@@ -1,0 +1,2510 @@
+afkorting,plaatsnaam
+AADORP,Aadorp
+AAGTKK,Aagtekerke
+AALDEN,Aalden
+AALSMR,Aalsmeer
+AALSMB,Aalsmeerderbrug
+AALST,Aalst
+AALSUM,Aalsum
+AALTEN,Aalten
+AARDBG,Aardenburg
+AARLVN,Aarlanderveen
+AARLRL,Aarle-Rixtel
+AARTSW,Aartswoud
+ABBEGA,Abbega
+ABBKRK,Abbekerk
+ABBBRK,Abbenbroek
+ABBNES,Abbenes
+ABCOUD,Abcoude
+ACHLUM,Achlum
+ACHTGE,Achterveld GE
+ACHTUT,Achterveld UT
+ACHTHZ,Achthuizen
+ACHTML,Achtmaal
+ACQUOY,Acquoy
+ADORP,Adorp
+ADUARD,Aduard
+AERDHT,Aerdenhout
+AERDT,Aerdt
+AFFDGE,Afferden GE
+AFFDLI,Afferden L
+AGELO,Agelo
+AKERSL,Akersloot
+AKKRUM,Akkrum
+AKMRP,Akmarijp
+ALBRGN,Albergen
+ALBLDM,Alblasserdam
+ALDLEI,Alde Leie
+ALDBRN,Aldeboarn
+ALDTSK,Aldtsjerk
+ALEM,Alem
+ALKMR,Alkmaar
+ALLGWR,Allingawier
+ALMELO,Almelo
+ALMEN,Almen
+ALMERE,Almere
+ALMKRK,Almkerk
+ALPHRN,Alphen aan den Rijn
+ALPHGE,Alphen GE
+ALPHNB,Alphen NB
+ALTVDW,Alteveer De Wolden
+ALTVHV,Alteveer gem Hoogeveen
+ALTVZW,Alteveer Gem Zuidwolde
+ALTVGR,Alteveer GR
+ALTVNV,Alteveer Noordenveld
+ALTFST,Altforst
+AMBTDD,Ambt Delden
+AMEIDE,Ameide
+AMEN,Amen
+AMERCA,America
+AMERGN,Amerongen
+AMERSF,Amersfoort
+AMMSTL,Ammerstol
+AMMZDN,Ammerzoden
+AMSTHK,Amstelhoek
+AMVEEN,Amstelveen
+AMSTRD,Amstenrade
+AMSDAM,Amsterdam
+AMSZO,Amsterdam Zuidoost
+AMSDVD,Amsterdam-Duivendrecht
+ANDEL,Andel
+ANDLST,Andelst
+ANDERN,Anderen
+ANDIJK,Andijk
+ANE,Ane
+ANERVN,Anerveen
+ANEVLD,Anevelde
+ANGERN,Angeren
+ANGRLO,Angerlo
+ANJUM,Anjum
+ANKVN,Ankeveen
+ANLOO,Anloo
+ANNPWN,Anna Paulowna
+ANNEN,Annen
+ANNVKL,Annerveenschekanaal
+ANSNDW,Ansen
+ANSNWV,Ansen Westerveld
+APELDN,Apeldoorn
+APPSCH,Appelscha
+APPTRN,Appeltern
+APPDAM,Appingedam
+ARCEN,Arcen
+ARKEL,Arkel
+ARNEMD,Arnemuiden
+ARNHEM,Arnhem
+ARRIEN,Arrien
+ARUM,Arum
+ASCH,Asch
+ASPERN,Asperen
+ASSEN,Assen
+ASSDLF,Assendelft
+ASTEN,Asten
+AUGBRT,Augsbuurt
+AUGTSG,Augustinusga
+AUSLTZ,Austerlitz
+AVENHN,Avenhorn
+AXEL,Axel
+AZEWN,Azewijn
+BAAIDN,Baaiduinen
+BAAIUM,Baaium
+BAAK,Baak
+BAAMBG,Baambrugge
+BAARD,Baard
+BAARLD,Baarland
+BAARNS,Baarle-Nassau
+BAARLI,Baarlo LI
+BAAROV,Baarlo OV
+BAARN,Baarn
+BAARS,Baars
+BABRCH,Babberich
+BABBRK,Babylonienbroek
+BADNIE,Bad Nieuweschans
+BADHDP,Badhoevedorp
+BAEXEM,Baexem
+BAFLO,Baflo
+BAKEL,Bakel
+BAKHZN,Bakhuizen
+BAKKVN,Bakkeveen
+BALGOJ,Balgoij
+BALING,Balinge
+BALK,Balk
+BALKBG,Balkbrug
+BALLVD,Balloerveld
+BALLOO,Balloo
+BALLUM,Ballum
+BANEHD,Baneheide
+BANHLT,Banholt
+BANT,Bant
+BANTGA,Bantega
+BARCHM,Barchem
+BARDRT,Barendrecht
+BARGCO,Barger-Compascuum
+BARNVD,Barneveld
+BARSHN,Barsingerhorn
+BASSE,Basse
+BATBRG,Batenburg
+BATHMN,Bathmen
+BAVELB,Bavel
+BAVELA,Bavel AC
+BEARS,Bears
+BEDUM,Bedum
+BEEGDN,Beegden
+BEEKDK,Beek en Donk
+BEEKLI,Beek LI
+BEEKMO,Beek Montferland
+BEEKGB,Beek Ubbergen
+BEEKBG,Beekbergen
+BEEMBR,Beemte Broekland
+BEERS,Beers NB
+BEERTA,Beerta
+BEERZE,Beerze
+BEERVD,Beerzerveld
+BEESD,Beesd
+BEESEL,Beesel
+BEETS,Beets
+BEETZG,Beetsterzwaag
+BEILEN,Beilen
+BEINDP,Beinsdorp
+BELFLD,Belfeld
+BELWLD,Bellingwolde
+BELTRM,Beltrum
+BELTSS,Belt-Schutsloot
+BEMELN,Bemelen
+BEMMEL,Bemmel
+BENLWN,Beneden-Leeuwen
+BENNBK,Bennebroek
+BENNKM,Bennekom
+BENNVD,Benneveld
+BENNIB,Benningbroek
+BENSCH,Benschop
+BENTLO,Bentelo
+BENTHZ,Benthuizen
+BENTVD,Bentveld
+BERGDL,Berg en Dal
+BERGTB,Berg en Terblijt
+BERGAB,Bergambacht
+BERGEK,Bergeijk
+BERGAZ,Bergen aan Zee
+BERGLI,Bergen L
+BERGNH,Bergen (NH)
+BERGZM,Bergen op Zoom
+BERGTH,Bergentheim
+BERGHN,Bergharen
+BERGHM,Berghem
+BERGHK,Bergschenhoek
+BERING,Beringe
+BERKRR,Berkel en Rodenrijs
+BERKES,Berkel-Enschot
+BERKWD,Berkenwoude
+BERKHT,Berkhout
+BERLCM,Berlicum
+BERLTS,Berltsum
+BERN,Bern
+BEST,Best
+BEUGEN,Beugen
+BEUNGE,Beuningen Gld
+BEUNOV,Beuningen OV
+BEUSCM,Beusichem
+BEUTAK,Beutenaken
+BEVERW,Beverwijk
+BIDDHZ,Biddinghuizen
+BIERUM,Bierum
+BIERTN,Biervliet
+BIERSL,Biervliet Sluis
+BIESTH,Biest-Houtakker
+BIEZML,Biezenmortel
+BIGGKK,Biggekerke
+BILTHV,Bilthoven
+BINGRD,Bingelrade
+BITGUM,Bitgum
+BITGMM,Bitgummole
+BLADEL,Bladel
+BLANKH,Blankenham
+BLARCM,Blaricum
+BLAUWS,Blauwestad
+BLAUWH,Blauwhuis
+BLEISW,Bleiswijk
+BLESDK,Blesdijke
+BLESGF,Bleskensgraaf ca
+BLESSM,Blessum
+BLIJE,Blije
+BLIJHM,Blijham
+BLITWK,Blitterswijck
+BLOEMD,Bloemendaal
+BLOKKR,Blokker
+BLOKZL,Blokzijl
+BOAZUM,Boazum
+BOCHLZ,Bocholtz
+BODEGR,Bodegraven
+BOEKEL,Boekel
+BOELSL,Boelenslaan
+BOER,Boer
+BOERAL,Boerakker Leek
+BOERAM,Boerakker Marum
+BOESLD,Boesingheliede
+BOIJL,Boijl
+BOKSUM,Boksum
+BOLSWD,Bolsward
+BONTBK,Bontebok
+BOORNB,Boornbergum
+BOORNZ,Boornzwaag
+BORCLO,Borculo
+BORGER,Borger
+BORGCM,Borgercompagnie Menterw.
+BORGCV,Borgercompagnie Veendam
+BORGSW,Borgsweer
+BORN,Born
+BORNE,Borne
+BORNBK,Bornerbroek
+BORNWD,Bornwird
+BORSLE,Borssele
+BOSCHD,Bosch en Duin
+BOSCHO,Boschoord
+BOSKP,Boskoop
+BOSSNH,Bosschenhoofd
+BOTLEK,Botlek Rotterdam
+BOURTG,Bourtange
+BOVNKS,Bovenkarspel
+BOVLWN,Boven-Leeuwen
+BOVSMD,Bovensmilde
+BOXMR,Boxmeer
+BOXTEL,Boxtel
+BRAAMT,Braamt
+BRAKEL,Brakel
+BRANDW,Brandwijk
+BRANTG,Brantgum
+BREDA,Breda
+BREDVT,Bredevoort
+BREEDB,Breedenbroek
+BREEZA,Breezand
+BREEZD,Breezanddijk
+BRESKS,Breskens
+BREUKL,Breukelen
+BREUKV,Breukeleveen
+BRIELL,Brielle
+BRILTL,Briltil
+BRITSM,Britsum
+BRITSW,Britswert
+BROEK,Broek
+BROEKW,Broek in Waterland
+BROEKO,Broek op Langedijk
+BROEDR,Broekhuizen Dr
+BROELI,Broekhuizen LI
+BROEKV,Broekhuizenvorst
+BROEKL,Broekland
+BROEKS,Broeksterwald
+BRONKH,Bronkhorst
+BRONNV,Bronneger
+BRONNH,Bronnegerveen
+BROUWH,Brouwershaven
+BRUCHM,Bruchem
+BRUCHT,Brucht
+BRUCHV,Bruchterveld
+BRUINH,Bruinehaar
+BRUINN,Bruinisse
+BRUMMN,Brummen
+BRUNSS,Brunssum
+BRUNTG,Bruntinge
+BUCHTN,Buchten
+BUDEL,Budel
+BUDELD,Budel-Dorplein
+BUDELS,Budel-Schoot
+BUGGNM,Buggenum
+BUINEN,Buinen
+BUINVN,Buinerveen
+BUITKG,Buitenkaag
+BUITPT,Buitenpost
+BUNDE,Bunde
+BUNNE,Bunne
+BUNNIK,Bunnik
+BUNSPK,Bunschoten-Spakenburg
+BURDRD,Burdaard
+BURNFR,Buren Ameland
+BURNGE,Buren GE
+BURGBG,Burgerbrug
+BURGVN,Burgerveen
+BURGHH,Burgh-Haamstede
+BURGUM,Burgum
+BURGWD,Burgwerd
+BURUM,Burum
+BUSSUM,Bussum
+BUURBR,Buurmalsen Buren
+BUURGM,Buurmalsen Geldermalsen
+CADKR,Cadier en Keer
+CADZND,Cadzand
+CALLTO,Callantsoog
+CAPIJS,Capelle aan den IJssel
+CASTLR,Castelre
+CASTRY,Castenray
+CASTRN,Casteren
+CASTRC,Castricum
+CHAAM,Chaam
+CLINGE,Clinge
+COEVDN,Coevorden
+COLPLT,Colijnsplaat
+COLLDN,Collendoorn
+COLMST,Colmschate
+CORNWD,Cornwerd
+COTHEN,Cothen
+CREIL,Creil
+CROMVT,Cromvoirt
+CRUQS,Cruquius
+CUIJK,Cuijk
+CULMBG,Culemborg
+DAARLE,Daarle
+DAARLV,Daarlerveen
+DALEM,Dalem
+DALEN,Dalen
+DALERP,Dalerpeel
+DALERV,Dalerveen
+DALFSN,Dalfsen
+DALMSH,Dalmsholte
+DAMWLD,Damwald
+DARP,Darp
+DEBILT,De Bilt
+DEBLES,De Blesse
+DEBULT,De Bult
+DECOCK,De Cocksdorp
+DEFALM,De Falom
+DEGLIN,De Glind
+DEGOOR,De Goorn
+DEGROE,De Groeve
+DEHEEN,De Heen
+DEHEUR,De Heurne
+DEHOEF,de Hoef
+DEHVE,De Hoeve
+DEKIEL,De Kiel
+DEKLOM,De Klomp
+DEKNIP,De Knipe
+DEKOOG,De Koog
+DEKRIM,De Krim
+DEKWAK,De Kwakel
+DELIER,De Lier
+DELUTT,de Lutte
+DEMEER,De Meern
+DEMOER,De Moer
+DEMORT,De Mortel
+DEPOL,De Pol
+DEPUNT,De Punt
+DERIJP,De Rijp
+DERIPS,De Rips
+DESCHI,De Schiphorst
+DESTEE,De Steeg
+DETIKE,De Tike
+DEVEEN,De Veenhoop
+DEWAAL,De Waal
+DEWEER,De Weere
+DEWEST,De Westereen
+DEWIJK,de Wijk
+DEWILG,De Wilgen
+DEWILP,De Wilp
+DEWOUD,de Woude
+DEZILK,De Zilk
+DEARSM,Dearsum
+DEDEMV,Dedemsvaart
+DEDGUM,Dedgum
+DEELEN,Deelen
+DEEST,Deest
+DEIL,Deil
+DEINUM,Deinum
+DELDEN,Delden
+DELFGW,Delfgauw
+DELFHZ,Delfstrahuizen
+DELFT,Delft
+DELFZL,Delfzijl
+DELWNN,Delwijnen
+DEMEN,Demen
+DENAND,Den Andel
+DENBOM,Den Bommel
+DENBUG,Den Burg
+DENDOL,Den Dolder
+DENDUN,Den Dungen
+DENHGR,Den Ham GR
+DENHOV,Den Ham OV
+DENHEL,Den Helder
+DENHNH,Den Hoorn
+DENHZH,Den Hoorn ZH
+DENHOR,Den Horn
+DENHOU,Den Hout
+DENILP,Den Ilp
+DENOEV,Den Oever
+DENVEL,Den Velde
+DENEKP,Denekamp
+DEURNE,Deurne
+DEURDI,Deurningen Dinkelland
+DEUROL,Deurningen Oldenzaal
+DEURSD,Deursen-Dennenburg
+DEURZE,Deurze
+DEVENT,Deventer
+DIDAM,Didam
+DIEDEN,Dieden
+DIEMEN,Diemen
+DIEPHM,Diepenheim
+DIEPVN,Diepenveen
+DIEREN,Dieren
+DIESSN,Diessen
+DIEVER,Diever
+DIEVBG,Dieverbrug
+DIFFLN,Diffelen
+DIJKEN,Dijken
+DINTLD,Dinteloord
+DINXPL,Dinxperlo
+DIPSHN,Diphoorn
+DIRKHN,Dirkshorn
+DIRKLD,Dirksland
+DODEWD,Dodewaard
+DOENRD,Doenrade
+DOESBG,Doesburg
+DOETCH,Doetinchem
+DOEVRN,Doeveren
+DOEZUM,Doezum
+DOKKUM,Dokkum
+DOLDSM,Doldersum
+DOMBRG,Domburg
+DONDRN,Donderen
+DONGEN,Dongen
+DONGJM,Dongjum
+DONIAG,Doniaga
+DONKBR,Donkerbroek
+DOORN,Doorn
+DOORNB,Doornenburg
+DOORNS,Doornspijk
+DOORWT,Doorwerth
+DORDRT,Dordrecht
+DORST,Dorst
+DRACHT,Drachten
+DRACHA,Drachten-Azeven
+DRACHC,Drachtstercompagnie
+DREISR,Dreischor
+DREMPT,Drempt
+DREUML,Dreumel
+DRIERB,Driebergen-Rijsenburg
+DRIEBG,Drieborg
+DRIEBN,Driebruggen
+DRIEHS,Driehuis NH
+DRIEHZ,Driehuizen
+DRIEL,Driel
+DRIEWG,Driewegen
+DRIEZM,Driezum
+DRIJBR,Drijber
+DRIMML,Drimmelen
+DROGEH,Drogeham
+DROGTO,Drogteropslagen
+DRONGL,Drongelen
+DRONRP,Dronryp
+DRONTN,Dronten
+DROUWN,Drouwen
+DROUMD,Drouwenermond
+DROUVN,Drouwenerveen
+DRUNEN,Drunen
+DRUTEN,Druten
+DUIVEN,Duiven
+DUIVDT,Duivendrecht
+DUIZEL,Duizel
+DUSSEN,Dussen
+DWINGL,Dwingeloo
+EAGUM,Eagum
+EARNWD,Earnewald
+EASTRN,Easterein
+EASTLT,Easterlittens
+EASTMR,Eastermar
+EASTWR,Easterwierrum
+ECHT,Echt
+ECHTLD,Echteld
+ECHNDR,Echten Dr
+ECHNFR,Echten Fr
+ECHTBG,Echtenerbrug
+ECKWL,Eck en Wiel
+ECKLRD,Eckelrade
+EDAM,Edam
+EDE,Ede
+EDERVN,Ederveen
+EE,Ee
+EEDE,Eede
+EEFDE,Eefde
+EELDE,Eelde
+EELDWL,Eelderwolde
+EEMDK,Eemdijk
+EEMNES,Eemnes
+EEMSHV,Eemshaven
+EEN,Een
+EENRUM,Eenrum
+EENUM,Eenum
+EENWST,Een-West
+EERBK,Eerbeek
+EERSEL,Eersel
+EES,Ees
+EESGRN,Eesergroen
+EESRVN,Eeserveen
+EESTGA,Eesterga
+EESVN,Eesveen
+EETHEN,Eethen
+EEXT,Eext
+EEXTVN,Eexterveen
+EEXTVK,Eexterveenschekanaal
+EEXTZV,Eexterzandvoort
+EGCHEL,Egchel
+EGMONH,Egmond aan den Hoef
+EGMONZ,Egmond aan Zee
+EGMONB,Egmond-Binnen
+EIBERG,Eibergen
+EIJSDN,Eijsden
+EINDHV,Eindhoven
+EINIGH,Einighausen
+EKEHR,Ekehaar
+ELAHZN,Elahuizen
+ELBURG,Elburg
+ELDERL,Eldersloo
+ELEVLD,Eleveld
+ELIM,Elim
+ELKENR,Elkenrade
+ELL,Ell
+ELLECM,Ellecom
+ELLEMT,Ellemeet
+ELLEHR,Ellertshaar
+ELLEWD,Ellewoutsdijk
+ELP,Elp
+ELSEND,Elsendorp
+ELSHT,Elshout
+ELSLFR,Elsloo Fr
+ELSLLI,Elsloo LI
+ELSPT,Elspeet
+ELSTGE,Elst GE
+ELSTUT,Elst Ut
+EMMELD,Emmeloord
+EMMEN,Emmen
+EMMERC,Emmer-Compascuum
+EMPE,Empe
+EMST,Emst
+ENGWRM,Engwierum
+ENKHZN,Enkhuizen
+ENS,Ens
+ENSCHD,Enschede
+ENSPK,Enspijk
+ENTER,Enter
+ENUMTL,Enumatil
+EPE,Epe
+EPEN,Epen
+EPPENH,Eppenhuizen
+EPSE,Epse
+ERICA,Erica
+ERICHM,Erichem
+ERLECM,Erlecom
+ERM,Erm
+ERMELO,Ermelo
+ERP,Erp
+ESBEEK,Esbeek
+ESCH,Esch
+ESCHRN,Escharen
+ESPEL,Espel
+EST,Est
+ETTEN,Etten
+ETTENL,Etten-Leur
+EUROPT,Europoort Rotterdam
+EURSMD,Eursinge
+EURSDW,Eursinge De Wolden
+EVERDG,Everdingen
+EVRTSO,Evertsoord
+EWIJK,Ewijk
+EXLRVN,Exloerveen
+EXLOO,Exloo
+EXMORR,Exmorra
+EYGLHV,Eygelshoven
+EYS,Eys
+EZINGE,Ezinge
+FARMSM,Farmsum
+FEANWD,Feanwalden
+FEERWD,Feerwerd
+FEINSM,Feinsum
+FERWRT,Ferwert
+FERWDE,Ferwoude
+FIJNRT,Fijnaart
+FINSWL,Finsterwolde
+FIRDGM,Firdgum
+FLERNG,Fleringen
+FLUITB,Fluitenberg
+FOCHTL,Fochteloo
+FOLLGA,Follega
+FOLSGR,Folsgare
+FORMRM,Formerum
+FOUDGM,Foudgum
+FOXHOL,Foxhol
+FOXWLD,Foxwolde
+FRANKR,Franeker
+FREDKO,Frederiksoord
+FRIENS,Friens
+FRIEPL,Frieschepalen
+FROOMB,Froombosch
+GAANDR,Gaanderen
+GAAST,Gaast
+GAASTM,Gaastmeer
+GALDER,Galder
+GAMERN,Gameren
+GAPING,Gapinge
+GARDRN,Garderen
+GARMWD,Garmerwolde
+GARMNG,Garminge
+GARNWD,Garnwerd
+GARRLW,Garrelsweer
+GARSTH,Garsthuizen
+GARYP,Garyp
+GASSEL,Gassel
+GASLTE,Gasselte
+GASNVN,Gasselternijveen
+GASNVM,Gasselternijveenschemond
+GASTEL,Gastel
+GASTRN,Gasteren
+GAUW,Gauw
+GEELBR,Geelbroek
+GEERDK,Geerdijk
+GEERSD,Geersdijk
+GEERTB,Geertruidenberg
+GEERVL,Geervliet
+GEES,Gees
+GEESBG,Geesbrug
+GEESGE,Geesteren GE
+GEESOV,Geesteren OV
+GEEUWB,Geeuwenbrug
+GEFFEN,Geffen
+GEIJST,Geijsteren
+GELDML,Geldermalsen
+GELDWD,Gelderswoude
+GELDRP,Geldrop
+GELEEN,Geleen
+GELLCM,Gellicum
+GELSLR,Gelselaar
+GEMERT,Gemert
+GEMOND,Gemonde
+GENDRN,Genderen
+GENDRG,Gendringen
+GENDT,Gendt
+GENEMD,Genemuiden
+GENNEP,Gennep
+GERKKL,Gerkesklooster
+GERSLT,Gersloot
+GEULLE,Geulle
+GIESBK,Giesbeek
+GIESSN,Giessen
+GIESBG,Giessenburg
+GIETEN,Gieten
+GIETVN,Gieterveen
+GIETNM,Giethmen
+GIETHN,Giethoorn
+GILZE,Gilze
+GINNUM,Ginnum
+GLANE,Glane
+GLIMMN,Glimmen
+GODLNZ,Godlinze
+GOEDRD,Goedereede
+GOENGA,Goenga
+GOENHZ,Goengahuizen
+GOES,Goes
+GOINGR,Goingarijp
+GOIRLE,Goirle
+GOOR,Goor
+GORCHM,Gorinchem
+GORRDK,Gorredijk
+GORSSL,Gorssel
+GOUDA,Gouda
+GOUDRK,Gouderak
+GOUDRN,Goudriaan
+GOUDWD,Goudswaard
+GOUTUM,Goutum
+GRAAUW,Graauw
+GRAFHT,Grafhorst
+GRAFT,Graft
+GRAMSB,Gramsbergen
+GRASHK,Grashoek
+GRATHM,Grathem
+GRAVE,Grave
+GREONT,Greonterp
+GREVBT,Grevenbicht
+GRIENV,Griendtsveen
+GRIJPK,Grijpskerk
+GRIJKK,Grijpskerke
+GROEDE,Groede
+GROENK,Groenekan
+GROENG,Groeningen
+GROENL,Groenlo
+GROESB,Groesbeek
+GROESS,Groessen
+GROET,Groet
+GROLLO,Grolloo
+GRONGN,Groningen
+GRONSV,Gronsveld
+GROOTA,Groot-Ammers
+GROOTB,Grootebroek
+GROOTG,Grootegast
+GROOTS,Grootschermer
+GROU,Grou
+GRUBVS,Grubbenvorst
+GULPEN,Gulpen
+GUTTEC,Guttecoven
+GYTSJK,Gytsjerk
+HAAFTN,Haaften
+HAAKSB,Haaksbergen
+HAALDR,Haalderen
+HAAREN,Haaren
+HAARLH,Haarle Hellendoorn
+HAARLT,Haarle Tubbergen
+HAARLM,Haarlem
+HAARLL,Haarlemmerliede
+HAARLO,Haarlo
+HAARST,Haarsteeg
+HAARZL,Haarzuilens
+HAASTR,Haastrecht
+HAELEN,Haelen
+HAGEST,Hagestein
+HAGHST,Haghorst
+HALER,Haler
+HALFWG,Halfweg
+HALL,Hall
+HALLE,Halle
+HALLUM,Hallum
+HALSTR,Halsteren
+HANDEL,Handel
+HANK,Hank
+HANSWT,Hansweert
+HANTUM,Hantum
+HANTBR,Hantumeruitburen
+HANTHZ,Hantumhuizen
+HAPERT,Hapert
+HAPS,Haps
+HARBHK,Harbrinkhoek
+HARDBG,Hardenberg
+HARDWK,Harderwijk
+HARDGD,Hardinxveld-Giessendam
+HARNGR,Haren Gn
+HARNNB,Haren Oss
+HARFSN,Harfsen
+HARICH,Harich
+HARIHZ,Haringhuizen
+HARKMA,Harkema
+HARKST,Harkstede
+HARKGN,Harkstede GN
+HARLGN,Harlingen
+HARMLN,Harmelen
+HARRVD,Harreveld
+HARSKP,Harskamp
+HARTWD,Hartwerd
+HASTDK,Haskerdijken
+HASKHN,Haskerhorne
+HASSLT,Hasselt
+HATTEM,Hattem
+HATTBR,Hattemerbroek
+HAULE,Haule
+HAULWK,Haulerwijk
+HAUWRT,Hauwert
+HAVLTE,Havelte
+HAVLTB,Havelterberg
+HAZDRP,Hazerswoude-Dorp
+HAZRDK,Hazerswoude-Rijndijk
+HEDEL,Hedel
+HEDIKH,Hedikhuizen
+HEE,Hee
+HEEG,Heeg
+HEEL,Heel
+HEELSM,Heelsum
+HEELWG,Heelweg
+HEEMVN,Heemserveen
+HEEMKK,Heemskerk
+HEEMST,Heemstede
+HEENVL,Heenvliet
+HEERDE,Heerde
+HEERVN,Heerenveen
+HEERWD,Heerewaarden
+HEERHW,Heerhugowaard
+HEERJD,Heerjansdam
+HEERLE,Heerle
+HEERLN,Heerlen
+HEESBN,Heesbeen
+HEESCH,Heesch
+HEESST,Heesselt
+HEESDT,Heeswijk-Dinther
+HEETEN,Heeten
+HEEZE,Heeze
+HEGEBT,Hegebeintum
+HEGELS,Hegelsom
+HEIBCP,Hei- en Boeicop
+HEIBLM,Heibloem
+HEIDE,Heide
+HEIJEN,Heijen
+HEIJRT,Heijenrath
+HEIJNG,Heijningen
+HEIKNT,Heikant
+HEILST,Heilig Landstichting
+HEILGL,Heiligerlee
+HEILOO,Heiloo
+HEINND,Heinenoord
+HEINKZ,Heinkenszand
+HEINO,Heino
+HEKELI,Hekelingen
+HEKEND,Hekendorp
+HELDEN,Helden
+HELNVN,Helenaveen
+HELLDN,Hellendoorn
+HELLVS,Hellevoetsluis
+HELLW,Hellouw
+HELLUM,Hellum
+HELMND,Helmond
+HELVRT,Helvoirt
+HEM,Hem
+HEMELM,Hemelum
+HEMMEN,Hemmen
+HEMPNS,Hempens
+HEMRIK,Hemrik
+HENDIA,Hendrik-Ido-Ambacht
+HENGOV,Hengelo
+HENGGE,Hengelo (Gld)
+HENGEV,Hengevelde
+HENGDK,Hengstdijk
+HENSBK,Hensbroek
+HERBJM,Herbaijum
+HERKBS,Herkenbosch
+HERKGN,Herkingen
+HERNEN,Hernen
+HERPEN,Herpen
+HERPT,Herpt
+HERTEN,Herten
+HERTME,Hertme
+HERVLD,Herveld
+HERWEN,Herwen
+HERWNN,Herwijnen
+HETERN,Heteren
+HEUKLO,Heukelom
+HEUKLU,Heukelum
+HEUMEN,Heumen
+HEUSDA,Heusden Asten
+HEUSDH,Heusden Heusden
+HEVDRP,Heveadorp
+HEYTHS,Heythuysen
+HEZING,Hezingen
+HIAURE,Hiaure
+HICHTM,Hichtum
+HIDRD,Hidaard
+HIERDN,Hierden
+HIESLM,Hieslum
+HIJKEN,Hijken
+HIJUM,Hijum
+HILRD,Hilaard
+HILLGM,Hillegom
+HILVBK,Hilvarenbeek
+HILVSM,Hilversum
+HINDLP,Hindeloopen
+HINNRD,Hinnaard
+HIPPHF,Hippolytushoef
+HITZUM,Hitzum
+HOBRDE,Hobrede
+HOEDKK,Hoedekenskerke
+HOEFHG,Hoef en Haag
+HOEK,Hoek
+HOEKVH,Hoek van Holland
+HOENDA,Hoenderloo Apeldoorn
+HOENDE,Hoenderloo Ede
+HOENDE,Hoenderloo Ede
+HOENBR,Hoensbroek
+HOENZD,Hoenzadriel
+HOEVLK,Hoevelaken
+HOEVEN,Hoeven
+HOGEHX,Hoge Hexel
+HOLLRD,Hollandsche Rading
+HOLLVD,Hollandscheveld
+HOLLUM,Hollum
+HOLSLT,Holsloot
+HOLTEN,Holten
+HOLTHS,Holthees
+HOLTHM,Holtheme
+HOLTHN,Holthone
+HOLTUM,Holtum
+HOLWRD,Holwerd
+HOLWDE,Holwierde
+HOMMRT,Hommerts
+HOMOET,Homoet
+HONSDK,Honselersdijk
+HOOFDD,Hoofddorp
+HOOFDP,Hoofdplaat
+HOOGSR,Hoog Soeren
+HOOGBL,Hoogblokland
+HOOGEM,Hooge Mierde
+HOOGZW,Hooge Zwaluwe
+HOOGLN,Hoogeloon
+HOOGWG,Hoogenweg
+HOOGHD,Hoogerheide
+HOOGSM,Hoogersmilde M-Drenthe
+HOOGSW,Hoogersmilde Westerveld
+HOOGVN,Hoogeveen
+HOOGZD,Hoogezand
+HOOGHL,Hooghalen
+HOOGKS,Hoogkarspel
+HOOGKP,Hoog-Keppel
+HOOGLD,Hoogland
+HOOGLV,Hooglanderveen
+HOOGMD,Hoogmade
+HOOGVL,Hoogvliet Rotterdam
+HOOGWD,Hoogwoud
+HOORFR,Hoorn Fr
+HOORNH,Hoorn NH
+HOORNR,Hoornaar
+HOORZW,Hoornsterzwaag
+HORN,Horn
+HORNHZ,Hornhuizen
+HORSSN,Horssen
+HORST,Horst
+HOUTEN,Houten
+HOUTHG,Houtigehage
+HOUWZL,Houwerzijl
+HUIJBG,Huijbergen
+HUISDR,Huis ter Heide DR
+HUISUT,Huis ter Heide UT
+HUISDN,Huisduinen
+HUISSL,Huisseling
+HUISSN,Huissen
+HUIZEN,Huizen
+HUIZNG,Huizinge
+HULSBG,Hulsberg
+HULSEL,Hulsel
+HULSHT,Hulshorst
+HULST,Hulst
+HULTEN,Hulten
+HUMMLO,Hummelo
+HUNS,Huns
+HUNSEL,Hunsel
+HURDGP,Hurdegaryp
+HURWNN,Hurwenen
+IDAERD,Idaerd
+IDSGHZ,Idsegahuizum
+IDSKHZ,Idskenhuizen
+IDZEGA,Idzega
+IENS,Iens
+IJHRST,IJhorst
+IJLST,IJlst
+IJMDN,IJmuiden
+IJSSHM,IJsselham
+IJSSMD,IJsselmuiden
+IJSSST,IJsselstein
+IJZNDK,IJzendijke
+IJZDRN,IJzendoorn
+ILPNDM,Ilpendam
+INDIJK,Indijk
+INGBER,Ingber
+INGELM,Ingelum
+INGEN,Ingen
+ITHEIK,It Heidenskip
+ITENS,Itens
+ITTERV,Ittervoort
+JAARSV,Jaarsveld
+JABEEK,Jabeek
+JANNUM,Jannum
+JELLUM,Jellum
+JELSUM,Jelsum
+JIRNSM,Jirnsum
+JISLUM,Jislum
+JISP,Jisp
+JISTRM,Jistrum
+JONKLN,Jonkerslan
+JONKVT,Jonkersvaart
+JOPPE,Joppe
+JORWRT,Jorwert
+JOURE,Joure
+JOUSWR,Jouswier
+JUBBGA,Jubbega
+JULIDP,Julianadorp
+JUTRP,Jutrijp
+KAAG,Kaag
+KAARD,Kaard
+KAATSH,Kaatsheuvel
+KALENB,Kalenberg
+KALLKT,Kallenkote
+KAMERK,Kamerik
+KAMPEN,Kampen
+KAMPLD,Kamperland
+KAMPVN,Kamperveen
+KANTNS,Kantens
+KAPATI,Kapel Avezaath Tiel
+KAPABU,Kapel-Avezaath Buren
+KAPLLE,Kapelle
+KAPLBG,Kapellebrug
+KATLK,Katlijk
+KATS,Kats
+KATTDK,Kattendijke
+KATWNB,Katwijk NB
+KATWZH,Katwijk ZH
+KATWDE,Katwoude
+KEDCHM,Kedichem
+KEENT,Keent
+KEIJNB,Keijenborg
+KEKERD,Kekerdom
+KELPOL,Kelpen-Oler
+KERKTI,Kerk Avezaath Tiel
+KERKBU,Kerk-Avezaath Buren
+KERKDR,Kerkdriel
+KERKVD,Kerkenveld
+KERKRD,Kerkrade
+KERKWV,Kerkwerve
+KERKWK,Kerkwijk
+KESSEL,Kessel
+KESTRN,Kesteren
+KIELWW,Kiel-Windeweer
+KILDER,Kilder
+KIMSWD,Kimswerd
+KINDDK,Kinderdijk
+KINNUM,Kinnum
+KLAASW,Klaaswaal
+KLARAD,Klarenbeek Apeldoorn
+KLARVO,Klarenbeek Voorst
+KLAZVN,Klazienaveen
+KLAZND,Klazienaveen-Noord
+KLEINZ,Klein Zundert
+KLIJND,Klijndijk
+KLIMMN,Klimmen
+KLOETG,Kloetinge
+KLOETK,Kloetinge Kapelle
+KLOLID,Klooster Lidlum
+KLOOSB,Kloosterburen
+KLOOSH,Kloosterhaar
+KLOOST,Kloosterhaar Twenterand
+KLOOSZ,Kloosterzande
+KLUNDT,Klundert
+KNEGSL,Knegsel
+KOARNJ,Koarnjum
+KOCKGN,Kockengen
+KOEDLD,Koedijk
+KOEDAL,Koedijk Alkmaar
+KOEKNG,Koekange
+KOEWT,Koewacht
+KOLDWD,Kolderwolde
+KOLHAM,Kolham
+KOLHRN,Kolhorn
+KOLLUM,Kollum
+KOLLPP,Kollumerpomp
+KOLLZW,Kollumerzwaag
+KOMMZL,Kommerzijl
+KONGBS,Koningsbosch
+KONLST,Koningslust
+KOOGZN,Koog aan de Zaan
+KOOLWK,Koolwijk
+KOOTTL,Kootstertille
+KOOTWK,Kootwijk
+KOOTWB,Kootwijkerbroek
+KORNHN,Kornhorn
+KORNWZ,Kornwerderzand
+KORTHM,Kortehemmen
+KORTHF,Kortenhoef
+KORTGN,Kortgene
+KOUDRN,Koudekerk aan den Rijn
+KOUDKK,Koudekerke
+KOUDUM,Koudum
+KOUFDR,Koufurderrige
+KRABDK,Krabbendijke
+KRAGBG,Kraggenburg
+KREILD,Kreileroord
+KREWRD,Krewerd
+KRIMLK,Krimpen aan de Lek
+KRIMIJ,Krimpen aan den IJssel
+KRINGD,Kring van Dorth
+KROMMN,Krommenie
+KRONBG,Kronenberg
+KROPSW,Kropswolde
+KRUING,Kruiningen
+KRUISL,Kruisland
+KUBRD,Kubaard
+KUDLST,Kudelstaart
+KUINRE,Kuinre
+KUITRT,Kuitaart
+KWADDM,Kwadendamme
+KWADK,Kwadijk
+KWINTH,Kwintsheul
+LAAGZU,Laag Zuthem
+LAAGKP,Laag-Keppel
+LAAGSR,Laag-Soeren
+LAGEMD,Lage Mierde
+LAGEVS,Lage Vuursche
+LAGEZW,Lage Zwaluwe
+LAGELD,Lageland
+LAGELS,Lageland Gem Slochteren
+LAGEGN,Lageland GN
+LAMBHG,Lambertschaag
+LAMSWD,Lamswaarde
+LANDRM,Landerum
+LANDGF,Landgraaf
+LANDHT,Landhorst
+LANDMR,Landsmeer
+LANGBK,Langbroek
+LANGDK,Langedijke
+LANGLL,Langelille
+LANGLO,Langelo
+LANGBM,Langenboom
+LANGRK,Langerak
+LANGVN,Langeveen
+LANGWG,Langeweg
+LANGZW,Langezwaag
+LANGWR,Langweer
+LARNGE,Laren GE
+LARNNH,Laren NH
+LARNNH,Laren Nh
+LATHUM,Lathum
+LATTBK,Lattrop-Breklenkamp
+LAUWRG,Lauwersoog
+LAUWZL,Lauwerzijl
+LEDEAK,Ledeacker
+LEEK,Leek
+LEENDE,Leende
+LEENS,Leens
+LEERBK,Leerbroek
+LEERDM,Leerdam
+LEERMS,Leermens
+LEERSM,Leersum
+LEEUWD,Leeuwarden
+LEGEMR,Legemeer
+LEIDEN,Leiden
+LEIDDP,Leiderdorp
+LEIDDM,Leidschendam
+LEIMDN,Leimuiden
+LEIMBG,Leimuiderbrug
+LEKKKK,Lekkerkerk
+LEKKUM,Lekkum
+LELLNS,Lellens
+LELYSD,Lelystad
+LEMELE,Lemele
+LEMEVD,Lemelerveld
+LEMRS,Lemiers
+LEMMER,Lemmer
+LENGEL,Lengel
+LENT,Lent
+LEONS,Leons
+LEPELS,Lepelstraat
+LETTBT,Lettelbert
+LETTLE,Lettele
+LEUNEN,Leunen
+LEUR,Leur
+LEUSDN,Leusden
+LEUTH,Leuth
+LEUTWD,Leutingewolde
+LEUVHM,Leuvenheim
+LEVROY,Leveroy
+LEWEDP,Lewedorp
+LEXMND,Lexmond
+LICHTD,Lichtaard
+LICHVD,Lichtenvoorde
+LIEMPD,Liempde
+LIENDN,Lienden
+LIERHH,Lierderholthuis
+LIEREN,Lieren
+LIEROP,Lierop
+LIES,Lies
+LIESHT,Lieshout
+LIESSL,Liessel
+LIEVLD,Lievelde
+LIEVRN,Lieveren
+LIJNDN,Lijnden
+LIMBRT,Limbricht
+LIMMEN,Limmen
+LINDE,Linde
+LINDEN,Linden
+LINNE,Linne
+LINSCH,Linschoten
+LIOESS,Lioessens
+LIPPHZ,Lippenhuizen
+LISSE,Lisse
+LISSBR,Lisserbroek
+LITH,Lith
+LITHN,Lithoijen
+LOBITH,Lobith
+LOCHEM,Lochem
+LOENEN,Loenen
+LOENVT,Loenen aan de Vecht
+LOENSL,Loenersloot
+LOENGA,Loenga
+LOERBK,Loerbeek
+LOLLUM,Lollum
+LOMM,Lomm
+LONGHW,Longerhouw
+LOODV,Loo Gld Duiven
+LOOLW,Loo Gld Lingewaard
+LOON,Loon
+LOONZD,Loon op Zand
+LOOSBK,Loosbroek
+LOOSDR,Loosdrecht
+LOOZEN,Loozen
+LOPIK,Lopik
+LOPKKP,Lopikerkapel
+LOPPSM,Loppersum
+LOSDRP,Losdorp
+LOSSER,Losser
+LOTTUM,Lottum
+LUCASW,Lucaswolde
+LUDDWR,Luddeweer
+LUINBD,Luinjeberd
+LUNTRN,Lunteren
+LUTJBK,Lutjebroek
+LUTJGT,Lutjegast
+LUTJWK,Lutjewinkel
+LUTTGT,Luttelgeest
+LUTTEN,Lutten
+LUTTBG,Luttenberg
+LUXWDE,Luxwoude
+LUYKGS,Luyksgestel
+LYTSWM,Lytsewierrum
+MAARHZ,Maarheeze
+MAARN,Maarn
+MAARSB,Maarsbergen
+MAARSS,Maarssen
+MAARTD,Maartensdijk
+MAASBL,Maasbommel
+MAASBT,Maasbracht
+MAASBR,Maasbree
+MAASDM,Maasdam
+MAASDK,Maasdijk
+MAASHS,Maashees
+MAASLD,Maasland
+MAASSL,Maassluis
+MAASTR,Maastricht
+MAASAP,Maastricht-Airport
+MAASVL,Maasvlakte Rotterdam
+MACHRN,Macharen
+MADE,Made
+MAKKNG,Makkinga
+MAKKUM,Makkum
+MALDEN,Malden
+MANDER,Mander
+MANDVN,Manderveen
+MANTGM,Mantgum
+MANTNG,Mantinge
+MARKES,Maren-Kessel
+MARGRT,Margraten
+MARIHP,Maria Hoop
+MARIHT,Mariahout
+MARIPR,Mariaparochie
+MARIBG,Marienberg
+MARIHM,Marienheem
+MARIVD,Marienvelde
+MARKMP,Marijenkampen
+MARKLO,Markelo
+MARKEN,Marken
+MARKBI,Markenbinnen
+MARKNS,Marknesse
+MARLE,Marle
+MARRUM,Marrum
+MARSUM,Marsum
+MARUM,Marum
+MARWKD,Marwijksoord
+MASTKP,Mastenbroek Kampen
+MASTZW,Mastenbroek Zwartewlnd
+MATSLT,Matsloot
+MAURIK,Maurik
+MECHLN,Mechelen
+MEDMBL,Medemblik
+MEEDEN,Meeden
+MEEDHZ,Meedhuizen
+MEERKK,Meerkerk
+MEERLO,Meerlo
+MEERSS,Meerssen
+MEERSD,Meerstad
+MEEUWN,Meeuwen
+MEGHLN,Megchelen
+MEGEN,Megen
+MEIJEL,Meijel
+MELDSL,Melderslo
+MELICK,Melick
+MELISK,Meliskerke
+MELISS,Melissant
+MENAAM,Menaam
+MENSWR,Mensingeweer
+MEPPEL,Meppel
+MEPPEN,Meppen
+MERKBK,Merkelbeek
+MERSLO,Merselo
+METERN,Meteren
+METERK,Meterik
+METSWR,Metslawier
+MHEER,Mheer
+MIDDLR,Middelaar
+MIDDBG,Middelburg
+MIDDHS,Middelharnis
+MIDDLI,Middelie
+MIDDLS,Middelstum
+MIDDBR,Middenbeemster
+MIDDMR,Middenmeer
+MIDLRN,Midlaren
+MIDLUM,Midlum
+MIDSLD,Midsland
+MIDWDA,Midwolda
+MIDWDE,Midwolde
+MIDWD,Midwoud
+MIEDUM,Miedum
+MIERLO,Mierlo
+MIJDRT,Mijdrecht
+MIJNSH,Mijnsheerenland
+MILDAM,Mildam
+MILHZE,Milheeze
+MILL,Mill
+MILLRN,Millingen aan de Rijn
+MILSBK,Milsbeek
+MINNSG,Minnertsga
+MIRNS,Mirns
+MODDGT,Moddergat
+MOERDK,Moerdijk
+MOERGL,Moergestel
+MOERKP,Moerkapelle
+MOERST,Moerstraten
+MOLGRF,Molenaarsgraaf
+MOLNHK,Molenhoek
+MOLNST,Molenschot
+MOLKWR,Molkwerum
+MONNKD,Monnickendam
+MONSTR,Monster
+MONTUT,Montfoort
+MONTLI,Montfort
+MOOK,Mook
+MOOKHK,Mookhoek
+MOORDR,Moordrecht
+MOORVD,Moorveld
+MORRA,Morra
+MUIDEN,Muiden
+MUIDBG,Muiderberg
+MUNEIN,Munein
+MUNNBN,Munnekeburen
+MUNNZL,Munnekezijl
+MUNSTG,Munstergeleen
+MUNTDM,Muntendam
+MUSSEL,Mussel
+MUSSKL,Musselkanaal
+NAALDW,Naaldwijk
+NAARDN,Naarden
+NAGELE,Nagele
+NEDASS,Nederasselt
+NEDHEM,Nederhemert
+NEDHBG,Nederhorst den Berg
+NEDLND,Nederland
+NEDWRT,Nederweert
+NEDEIN,Nederweert-Eind
+NEEDE,Neede
+NEER,Neer
+NEERNN,Neerijnen
+NEERTT,Neeritter
+NEERKT,Neerkant
+NEERLG,Neerlangel
+NEERLN,Neerloon
+NESBO,Nes
+NESAM,Nes Ameland
+NESDO,Nes Dongeradeel
+NETERS,Netersel
+NETTDN,Netterden
+NIAWR,Niawier
+NIBBWD,Nibbixwoud
+NIEBRT,Niebert
+NIEHVE,Niehove
+NIEKDM,Niekerk De Marne
+NIEKGG,Niekerk Grootegast
+NIETAP,Nietap
+NWANNV,Nieuw Annerveen
+NWBEER,Nieuw Beerta
+NWBUIN,Nieuw Buinen
+NWSTJL,Nieuw- en Sint Joosland
+NWHEET,Nieuw Heeten
+NWNAMN,Nieuw Namen
+NWSCHD,Nieuw Scheemda
+NWAAL,Nieuwaal
+NWAMST,Nieuw-Amsterdam
+NWBALG,Nieuw-Balinge
+NWBEIJ,Nieuw-Beijerland
+NWBUIN,Nieuw-Buinen
+NWDORD,Nieuw-Dordrecht
+NWDORP,Nieuwdorp
+NWNIED,Nieuwe Niedorp
+NWPEKL,Nieuwe Pekela
+NWWETR,Nieuwe Wetering
+NWBRUG,Nieuwebrug
+NWDIEP,Nieuwediep
+NWGEIN,Nieuwegein
+NWHORN,Nieuwehorne
+NWDIJK,Nieuwendijk
+NWTRAA,Nieuwer Ter Aa
+NWBRRN,Nieuwerbrug aan den Rijn
+NWKERK,Nieuwerkerk
+NWKKIJ,Nieuwerkerk ad IJssel
+NWOORH,Nieuweroord
+NWOORM,Nieuweroord M-Drenthe
+NWSLUI,Nieuwersluis
+NWSCHT,Nieuweschoot
+NWTONG,Nieuwe-Tonge
+NWKOOP,Nieuwkoop
+NWKUIJ,Nieuwkuijk
+NWLAND,Nieuwland
+NWLNDH,Nieuwlande
+NWLNDC,Nieuwlande Coevorden
+NWLEKK,Nieuw-Lekkerland
+NWLEUS,Nieuwleusen
+NWOLDA,Nieuwolda
+NWPOOR,Nieuwpoort
+NWRODN,Nieuw-Roden
+NWSCHB,Nieuw-Schoonebeek
+NWSTAD,Nieuwstadt
+NWVEEN,Nieuwveen
+NWVNNP,Nieuw-Vennep
+NWVLIE,Nieuwvliet
+NWVOSS,Nieuw-Vossemeer
+NWWEER,Nieuw-Weerdinge
+NIEZL,Niezijl
+NIFTRK,Niftrik
+NIGTEV,Nigtevecht
+NIJALT,Nij Altoenae
+NIJBTS,Nij Beets
+NIJBRK,Nijbroek
+NIJBKP,Nijeberkoop
+NIJEGA,Nijega
+NIJEHK,Nijehaske
+NIJEHP,Nijeholtpade
+NIJEHW,Nijeholtwolde
+NIJELM,Nijelamer
+NIJEMD,Nijemirdum
+NIJESK,Nijensleek
+NIJETN,Nijetrijne
+NIJEVN,Nijeveen
+NIJHZM,Nijhuizum
+NIJKRK,Nijkerk
+NIJKVN,Nijkerkerveen
+NIJLND,Nijland
+NIJLDE,Nijlande
+NIJMGN,Nijmegen
+NIJVDL,Nijverdal
+NISPEN,Nispen
+NISSE,Nisse
+NISTRD,Nistelrode
+NOARDB,Noardburgum
+NOOITG,Nooitgedacht
+NOORBK,Noorbeek
+NDBEEM,Noordbeemster
+NDBROE,Noordbroek
+NDEIGE,Noordeinde Gld
+NDEINH,Noordeinde NH
+NDLOOS,Noordeloos
+NDEN,Noorden
+NDGOUW,Noordgouwe
+NDHOEK,Noordhoek
+NDHORN,Noordhorn
+NDLARN,Noordlaren
+NDSCHA,Noord-Scharwoude
+NDSCHU,Noordscheschut
+NDSLEE,Noord-Sleen
+NDWELL,Noordwelle
+NDWKGR,Noordwijk GR
+NDWKZH,Noordwijk ZH
+NDWKHT,Noordwijkerhout
+NDWLFR,Noordwolde Fr
+NDWLGR,Noordwolde GR
+NOOTDP,Nootdorp
+NORG,Norg
+NOTTER,Notter
+NUENEN,Nuenen
+NUIS,Nuis
+NULAND,Nuland
+NUMAND,Numansdorp
+NUNHEM,Nunhem
+NUNSPT,Nunspeet
+NUTH,Nuth
+NUTTER,Nutter
+OBBCHT,Obbicht
+OBDAM,Obdam
+OCHTEN,Ochten
+ODIJK,Odijk
+ODILPL,Odiliapeel
+ODOORN,Odoorn
+ODOORV,Odoornerveen
+OEFFLT,Oeffelt
+OEGSTG,Oegstgeest
+OENE,Oene
+OENTSJ,Oentsjerk
+OFFGWR,Offingawier
+OHELK,Ohe en Laak
+OIJEN,Oijen
+OIRLO,Oirlo
+OIRSBK,Oirsbeek
+OIRSCT,Oirschot
+OISTWK,Oisterwijk
+OKKENB,Okkenbroek
+OLBRGN,Olburgen
+OLDEBP,Oldeberkoop
+OLDEBK,Oldebroek
+OLDEHP,Oldeholtpade
+OLDEHW,Oldeholtwolde
+OLDEHV,Oldehove
+OLDEKK,Oldekerk
+OLDELM,Oldelamer
+OLDEMT,Oldemarkt
+OLZAAL,Oldenzaal
+OLZIJL,Oldenzijl
+OLDEOW,Oldeouwer
+OLDETN,Oldetrijne
+OLST,Olst
+OLTRTP,Olterterp
+OMMEL,Ommel
+OMMEN,Ommen
+OMMERN,Ommeren
+ONDERD,Onderdendam
+ONNA,Onna
+ONNEN,Onnen
+ONSTWD,Onstwedde
+OOIJ,Ooij
+OOLTPL,Ooltgensplaat
+OWMIDD,Oost West en Middelbeers
+OTBURG,Oostburg
+OTDIJK,Oostdijk
+OTEIND,Oosteind
+OTBEEK,Oosterbeek
+OTBIER,Oosterbierum
+OTBLOK,Oosterblokker
+OTENFR,Oosterend FR
+OTENNH,Oosterend NH
+OTHESS,Oosterhesselen
+OTHTGE,Oosterhout GE
+OTHTNB,Oosterhout NB
+OTLAND,Oosterland
+OTLEEK,Oosterleek
+OTNIEL,Oosternieland
+OTNIJK,Oosternijkerk
+OTSTRK,Oosterstreek
+OTWIJK,Oosterwijk
+OTWIJT,Oosterwijtwerd
+OTWLFR,Oosterwolde FR
+OTWLGE,Oosterwolde Gld
+OTRZEE,Oosterzee
+OTGRAF,Oost-Graftdijk
+OOSTHM,Oosthem
+OTHUIZ,Oosthuizen
+OTKAPP,Oostkapelle
+OTKNOL,Oostknollendam
+OTRMFR,Oostrum FR
+OTRMLI,Oostrum LI
+OTSOUB,Oost-Souburg
+OTVOOR,Oostvoorne
+OTWOLK,Oostwold Leek
+OTWOOA,Oostwold Oldambt
+OTWOUD,Oostwoud
+OTZAAN,Oostzaan
+OOTMSM,Ootmarsum
+OPEIND,Opeinde
+OPENDE,Opende
+OPHMRT,Ophemert
+OPHSDN,Opheusden
+OPIJNN,Opijnen
+OPLOO,Oploo
+OPMEER,Opmeer
+OPPNHZ,Oppenhuizen
+OPPRDS,Opperdoes
+ORANJE,Oranje
+ORANWD,Oranjewoud
+ORVLTE,Orvelte
+OSPEL,Ospel
+OSS,Oss
+OSSDRT,Ossendrecht
+OSSNIS,Ossenisse
+OSSNWD,Ossenwaard
+OSSNZL,Ossenzijl
+OTERLK,Oterleek
+OTTRLO,Otterlo
+OTTRSM,Ottersum
+OTTOLD,Ottoland
+OUDADE,Oud Ade
+OUDANN,Oud Annerveen
+OUDGAS,Oud Gastel
+OUDOOT,Oud Ootmarsum
+OUDZLN,Oud Zuilen
+OUDALB,Oud-Alblas
+OUDBLD,Oud-Beijerland
+OUDDRP,Ouddorp ZH
+OUDEMR,Oude Meer
+OUDNDP,Oude Niedorp
+OUDPEK,Oude Pekela
+OUDWET,Oude Wetering
+OUDWIL,Oude Willem
+OUDBZL,Oudebildtzijl
+OUDGFM,Oudega De Fryske Marren
+OUDGSL,Oudega Smallingerland
+OUDGSF,Oudega Sudwest-Fryslan
+OUDHSK,Oudehaske
+OUDHRN,Oudehorne
+OUDLND,Oudelande
+OUDMDM,Oudemirdum
+OUDMDR,Oudemolen DR
+OUDMNB,Oudemolen NB
+OUDBOS,Oudenbosch
+OUDNDK,Oudendijk
+OUDNHN,Oudenhoorn
+ODKAMS,Ouderkerk aan de Amstel
+ODKIJS,Ouderkerk aan den IJssel
+OUDSCS,Oudeschans
+OUDSCD,Oudeschild
+OUDSCP,Oudeschip
+OUDSCT,Oudeschoot
+OUDSLS,Oudesluis
+OUDTNG,Oude-Tonge
+OUDWTR,Oudewater
+OUDEZL,Oudezijl
+OUDHSD,Oudheusden
+OUDKLD,Oudkarspel
+OUDKSG,Oudkarspel Schagen
+OUDORP,Oudorp
+OUDVOS,Oud-Vossemeer
+OUDWDE,Oudwoude
+OUWKRK,Ouwerkerk
+OUWHLE,Ouwsterhaule
+OUWNIJ,Ouwster-Nijega
+OVERAS,Overasselt
+OVERBG,Overberg
+OVERDK,Overdinkel
+OVERLA,Overlangel
+OVERLN,Overloon
+OVERSD,Overschild
+OVERSL,Overslag
+OVERVN,Overveen
+OVEZAN,Ovezande
+PAASLO,Paasloo
+PAESNS,Paesens
+PANNDN,Pannerden
+PANNGN,Panningen
+PAPEKP,Papekop
+PAPDRT,Papendrecht
+PAPHVN,Papenhoven
+PAPVRT,Papenvoort
+PARRGA,Parrega
+PATWLD,Paterswolde
+PEEST,Peest
+PEINS,Peins
+PEIZE,Peize
+PEPRGA,Peperga
+PERNIS,Pernis Rotterdam
+PERSGN,Persingen
+PESSEH,Pesse Hoogeveen
+PESSEW,Pesse Westerveld
+PETTEN,Petten
+PHILPP,Philippine
+PIAAM,Piaam
+PIERSH,Piershil
+PIETBN,Pieterburen
+PIETBM,Pietersbierum
+PIETZL,Pieterzijl
+PIJNAK,Pijnacker
+PINGJM,Pingjum
+PLASML,Plasmolen
+POEDRN,Poederoijen
+POELDK,Poeldijk
+POLSBK,Polsbroek
+POORTG,Poortugaal
+POORTV,Poortvliet
+POPPWR,Poppenwier
+POSTHT,Posterholt
+PRINSB,Prinsenbeek
+PUIFLK,Puiflijk
+PUNTHT,Punthorst
+PURMEV,Purmer Edam-Volendam
+PURMWA,Purmer Waterland
+PURMED,Purmerend
+PURMLD,Purmerland
+PUTH,Puth
+PUTTE,Putte
+PUTTEN,Putten
+PUTTHK,Puttershoek
+RAALTE,Raalte
+RAAMDK,Raamsdonk
+RAAMDV,Raamsdonksveer
+RAARD,Raard
+RADEWK,Radewijk
+RADIOK,Radio Kootwijk
+RAERD,Raerd
+RANDWK,Randwijk
+RANSDL,Ransdaal
+RASQRT,Rasquert
+RAVSTN,Ravenstein
+RAVWIJ,Ravenswaaij
+RAVNWD,Ravenswoud
+READTK,Readtsjerk
+REAHUS,Reahus
+REDZUM,Reduzum
+REEK,Reek
+REEUWK,Reeuwijk
+REIJMS,Reijmerstok
+REITSM,Reitsum
+REKKEN,Rekken
+RENESS,Renesse
+RENKUM,Renkum
+RENSWD,Renswoude
+RESSEN,Ressen
+RETRMT,Retranchement
+REUSEL,Reusel
+REUTUM,Reutum
+REUVER,Reuver
+RHA,Rha
+RHEDEN,Rheden
+RHEE,Rhee
+RHEEZE,Rheeze
+RHEEVN,Rheezerveen
+RHENEN,Rhenen
+RHENOY,Rhenoy
+RHOON,Rhoon
+RIDDKK,Ridderkerk
+RIED,Ried
+RIEL,Riel
+RIEN,Rien
+RIETHV,Riethoven
+RIETML,Rietmolen
+RIJEN,Rijen
+RIJKVT,Rijkevoort
+RIJKWL,Rijkevoort-De Walsert
+RIJNWD,Rijnsaterwoude
+RIJNBG,Rijnsburg
+RIJPWT,Rijpwetering
+RIJS,Rijs
+RIJSBG,Rijsbergen
+RIJSHT,Rijsenhout
+RIJSSN,Rijssen
+RIJSGE,Rijswijk (GLD)
+RIJSNB,Rijswijk (NB)
+RIJSZH,Rijswijk ZH
+RILLND,Rilland
+RINSMG,Rinsumageast
+RITTHM,Ritthem
+ROCKNJ,Rockanje
+RODEN,Roden
+RODRSC,Roderesch
+RODRWD,Roderwolde
+ROELVN,Roelofarendsveen
+ROERMD,Roermond
+ROGAT,Rogat
+ROGGEL,Roggel
+ROHEL,Rohel
+ROLDE,Rolde
+ROODSC,Roodeschool
+ROOSDL,Roosendaal
+ROOSTR,Roosteren
+ROSMLN,Rosmalen
+ROSSGE,Rossum GE
+ROSSOV,Rossum OV
+ROSWKL,Roswinkel
+ROTSGT,Rotstergaast
+ROTSHL,Rotsterhaule
+ROTTDM,Rotterdam
+ROTALB,Rotterdam-Albrandswaard
+ROTTVL,Rottevalle
+ROTTFR,Rottum Fr
+ROTTGR,Rottum GR
+ROUVN,Rouveen
+ROZNNH,Rozenburg NH
+ROZNZH,Rozenburg ZH
+ROZNDL,Rozendaal
+RUCPHN,Rucphen
+RUIGHZ,Ruigahuizen
+RUINDW,Ruinen De Wolden
+RUINWV,Ruinen Westerveld
+RUINWD,Ruinerwold
+RUMPT,Rumpt
+RUTTEN,Rutten
+RUURLO,Ruurlo
+RYPTSK,Ryptsjerk
+SGRAVM,'s Gravenmoer
+SAAKSM,Saaksum
+SAASVD,Saasveld
+SAAXHZ,Saaxumhuizen
+SAMBK,Sambeek
+SANDFD,Sandfirden
+SANTPN,Santpoort-Noord
+SANTPZ,Santpoort-Zuid
+VELSNZ,Santpoort-Zuid
+SAPPMR,Sappemeer
+SASGNT,Sas van Gent
+SASSHM,Sassenheim
+SAUWRD,Sauwerd
+SCHAGN,Schagen
+SCHAGB,Schagerbrug
+SCHAIJ,Schaijk
+SCHAHR,Schalkhaar
+SCHAWK,Schalkwijk
+SCHASM,Schalsum
+SCHADM,Schardam
+SCHADK,Scharendijke
+SCHAMR,Scharmer
+SCHAGT,Scharnegoutum
+SCHABG,Scharsterbrug
+SCHAWD,Scharwoude
+SCHEDA,Scheemda
+SCHEWD,Scheerwolde
+SCHEHT,Schellinkhout
+SCHELN,Schelluinen
+SCHEHN,Schermerhorn
+SCHENS,Scherpenisse
+SCHEFR,Scherpenzeel FR
+SCHEGE,Scherpenzeel GE
+SCHETS,Schettens
+SCHEDR,Scheulder
+SCHIDM,Schiedam
+SCHIMO,Schiermonnikoog
+SCHIJF,Schijf
+SCHIJN,Schijndel
+SCHIWD,Schildwolde
+SCHIMM,Schimmert
+SCHING,Schin op Geul
+SCHINN,Schinnen
+SCHIVD,Schinveld
+SCHIBG,Schipborg
+SCHIHL,Schiphol
+SCHIRK,Schiphol-Rijk
+SCHILD,Schipluiden
+SCHOLD,Schokland
+SCHODK,Schoondijke
+SCHOBK,Schoonebeek
+SCHOHV,Schoonhoven
+SCHOLO,Schoonloo
+SCHONO,Schoonoord
+SCHOWD,Schoonrewoerd
+SCHOOR,Schoorl
+SCHORE,Schore
+SCHOZL,Schouwerzijl
+SCHRRD,Schraard
+SCHUST,Schuinesloot
+SEBDBR,Sebaldeburen
+SELLNG,Sellingen
+SERSSW,Serooskerke Schouwen
+SERSVE,Serooskerke Veere
+SEVNUM,Sevenum
+SEXBRM,Sexbierum
+SGRAVL,'s-Graveland
+SGRAVD,'s-Gravendeel
+SGRAVH,'s-Gravenhage
+SGRAVP,'s-Gravenpolder
+SGRAVZ,'s-Gravenzande
+SHEEAB,'s-Heer Abtskerke
+SHEEAR,'s-Heer Arendskerke
+SHEEHK,'s-Heer Hendrikskinderen
+SHEEBG,'s-Heerenberg
+SHEEBK,'s-Heerenbroek
+SHEEHO,'s-Heerenhoek
+SHERTO,'s-Hertogenbosch
+SIBCLH,Sibculo
+SIBCLT,Sibculo Twenteraand
+SIBRBR,Sibrandabuorren
+SIBRHS,Sibrandahus
+SIDDB,Siddeburen
+SIEBGW,Siebengewald
+SIEGWD,Siegerswoude
+SIJBKP,Sijbekarspel
+SILVLD,Silvolde
+SIMNHV,Simonshaven
+SIMPVD,Simpelveld
+SINDRN,Sinderen
+STAGAT,Sint Agatha
+STANNN,Sint Annen
+STANTH,Sint Anthonis
+STGEER,Sint Geertruid
+STHUBT,Sint Hubert
+STJANK,Sint Jansklooster
+STJANS,Sint Jansteen
+STJOOS,Sint Joost
+STKRUI,Sint Kruis
+STMAAR,Sint Maarten
+STMTBR,Sint Maartensbrug
+STMRVB,Sint Maartensvlotbrug
+STNICG,Sint Nicolaasga
+STODIL,Sint Odilienberg
+STPANC,Sint Pancras
+STPHIL,Sint Philipsland
+STANNA,Sint-Annaland
+STJOHA,Sintjohannesga
+STMTDK,Sint-Maartensdijk
+STMICH,Sint-Michielsgestel
+STOEDR,Sint-Oedenrode
+SIRJLD,Sirjansland
+SITTRD,Sittard
+SKINGN,Skingen
+SLAGHR,Slagharen
+SLAPTP,Slappeterp
+SLEEN,Sleen
+SLEEUW,Sleeuwijk
+SLENKN,Slenaken
+SLIEDR,Sliedrecht
+SLIJKB,Slijkenburg
+SLIJKE,Slijk-Ewijk
+SLOCHT,Slochteren
+SLOOTD,Slootdorp
+SLOTEN,Sloten
+SLUIS,Sluis
+SLUISK,Sluiskil
+SMAKT,Smakt
+SMALEE,Smalle Ee
+SMALBG,Smallebrugge
+SMILDE,Smilde
+SNAKKB,Snakkerburen
+SNEEK,Sneek
+SNELRW,Snelrewaard
+SNIKZW,Snikzwaag
+SOERND,Soerendonk
+SOEST,Soest
+SOESTB,Soesterberg
+SOMERN,Someren
+SOMMDK,Sommelsdijk
+SONBRG,Son en Breugel
+SONDEL,Sondel
+SONNGA,Sonnega
+SPAAHL,Spaarndam
+SPAAHA,Spaarndam gem. Haarlem
+SPANBK,Spanbroek
+SPANGA,Spanga
+SPANKR,Spankeren
+SPANNM,Spannum
+SPAUBK,Spaubeek
+SPIERM,Spier
+SPIERW,Spier Westerveld
+SPIERD,Spierdijk
+SPIJKG,Spijk GN
+SPIJKL,Spijk Lingewaal
+SPIJKR,Spijk Rijnwaarden
+SPIJKN,Spijkenisse
+SPKBDR,Spijkerboor DR
+SPKBNH,Spijkerboor NH
+SPRANG,Sprang-Capelle
+SPRUND,Sprundel
+SPUI,Spui
+STWILL,St. Willebrord
+STADHV,Stad aan 't Haringvliet
+STADKN,Stadskanaal
+STAMPG,Stampersgat
+STANDD,Standdaarbuiten
+STANNP,St.-Annaparochie
+STAPHS,Staphorst
+STARNM,Starnmeer
+STARTL,Startenhuizen
+STARTE,Startenhuizen Eemsmond
+STAVNS,Stavenisse
+STAVRN,Stavoren
+STEDUM,Stedum
+STNBDR,Steenbergen DR
+STNBNB,Steenbergen NB
+STNDAM,Steendam
+STNDRN,Steenderen
+STNKMR,Steenenkamer
+STNSEL,Steensel
+STNWK,Steenwijk
+STNWKW,Steenwijkerwold
+STEGRN,Stegeren
+STEGGD,Steggerda
+STEIN,Stein
+STELLD,Stellendam
+STERKS,Sterksel
+STEVBK,Stevensbeek
+STEVWT,Stevensweert
+STEYL,Steyl
+STIELK,Stieltjeskanaal
+STIENS,Stiens
+STITSW,Stitswerd
+STJACP,St.-Jacobiparochie
+STOKKM,Stokkum
+STOLWK,Stolwijk
+STOMPT,Stompetoren
+STOUTB,Stoutenburg
+STTBND,Stoutenburg Noord
+STRAMP,Stramproy
+STREEF,Streefkerk
+STRIEP,Striep
+STRIJB,Strijbeek
+STRIJN,Strijen
+STRIJS,Strijensas
+STROE,Stroe
+STROOB,Stroobos
+STUIFH,Stuifzand
+STUIFM,Stuifzand M-Drenthe
+SUMAR,Sumar
+SURHVN,Surhuisterveen
+SURHZM,Surhuizum
+SUSTRN,Susteren
+SUWALD,Suwald
+SWALMN,Swalmen
+SWEIKH,Sweikhuizen
+SWICHM,Swichum
+SWIFTB,Swifterbant
+SWOLGN,Swolgen
+TGOY,'t Goy
+THAANT,'t Haantje
+THARDE,'t Harde
+TLOOOL,'t Loo Oldebroek
+TVELD,'t Veld
+TWAAR,'t Waar
+TZAND,'t Zand
+TZANDT,'t Zandt
+TAARLO,Taarlo
+TEEFFL,Teeffelen
+TEERNS,Teerns
+TEGELN,Tegelen
+TNBOER,Ten Boer
+TNPOST,Ten Post
+TRAAR,Ter Aar
+TRAARD,Ter Aard
+TRAPEL,Ter Apel
+TRAPKN,Ter Apelkanaal
+TRHEIE,Ter Heijde
+TRIDZD,Ter Idzard
+TRBAND,Terband
+TRBORG,Terborg
+TRHEIN,Terheijden
+TRHERN,Terherne
+TRHOLE,Terhole
+TRKAPL,Terkaple
+TRMUNT,Termunten
+TRMUZL,Termunterzijl
+TRNAAR,Ternaard
+TRNEUZ,Terneuzen
+TROELE,Teroele
+TRSCHU,Terschuur
+TRSOAL,Tersoal
+TRWISP,Terwispel
+TRWOLD,Terwolde
+TETRGN,Teteringen
+TEUGE,Teuge
+THESNG,Thesinge
+THOLEN,Tholen
+THORN,Thorn
+TIEL,Tiel
+TIENDH,Tiendeveen
+TIENDM,Tiendeveen M-Drenthe
+TIENUT,Tienhoven UT
+TIENZH,Tienhoven ZH
+TIENRY,Tienray
+TIJNJE,Tijnje
+TILBRG,Tilburg
+TILLGT,Tilligte
+TINLLG,Tinallinge
+TINTE,Tinte
+TIRNS,Tirns
+TJALHZ,Tjalhuizum
+TJALLB,Tjalleberd
+TJERKG,Tjerkgaast
+TJERKW,Tjerkwerd
+TJUCHM,Tjuchem
+TOLBRT,Tolbert
+TOLDK,Toldijk
+TOLKMR,Tolkamer
+TOLLBK,Tollebeek
+TONDEN,Tonden
+TOORNW,Toornwerd
+TRICHT,Tricht
+TRIEMN,Triemen
+TRIPSC,Tripscompagnie
+TUBBRG,Tubbergen
+TUIL,Tuil
+TUITJH,Tuitjenhorn
+TUK,Tuk
+TULLWL,Tull en 't Waal
+TWELLO,Twello
+TWIJZL,Twijzel
+TWIJZH,Twijzelerheide
+TWISK,Twisk
+TYNRLO,Tynaarlo
+TYTSJK,Tytsjerk
+TZUM,Tzum
+TZUMMR,Tzummarum
+UBBENA,Ubbena
+UBBERG,Ubbergen
+UDDEL,Uddel
+UDEN,Uden
+UDENHT,Udenhout
+UFFELT,Uffelte
+UGCHLN,Ugchelen
+UITDAM,Uitdam
+UITGST,Uitgeest
+UITHRN,Uithoorn
+UITHZN,Uithuizen
+UITHMD,Uithuizermeeden
+UITWLL,Uitwellingerga
+UITWK,Uitwijk
+ULESTR,Ulestraten
+ULFT,Ulft
+ULICOT,Ulicoten
+ULRUM,Ulrum
+ULVNHT,Ulvenhout
+ULVHAC,Ulvenhout AC
+URETRP,Ureterp
+URK,Urk
+URMOND,Urmond
+URSEM,Ursem
+URSEMS,Ursem gem. S
+USQURT,Usquert
+UTRECH,Utrecht
+VAALS,Vaals
+VAASSN,Vaassen
+VALBRG,Valburg
+VALKLI,Valkenburg LI
+VALKZH,Valkenburg ZH
+VALKWD,Valkenswaard
+VALTHE,Valthe
+VALTMD,Valthermond
+VARIK,Varik
+VARSSD,Varsselder
+VARSSV,Varsseveld
+VASSE,Vasse
+VEELRV,Veelerveen
+VEEN,Veen
+VEENDM,Veendam
+VEENDL,Veenendaal
+VEENHZ,Veenhuizen
+VEENGN,Veeningen
+VEENKL,Veenklooster
+VEENOO,Veenoord
+VEERE,Veere
+VEESSN,Veessen
+VEGELO,Vegelinsoord
+VEGHEL,Veghel
+VELDDR,Velddriel
+VELDEN,Velden
+VELDHV,Veldhoven
+VELPGE,Velp GE
+VELPNB,Velp NB
+VELSNN,Velsen-Noord
+VELSNZ,Velsen-Zuid
+VELSBR,Velserbroek
+VENEBG,Venebrugge
+VENHRS,Venhorst
+VENHZN,Venhuizen
+VENLO,Venlo
+VENRAY,Venray
+VENZEL,Ven-Zelderheide
+VESSEM,Vessem
+VETHZN,Vethuizen
+VEULEN,Veulen
+VIANNB,Vianen NB
+VIANUT,Vianen UT
+VIERKK,Vierakker
+VIERHT,Vierhouten
+VIERHZ,Vierhuizen
+VIERLB,Vierlingsbeek
+VIERPL,Vierpolders
+VIJFHZ,Vijfhuizen
+VIJLEN,Vijlen
+VILSTR,Vilsteren
+VINKGA,Vinkega
+VINKLM,Vinkel
+VINKLB,Vinkel Bernheze
+VINKBT,Vinkenbuurt
+VINKVN,Vinkeveen
+VISVLT,Visvliet
+VLAARD,Vlaardingen
+VLAGTW,Vlagtwedde
+VLEDDE,Vledder
+VLEDDR,Vledderveen DR
+VLEDGR,Vledderveen GR
+VLEUTN,Vleuten
+VLIELD,Vlieland
+VLIERD,Vlierden
+VLIJMN,Vlijmen
+VLISSG,Vlissingen
+VLIST,Vlist
+VLODRP,Vlodrop
+VOERDL,Voerendaal
+VOGELZ,Vogelenzang
+VOGELW,Vogelwaarde
+VOLEND,Volendam
+VOLKEL,Volkel
+VOLLHV,Vollenhove
+VONDPL,Vondelingenplaat Rdam
+VOORB,Voorburg
+VOORHT,Voorhout
+VOORSC,Voorschoten
+VOOROU,Voorst Oude IJsselstreek
+VOORVO,Voorst Voorst
+VOORTH,Voorthuizen
+VORCHT,Vorchten
+VORDEN,Vorden
+VORSTB,Vorstenbosch
+VORTML,Vortum-Mullem
+VRAGDR,Vragender
+VREDHM,Vredenheim
+VREDPL,Vredepeel
+VREELD,Vreeland
+VRIES,Vries
+VRIESL,Vriescheloo
+VRIEZV,Vriezenveen
+VROOMH,Vroomshoop
+VROUAK,Vrouwenakker
+VROUPR,Vrouwenparochie
+VROUPD,Vrouwenpolder
+VUGHT,Vught
+VUREN,Vuren
+WAAKSS,Waaksens
+WAAL,Waal
+WAALRE,Waalre
+WAALWK,Waalwijk
+WAARDE,Waarde
+WAARBG,Waardenburg
+WAARDR,Waarder
+WAARHZ,Waardhuizen
+WAARLD,Waarland
+WAAXNS,Waaxens
+WACHTM,Wachtum
+WADDXV,Waddinxveen
+WADENO,Wadenoijen
+WAGENB,Wagenberg
+WAGNBG,Wagenborgen
+WAGNGN,Wageningen
+WALEM,Walem
+WALSRD,Walsoorden
+WALTWD,Walterswald
+WAMEL,Wamel
+WANNPV,Wanneperveen
+WANROJ,Wanroij
+WANSSM,Wanssum
+WANSWT,Wanswert
+WAPNVD,Wapenveld
+WAPSE,Wapse
+WAPSVN,Wapserveen
+WARDER,Warder
+WARFFM,Warffum
+WARFHZ,Warfhuizen
+WARFSM,Warfstermolen
+WARMNH,Warmenhuizen
+WARMND,Warmond
+WARNS,Warns
+WANSVD,Warnsveld
+WARSTN,Warstiens
+WARTEN,Warten
+WASKEM,Waskemeer
+WASPIK,Waspik
+WASSNR,Wassenaar
+WATERN,Wateren
+WATERG,Watergang
+WATERH,Waterhuizen
+WATERI,Wateringen
+WATERK,Waterlandkerkje
+WAVERV,Waverveen
+WEDDE,Wedde
+WEERSL,Weerselo
+WEERT,Weert
+WEESP,Weesp
+WEHEDH,Wehe-den Hoorn
+WEHL,Wehl
+WEIDUM,Weidum
+WEITVN,Weiteveen
+WEKERM,Wekerom
+WELLGE,Well GE
+WELLLI,Well L
+WELLRL,Wellerlooi
+WELSUM,Welsum
+WEMELD,Wemeldinge
+WENUMW,Wenum Wiesel
+WERGEA,Wergea
+WERKDM,Werkendam
+WERKHV,Werkhoven
+WERNHT,Wernhout
+WERVHF,Wervershoof
+WESEPE,Wesepe
+WESSEM,Wessem
+WBEEMS,Westbeemster
+WBROEK,Westbroek
+WDORP,Westdorp
+WDORPE,Westdorpe
+WNDRP,Westendorp
+WRBEEK,Westerbeek
+WRBORK,Westerbork
+WRBROE,Westerbroek
+WREMDN,Westeremden
+WRGEES,Westergeest
+WRHAAR,Westerhaar-Vriezenv wijk
+WESTHV,Westerhoven
+WRLAND,Westerland
+WRLEE,Westerlee
+WRNIEL,Westernieland
+WRVELD,Westervelde
+WRVOOR,Westervoort
+WRWIJT,Westerwijtwerd
+WGRAFT,West-Graftdijk
+WESTHM,Westhem
+WHOEK,Westhoek
+WKAPLL,Westkapelle
+WKNOLD,Westknollendam
+WMAAS,Westmaas
+WTERSC,West-Terschelling
+WWOUD,Westwoud
+WZAAN,Westzaan
+WETERG,Wetering
+WETEBG,Weteringbrug
+WETSNS,Wetsens
+WETSNG,Wetsinge
+WEURT,Weurt
+WEZEP,Wezep
+WEZUP,Wezup
+WEZUPB,Wezuperbrug
+WICHMD,Wichmond
+WIER,Wier
+WIERDN,Wierden
+WIERWD,Wieringerwaard
+WIERWF,Wieringerwerf
+WIERUM,Wierum
+WIJCHN,Wijchen
+WIJCKL,Wijckel
+WIJDNS,Wijdenes
+WIJDWR,Wijdewormer
+WIJHE,Wijhe
+WIJKAZ,Wijk aan Zee
+WIJKDS,Wijk bij Duurstede
+WIJKAB,Wijk en Aalburg
+WIJLRE,Wijlre
+WIJNAL,Wijnaldum
+WIJNRD,Wijnandsrade
+WIJNBG,Wijnbergen
+WIJNGD,Wijngaarden
+WIJNWD,Wijnjewoude
+WIJSTR,Wijster
+WILBRT,Wilbertoord
+WILDVK,Wildervank
+WILHDP,Wilhelminadorp
+WILHOO,Wilhelminaoord
+WILLOO,Willemsoord
+WILLST,Willemstad
+WILNIS,Wilnis
+WILP,Wilp
+WILSUM,Wilsum
+WINDE,Winde
+WINDRK,Windraak
+WINKEL,Winkel
+WINNWR,Winneweer
+WINSCH,Winschoten
+WINSSN,Winssen
+WINSFR,Winsum Fr
+WINSGR,Winsum GR
+WINTLR,Wintelre
+WINTWK,Winterswijk
+WINTBR,Winterswijk Brinkheurne
+WINTCO,Winterswijk Corle
+WINTHX,Winterswijk Henxel
+WINTHU,Winterswijk Huppel
+WINTKO,Winterswijk Kotten
+WINTME,Winterswijk Meddo
+WINTMI,Winterswijk Miste
+WINTRA,Winterswijk Ratum
+WINTWO,Winterswijk Woold
+WIRDFR,Wirdum Fr
+WIRDGR,Wirdum Gn
+WISSKK,Wissenkerke
+WITHRN,Witharen
+WITMSM,Witmarsum
+WITTEP,Witte Paarden
+WITTLT,Wittelte
+WITTEM,Wittem
+WITTVN,Witteveen
+WIUWRT,Wiuwert
+WJELSP,Wjelsryp
+WOENSD,Woensdrecht
+WOERDN,Woerden
+WOEVRL,Woerdense Verlaat
+WOGNUM,Wognum
+WOLDDP,Woldendorp
+WOLFHZ,Wolfheze
+WOLPHD,Wolphaartsdijk
+WOLSUM,Wolsum
+WOLTSM,Woltersum
+WOLVGA,Wolvega
+WOMMLS,Wommels
+WONS,Wons
+WORKUM,Workum
+WORMER,Wormer
+WORMVR,Wormerveer
+WOUBRG,Woubrugge
+WOUDBL,Woudbloem
+WOUDBG,Woudenberg
+WOUDRM,Woudrichem
+WOUDSD,Woudsend
+WOUW,Wouw
+WOUWPL,Wouwse Plantage
+WYNS,Wyns
+WYTGRD,Wytgaard
+YDE,Yde
+YERSKE,Yerseke
+YPECLS,Ypecolsga
+YSBRCH,Ysbrechtum
+YSSELS,Ysselsteyn LI
+ZAAMSL,Zaamslag
+ZAANDM,Zaandam
+ZAANDK,Zaandijk
+ZALK,Zalk
+ZALTBM,Zaltbommel
+ZANDBG,Zandberg
+ZANDWR,Zandeweer
+ZANDHZ,Zandhuizen
+ZANDPL,Zandpol
+ZANDVT,Zandvoort
+ZEDDAM,Zeddam
+ZEEGSE,Zeegse
+ZEELND,Zeeland
+ZEERP,Zeerijp
+ZEEWLD,Zeewolde
+ZEGGE,Zegge
+ZEGVLD,Zegveld
+ZEIJEN,Zeijen
+ZEIJRV,Zeijerveen
+ZEIJRD,Zeijerveld
+ZEIST,Zeist
+ZELHEM,Zelhem
+ZENDRN,Zenderen
+ZENWTL,Zennewijnen
+ZENWNR,Zennewijnen Neerijnen
+ZETTEN,Zetten
+ZEVENR,Zevenaar
+ZEVENB,Zevenbergen
+ZEVBHM,Zevenbergschen Hoek
+ZEVBHD,Zevenbergschen Hoek Dri
+ZEVNHV,Zevenhoven
+ZEVHGR,Zevenhuizen GR
+ZEVHZH,Zevenhuizen ZH
+ZIERKZ,Zierikzee
+ZIEUWT,Zieuwent
+ZIJDVD,Zijderveld
+ZIJDWD,Zijdewind
+ZIJLDK,Zijldijk
+ZOELEN,Zoelen
+ZOELMD,Zoelmond
+ZOETMR,Zoetermeer
+ZOETWD,Zoeterwoude
+ZONNEM,Zonnemaire
+ZORGVL,Zorgvlied
+ZOUTLD,Zoutelande
+ZOUTKP,Zoutkamp
+ZBEIJL,Zuid-Beijerland
+ZBROEK,Zuidbroek
+ZDORPP,Zuiddorpe
+ZRMEER,Zuidermeer
+ZRWOUD,Zuiderwoude
+ZHORN,Zuidhorn
+ZLAARV,Zuidlaarderveen
+ZLAND,Zuidland
+ZLAREN,Zuidlaren
+ZOBEEM,Zuidoostbeemster
+ZSCHAR,Zuid-Scharwoude
+ZSCHER,Zuidschermer
+ZVEEN,Zuidveen
+ZVELD,Zuidveld
+ZVELDE,Zuidvelde Noordenveld
+ZWLDDR,Zuidwolde DR
+ZWLDGR,Zuidwolde GR
+ZZANDE,Zuidzande
+ZUILCH,Zuilichem
+ZUNA,Zuna
+ZUNDRT,Zundert
+ZURICH,Zurich
+ZUTPHN,Zutphen
+ZUURDK,Zuurdijk
+ZWAAG,Zwaag
+ZWAAGO,Zwaagdijk-Oost
+ZWAAGW,Zwaagdijk-West
+ZWAANH,Zwaanshoek
+ZWAGRB,Zwagerbosch
+ZWAMMD,Zwammerdam
+ZWANBG,Zwanenburg
+ZWARTB,Zwartebroek
+ZWARTM,Zwartemeer
+ZWARTW,Zwartewaal
+ZWARTS,Zwartsluis
+ZWEELO,Zweeloo
+ZWEINS,Zweins
+ZWIGGT,Zwiggelte
+ZWIJND,Zwijndrecht
+ZWINDR,Zwinderen
+ZWOLLE,Zwolle
+1EXLMD,1e Exloermond
+2EXLMD,2e Exloermond
+2VLTMD,2e Valthermond

@@ -1,0 +1,19 @@
+# Translate certain words inside messages before posting
+# Format: old_test,new_text
+# Not implemented yet
+Brandmelding PAC,PAC melding
+Handmelder OMS,OMS
+Brandmelding OMS,OMS
+Autom. Brand OMS,OMS
+Ass. Ambu (til assistentie),til assistentie
+Ass. Ambu (afhijsen),Afhijsen
+Ass. Politie,assistentie Politie
+Ass. Ambu (Afhijsen),Afhijsen
+bv,B.V.
+Ass. Ambu,assistentie ambulance
+ Li , links 
+ Re , rechts
+[Kazerne Alarm],,
+Stank/Hinder. lucht (Meting) (Gev Stof: Aardgas),gasmeting
+Ongeval Binnen (koolmonoxide/co) (meting),CO meting
+Autom. Brand,Automatische brandmelding

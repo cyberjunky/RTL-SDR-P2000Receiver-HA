@@ -1,0 +1,2 @@
+# Only process messages with these capcodes, one per line, empty is all
+# Not yet implemented

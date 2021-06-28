@@ -1,0 +1,2 @@
+# Only pass messages when filter matches, format: one string per line, * and ? masks are allowed.
+# When empty all messages pass

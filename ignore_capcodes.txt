@@ -1,0 +1,3 @@
+# This capcodes will be excluded from the messages list, one per line.
+# capcode,description
+123456789,TEST GROUP
