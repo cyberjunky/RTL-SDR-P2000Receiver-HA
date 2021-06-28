@@ -2,8 +2,6 @@
 """RTL-SDR P2000 Receiver for Home Assistant."""
 
 # See README for installation instructions
-# Config settings inside this file can be found in the 'RTL-SDR' and 'Home Assistant' section
-
 import calendar
 import configparser
 import fnmatch
