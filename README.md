@@ -1,35 +1,33 @@
 # RTL-SDR-P2000Receiver-HA
 Receiving P2000 messages using RTL-SDR stick and post them to Home Assistant.
 
-Read the Credits secion below.
+Read the Credits section below.
 
 ## Features
 
 - Standalone P2000 messages receiver using a local RTL-SDR compatible receiver
 - Linux based only
 - Post P2000 message information to a Home Assistant sensor using the REST API (no need to install something on HA side)
-- Capcodes database (text based for now), see db_capcodes.txt
-- Optional text match filter (white list), see match_text.txt
-- Capcode ignore filter (black list), see ignore_capcodes.txt
+- Capcodes database (text based for now), see 'db_capcodes.txt'
+- Optional text match filter (white-list), see 'match_text.txt'
+- Capcode ignore filter (black-list), see 'ignore_capcodes.txt'
 
 
 ## Screenshots
 
-![View](/screenshots/p2000_sensor.jpg)
+![View](/screenshots/p2000_sensor.png)
 
-![View](/screenshots/dongle.jpg)
-
-![View](/screenshots/cli_output.jpg)
+![View](/screenshots/cli_output.png)
 
 ## Installation
-sudo gpasswd -a yourusername vboxusers
-0) Install required build tools and libraries (tested on Debian 10)
+
+### 0) Install required build tools and libraries (tested on Debian 10)
 
 ```
 sudo apt-get install build-essential cmake unzip pkg-config libusb-1.0-0-dev git qt4-qmake libpulse-dev libx11-dev qt4-default
 ```
 
-1) Install RTL-SDR software
+### 1) Install RTL-SDR software
 
 Download and build the software:
 ```
@@ -72,7 +70,7 @@ lost at least 908 bytes
 ```
 
 
-2) Install multimon-ng software
+### 2) Install multimon-ng software
 
 Download and build the software:
 ```
@@ -132,7 +130,7 @@ Usage: multimon-ng [file] [file] [file] ...
 ```
 
 
-3) Install this RTL-SDR-P2000Receiver-HA software
+### 3) Install this RTL-SDR-P2000Receiver-HA software
 
 ```
 cd
@@ -155,44 +153,44 @@ Python packages, the needed packages are installed by default on Debian 10.
 If you get errors about missing packages when starting the software, you may need to install them for your distro.
 
 
-5) Cleanup build environments (optional)
+### 4) Cleanup build environments (optional)
 
 ```
 cd
 sudo rm -r rtl-sdr multimon-ng
 ```
 
-6) Tools
+### 5) Tools (optional)
 
 I have created some tools to download and/or convert or extract data from.
 You can find them in the tools directory, you must run them from there.
 
-'gen_db_capcodes.py'
+*gen_db_capcodes.py*
 Downloads capcodes file from http://p2000.bommel.net/cap2csv.php
 And created the db_capcodes.txt file from it.
 Different delimiter, lowercase header names, fill capcodes with zero's to 9 char lenght.
 Format: capcode,discipline,region,location,description,remark
 
-'gen_db_plaatsnamen.py'
+*gen_db_plaatsnamen.py*
 Downloads Afkortingen_Plaatsnamen sheet from Google Docs file https://www.tomzulu10capcodes.nl/
 And extracts the plaatsnamen from it to create db_plaatsnamen.txt.
 It's used to check for valid plaatsnamen.
 Format: plaatsnaam
 
-'gen_db_pltsnmn.py'
+*gen_db_pltsnmn.py*
 Downloads Afkortingen_Plaatsnamen sheet from google Docs file https://www.tomzulu10capcodes.nl/
 And creates the db_pltsnmn.txt file from it.
 And extracts the pltsnmn and plaatsnamen from it to create db_pltsnmn.txt.
 It's used to look up plaatsnamen by there short name and convert them.
 Format: pltsnmn,plaatsnaam
 
-'gen_match_regions.py'
+*gen_match_regions.py*
 Extract all regions from db_capcodes.txt and create match_regions.txt.
 Format: regio
 
 This file is not used yet, but will be a filter later.
 
-'gen_match_disciplines.py'
+*gen_match_disciplines.py*
 Extract all disciplines from db_capcodes.txt and create match_disciplines.txt
 Format: disciplines
 
@@ -204,6 +202,8 @@ This is also the location the temp data is downloaded to.
 
 
 ## RTL-SDR dongle
+
+![View](/screenshots/dongle.jpg)
 
 I tested the software with:
 *RTL-SDR / FM+DAB / DVB-T USB 2.0 Mini Digital TV Stick DVBT Dongle SDR*
