@@ -1,35 +1,33 @@
 # RTL-SDR-P2000Receiver-HA
 Receiving P2000 messages using RTL-SDR stick and post them to Home Assistant.
 
-Read the Credits secion below.
+Read the Credits section below.
 
 ## Features
 
 - Standalone P2000 messages receiver using a local RTL-SDR compatible receiver
 - Linux based only
 - Post P2000 message information to a Home Assistant sensor using the REST API (no need to install something on HA side)
-- Capcodes database (text based for now), see db_capcodes.txt
-- Optional text match filter (white list), see match_text.txt
-- Capcode ignore filter (black list), see ignore_capcodes.txt
+- Capcodes database (text based for now), see 'db_capcodes.txt'
+- Optional text match filter (white-list), see 'match_text.txt'
+- Capcode ignore filter (black-list), see 'ignore_capcodes.txt'
 
 
 ## Screenshots
 
-![View](/screenshots/p2000_sensor.jpg)
+![View](/screenshots/p2000_sensor.png)
 
-![View](/screenshots/dongle.jpg)
-
-![View](/screenshots/cli_output.jpg)
+![View](/screenshots/cli_output.png)
 
 ## Installation
-sudo gpasswd -a yourusername vboxusers
-0) Install required build tools and libraries (tested on Debian 10)
+
+### 0) Install required build tools and libraries (tested on Debian 10)
 
 ```
 sudo apt-get install build-essential cmake unzip pkg-config libusb-1.0-0-dev git qt4-qmake libpulse-dev libx11-dev qt4-default
 ```
 
-1) Install RTL-SDR software
+### 1) Install RTL-SDR software
 
 Download and build the software:
 ```
@@ -72,7 +70,7 @@ lost at least 908 bytes
 ```
 
 
-2) Install multimon-ng software
+### 2) Install multimon-ng software
 
 Download and build the software:
 ```
@@ -132,7 +130,7 @@ Usage: multimon-ng [file] [file] [file] ...
 ```
 
 
-3) Install this RTL-SDR-P2000Receiver-HA software
+### 3) Install this RTL-SDR-P2000Receiver-HA software
 
 ```
 cd
@@ -155,44 +153,49 @@ Python packages, the needed packages are installed by default on Debian 10.
 If you get errors about missing packages when starting the software, you may need to install them for your distro.
 
 
-5) Cleanup build environments (optional)
+### 4) Cleanup build environments (optional)
 
 ```
 cd
 sudo rm -r rtl-sdr multimon-ng
 ```
 
-6) Tools
+### 5) Tools (optional)
 
 I have created some tools to download and/or convert or extract data from.
 You can find them in the tools directory, you must run them from there.
 
-'gen_db_capcodes.py'
+*gen_db_capcodes.py*
+
 Downloads capcodes file from http://p2000.bommel.net/cap2csv.php
 And created the db_capcodes.txt file from it.
 Different delimiter, lowercase header names, fill capcodes with zero's to 9 char lenght.
 Format: capcode,discipline,region,location,description,remark
 
-'gen_db_plaatsnamen.py'
+*gen_db_plaatsnamen.py*
+
 Downloads Afkortingen_Plaatsnamen sheet from Google Docs file https://www.tomzulu10capcodes.nl/
 And extracts the plaatsnamen from it to create db_plaatsnamen.txt.
 It's used to check for valid plaatsnamen.
 Format: plaatsnaam
 
-'gen_db_pltsnmn.py'
+*gen_db_pltsnmn.py*
+
 Downloads Afkortingen_Plaatsnamen sheet from google Docs file https://www.tomzulu10capcodes.nl/
 And creates the db_pltsnmn.txt file from it.
 And extracts the pltsnmn and plaatsnamen from it to create db_pltsnmn.txt.
 It's used to look up plaatsnamen by there short name and convert them.
 Format: pltsnmn,plaatsnaam
 
-'gen_match_regions.py'
+*gen_match_regions.py*
+
 Extract all regions from db_capcodes.txt and create match_regions.txt.
 Format: regio
 
 This file is not used yet, but will be a filter later.
 
-'gen_match_disciplines.py'
+*gen_match_disciplines.py*
+
 Extract all disciplines from db_capcodes.txt and create match_disciplines.txt
 Format: disciplines
 
@@ -204,6 +207,8 @@ This is also the location the temp data is downloaded to.
 
 
 ## RTL-SDR dongle
+
+![View](/screenshots/dongle.jpg)
 
 I tested the software with:
 *RTL-SDR / FM+DAB / DVB-T USB 2.0 Mini Digital TV Stick DVBT Dongle SDR*
@@ -265,15 +270,15 @@ baseurl = http://192.168.2.123:8123
 token = Place Your Long-Lived Access Token Here
 sensorname = P2000
 ```
+*main - debug*
 
-Enter the local url to your Home Assistant instance including port http://IP-ADDRESS:8123
-Goto your user profile menu in Home Assistant lovelace GUI, and create a Long-Lived Access Token.
-Name it P2000Receiver and copy and paste this token to the config.ini file.
-Change default sensor name 'P2000' if you want too.
+Set to True to get debugging output.
 
-Mine works with default settings (with -g and -p), with them I get no output.
+*rtl-sdr - cmd*
 
-You maybe need to add the gain or correction parameters, depending on the dongle you have.
+My dongle works with these default settings (without -g and -p), with them I get no output.
+
+You may need to add these gain or correction parameters:
 -g = 'gain' - a number between 0-50
 -p = 'correction' - specific ppm deviation
 -d = 'device id' - if you have more than one dongle
@@ -282,10 +287,23 @@ For example:
 ```
 cmd = rtl_fm -f 169.65M -M fm -s 22050 -g 20 -p 0 | multimon-ng -a FLEX -t raw -
 ```
-
 U can test this by running the command line from the shell, see RTL-SDR dongle section above.
 You should see the FLEX messages appear after some seconds.
 
+*home-assistant - baseurl*
+
+Enter the url to your local Home Assistant instance including port.
+
+*home-assistant - token*
+
+Goto your user profile menu in Home Assistant lovelace GUI, and create a so called 'Long-Lived Access Token'.
+Name it 'P2000Receiver' for example and copy and paste this token here in the config.ini file.
+
+*home-assistant - sensorname*
+
+Name of sensor to create and update inside Home Assistant.
+
+Change default sensor name 'P2000' if you want too.
 
 ## Credits
 
@@ -294,21 +312,21 @@ You should see the FLEX messages appear after some seconds.
 My project is based on https://github.com/dmitryelj/RPi-P2000Receiver written by https://github.com/dmitryelj, thanks for the inspiration!
 
 I rewrote it heavily though, left out all unneeded code for my specific purpose, and added some functionality:
-Removed websocket code
-Removed httpserver code
-Removed POCSAG code
-Removed all RPi specific code and functionality (e.g. LCD, Reboot. Power, CPU)
-Make it more Linux distro independent
-Removed Windows specific code
-Added config file support, see config.ini (run program ones to create it)
-Added P2000 address extract/guess code
-Added support for city database, see db_plaatsnamen.txt
-Added support for finding and translating city shortnames, see db_pltsnmn.txt
-Rewrote 3rd party post to server code to post to Home Assistant REST API
-Created class based code instead of monolith using globals
-Renamed files to see which are filters and which are databases
-Added tools to create these files, find them under 'tools'
-Pylint, flake8, black, isort checked code, some rewriting todo to get pylint 10 score.
+- Removed websocket code
+- Removed httpserver code
+- Removed POCSAG code
+- Removed all RPi specific code and functionality (e.g. LCD, Reboot. Power, CPU)
+- Make it more Linux distro independent
+- Removed Windows specific code
+- Added config file support, see config.ini (run program ones to create it)
+- Added P2000 address extract/guess code
+- Added support for city database, see db_plaatsnamen.txt
+- Added support for finding and translating city shortnames, see db_pltsnmn.txt
+- Rewrote 3rd party post to server code to post to Home Assistant REST API
+- Created class based code instead of monolith using globals
+- Renamed files to see which are filters and which are databases
+- Added tools to create these files, find them under 'tools'
+- Pylint, flake8, black, isort checked code, some rewriting todo to get pylint 10 score.
 
 ### Capcodes, Disciplines, Regions etc.
 
@@ -324,11 +342,17 @@ https://www.tomzulu10capcodes.nl/
 
 NOTE: We only support one sensor for now.
 Some filter functionalty (e.g. disciplinces, regions) is not implemented yet.
+
 Unless you fill match_filter.txtr you will receive all P2000 messages!
+
 Could be that we re-add websocket functionality, and create a matching Home Assistant custom integration.
+
 There is a chance we make other big breaking changes.
+
 Focus of development is now on getting as much as data from the FLEX messages as possible.
+
 Adding GPS location lat/long, from Cloud service or database
+
 Replace text files with a database (MongoDB/sSQLite?)
 
 
