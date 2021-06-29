@@ -270,15 +270,15 @@ baseurl = http://192.168.2.123:8123
 token = Place Your Long-Lived Access Token Here
 sensorname = P2000
 ```
+*main - debug*
 
-Enter the local url to your Home Assistant instance including port http://IP-ADDRESS:8123
-Goto your user profile menu in Home Assistant lovelace GUI, and create a Long-Lived Access Token.
-Name it P2000Receiver and copy and paste this token to the config.ini file.
-Change default sensor name 'P2000' if you want too.
+Set to True to get debugging output.
 
-Mine works with default settings (with -g and -p), with them I get no output.
+*rtl-sdr - cmd*
 
-You maybe need to add the gain or correction parameters, depending on the dongle you have.
+My dongle works with these default settings (without -g and -p), with them I get no output.
+
+You may need to add these gain or correction parameters:
 -g = 'gain' - a number between 0-50
 -p = 'correction' - specific ppm deviation
 -d = 'device id' - if you have more than one dongle
@@ -287,10 +287,23 @@ For example:
 ```
 cmd = rtl_fm -f 169.65M -M fm -s 22050 -g 20 -p 0 | multimon-ng -a FLEX -t raw -
 ```
-
 U can test this by running the command line from the shell, see RTL-SDR dongle section above.
 You should see the FLEX messages appear after some seconds.
 
+*home-assistant - baseurl*
+
+Enter the url to your local Home Assistant instance including port.
+
+*home-assistant - token*
+
+Goto your user profile menu in Home Assistant lovelace GUI, and create a so called 'Long-Lived Access Token'.
+Name it 'P2000Receiver' for example and copy and paste this token here in the config.ini file.
+
+*home-assistant - sensorname*
+
+Name of sensor to create and update inside Home Assistant.
+
+Change default sensor name 'P2000' if you want too.
 
 ## Credits
 
