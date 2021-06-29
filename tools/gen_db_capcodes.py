@@ -36,7 +36,7 @@ with open('convert/cap2csv.php', 'r') as infile, open('db_capcodes.txt', 'w') as
 
     reader = csv.DictReader(infile, delimiter=';', fieldnames=fieldnames)
     for row in reader:
-       writer.writerow({'capcode': row['capcode'].zfill(9), 'discipline': row['discipline'], 'region': row['region'], 'location': row['location'], 'description': row['description'], 'remark': row['remark']})
+       writer.writerow({'capcode': row['capcode'].zfill(9), 'discipline': row['discipline'], 'region': row['region'], 'location': row['location'], 'description': row['description'].strip(), 'remark': row['remark'].strip()})
 
 infile.close()
 outfile.close()
