@@ -166,18 +166,21 @@ I have created some tools to download and/or convert or extract data from.
 You can find them in the tools directory, you must run them from there.
 
 *gen_db_capcodes.py*
+
 Downloads capcodes file from http://p2000.bommel.net/cap2csv.php
 And created the db_capcodes.txt file from it.
 Different delimiter, lowercase header names, fill capcodes with zero's to 9 char lenght.
 Format: capcode,discipline,region,location,description,remark
 
 *gen_db_plaatsnamen.py*
+
 Downloads Afkortingen_Plaatsnamen sheet from Google Docs file https://www.tomzulu10capcodes.nl/
 And extracts the plaatsnamen from it to create db_plaatsnamen.txt.
 It's used to check for valid plaatsnamen.
 Format: plaatsnaam
 
 *gen_db_pltsnmn.py*
+
 Downloads Afkortingen_Plaatsnamen sheet from google Docs file https://www.tomzulu10capcodes.nl/
 And creates the db_pltsnmn.txt file from it.
 And extracts the pltsnmn and plaatsnamen from it to create db_pltsnmn.txt.
@@ -185,12 +188,14 @@ It's used to look up plaatsnamen by there short name and convert them.
 Format: pltsnmn,plaatsnaam
 
 *gen_match_regions.py*
+
 Extract all regions from db_capcodes.txt and create match_regions.txt.
 Format: regio
 
 This file is not used yet, but will be a filter later.
 
 *gen_match_disciplines.py*
+
 Extract all disciplines from db_capcodes.txt and create match_disciplines.txt
 Format: disciplines
 
@@ -294,21 +299,21 @@ You should see the FLEX messages appear after some seconds.
 My project is based on https://github.com/dmitryelj/RPi-P2000Receiver written by https://github.com/dmitryelj, thanks for the inspiration!
 
 I rewrote it heavily though, left out all unneeded code for my specific purpose, and added some functionality:
-Removed websocket code
-Removed httpserver code
-Removed POCSAG code
-Removed all RPi specific code and functionality (e.g. LCD, Reboot. Power, CPU)
-Make it more Linux distro independent
-Removed Windows specific code
-Added config file support, see config.ini (run program ones to create it)
-Added P2000 address extract/guess code
-Added support for city database, see db_plaatsnamen.txt
-Added support for finding and translating city shortnames, see db_pltsnmn.txt
-Rewrote 3rd party post to server code to post to Home Assistant REST API
-Created class based code instead of monolith using globals
-Renamed files to see which are filters and which are databases
-Added tools to create these files, find them under 'tools'
-Pylint, flake8, black, isort checked code, some rewriting todo to get pylint 10 score.
+- Removed websocket code
+- Removed httpserver code
+- Removed POCSAG code
+- Removed all RPi specific code and functionality (e.g. LCD, Reboot. Power, CPU)
+- Make it more Linux distro independent
+- Removed Windows specific code
+- Added config file support, see config.ini (run program ones to create it)
+- Added P2000 address extract/guess code
+- Added support for city database, see db_plaatsnamen.txt
+- Added support for finding and translating city shortnames, see db_pltsnmn.txt
+- Rewrote 3rd party post to server code to post to Home Assistant REST API
+- Created class based code instead of monolith using globals
+- Renamed files to see which are filters and which are databases
+- Added tools to create these files, find them under 'tools'
+- Pylint, flake8, black, isort checked code, some rewriting todo to get pylint 10 score.
 
 ### Capcodes, Disciplines, Regions etc.
 
@@ -324,11 +329,17 @@ https://www.tomzulu10capcodes.nl/
 
 NOTE: We only support one sensor for now.
 Some filter functionalty (e.g. disciplinces, regions) is not implemented yet.
+
 Unless you fill match_filter.txtr you will receive all P2000 messages!
+
 Could be that we re-add websocket functionality, and create a matching Home Assistant custom integration.
+
 There is a chance we make other big breaking changes.
+
 Focus of development is now on getting as much as data from the FLEX messages as possible.
+
 Adding GPS location lat/long, from Cloud service or database
+
 Replace text files with a database (MongoDB/sSQLite?)
 
 
