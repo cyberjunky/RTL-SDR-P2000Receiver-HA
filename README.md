@@ -50,7 +50,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 ```
 Then remove and insert the RTL-SDR dongle.
 
-Insert your dongle and test the rtl-sdr functionality like so:
+Test the rtl-sdr functionality like so:
 ```
 $ rtl_test 
 Found 1 device(s):
