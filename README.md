@@ -312,6 +312,45 @@ Name of sensor to create and update inside Home Assistant.
 
 Change default sensor name 'P2000' if you want too.
 
+## Filtering
+
+There is basic filtering implemented (this can be changed during development)
+
+The following files are used:
+
+match_text.txt
+match_capcodes.txt
+ignore_text.txt
+ignore_capcodes.txt
+
+
+Type of filtering is ignored if a file is empty or only has commented line in it (leading with a #)
+
+The syntax for match_text and ignore_text is using fnmatch.
+
+https://docs.python.org/3/library/fnmatch.html
+
+So entries need to match whole message exactly, or use wildcards to match parts of it.
+
+This is the order in which they are processed:
+
+![View](/screenshots/filters.png)
+ 
+## Automation
+You can get message events on your mobile device(s) by using a notify event, for example like this:
+```
+automation:
+  - alias: "Melding P2000 Bericht"
+    trigger:
+      platform: state
+      entity_id: sensor.p2000
+    action:
+      service: notify.telegram
+      data_template:
+        message: >
+          {{ states.sensor.p2000.state + "\n" + states.sensor.p2000.attributes.disciplines }}
+```
+
 ## Credits
 
 ### RPi-P2000Receiver
