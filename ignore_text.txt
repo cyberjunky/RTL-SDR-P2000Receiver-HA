@@ -1,0 +1,5 @@
+# Ignore messages when filter matches, format: one string per line, * and ? masks are allowed.
+# When empty or all commented with # all messages pass
+#*Test*
+#*test*
+#*TEST*

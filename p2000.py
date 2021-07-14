@@ -242,10 +242,16 @@ class Main:
         self.pltsnmn = load_capcodes_dict("db_pltsnmn.txt")
 
         # Load capcodes ignore data
-        self.capcodesignore = load_capcodes_ignore_dict("ignore_capcodes.txt")
+        self.ignorecapcodes = load_capcodes_ignore_dict("ignore_capcodes.txt")
+
+        # Load text ignore data
+        self.ignoretext = load_list("ignore_text.txt")
 
         # Load match text filter data
         self.matchtext = load_list("match_text.txt")
+
+        # Load match capcodes filter data
+        self.matchcapcodes = load_list("match_capcodes.txt")
 
         # Start thread to get data from RTL-SDR stick
         data_thread = threading.Thread(target=self.data_thread_call)
@@ -380,84 +386,94 @@ class Main:
                                 if afkorting in self.pltsnmn:
                                     city = self.pltsnmn[afkorting]["plaatsnaam"]
 
-                    # There can be several capcodes in one message
-                    for capcode in capcodes.split(" "):
-                        # Apply filter
-                        if check_filter(self.matchtext, capcode) is False:
+                    if not check_filter(self.matchtext, message):
+                        if self.debug:
+                            print(
+                                f"Message '{message}' ignored (didn't match matched_text)")
+                    else:
+                        if check_filter(self.ignoretext, message):
                             if self.debug:
                                 print(
-                                    f"Message '{message}'' ignored (didn't match matched_text)"
-                                )
-                            continue
-                        if capcode in self.capcodesignore:
-                            if self.debug:
-                                print(
-                                    f"Message '{message}' to '{capcode}' ignored (capcode in ignore_capcodes)"
-                                )
-                            continue
-
-                        # Get data from capcode, if exist
-                        if capcode in self.capcodes:
-                            receiver = "{} ({})".format(
-                                self.capcodes[capcode]["description"], capcode
-                            )
-                            discipline = "{} ({})".format(
-                                self.capcodes[capcode]["discipline"], capcode
-                            )
-                            region = self.capcodes[capcode]["region"]
-                            location = self.capcodes[capcode]["location"]
-                            remark = self.capcodes[capcode]["remark"]
+                                    f"Message '{message}' ignored (matched ignore_text)")
                         else:
-                            receiver = capcode
-                            discipline = ""
-                            region = ""
-                            remark = ""
+                            # There can be several capcodes in one message
+                            for capcode in capcodes.split(" "):
+                                # Apply filter
+                                if check_filter(self.matchcapcodes, capcode) is False:
+                                    if self.debug:
+                                        print(
+                                            f"Message '{message}' ignored (didn't match matched_capcodes)"
+                                        )
+                                    continue
+                                if capcode in self.ignorecapcodes:
+                                    if self.debug:
+                                        print(
+                                            f"Message '{message}' to '{capcode}' ignored (capcode in ignore_capcodes)"
+                                        )
+                                    continue
 
-                        # If this message was already received, only add extra info
-                        if len(self.messages) > 0 and self.messages[0].body == message:
-                            if self.messages[0].receivers == "":
-                                self.messages[0].receivers = receiver
-                            elif receiver:
-                                self.messages[0].receivers += ", " + receiver
+                                # Get data from capcode, if exist
+                                if capcode in self.capcodes:
+                                    receiver = "{} ({})".format(
+                                        self.capcodes[capcode]["description"], capcode
+                                    )
+                                    discipline = "{} ({})".format(
+                                        self.capcodes[capcode]["discipline"], capcode
+                                    )
+                                    region = self.capcodes[capcode]["region"]
+                                    location = self.capcodes[capcode]["location"]
+                                    remark = self.capcodes[capcode]["remark"]
+                                else:
+                                    receiver = capcode
+                                    discipline = ""
+                                    region = ""
+                                    remark = ""
 
-                            if self.messages[0].disciplines == "":
-                                self.messages[0].disciplines = discipline
-                            elif discipline:
-                                self.messages[0].disciplines += ", " + discipline
-                            if self.messages[0].remarks == "":
-                                self.messages[0].remarks = remark
-                            elif remark:
-                                self.messages[0].remarks += ", " + remark
+                                # If this message was already received, only add extra info
+                                if len(self.messages) > 0 and self.messages[0].body == message:
+                                    if self.messages[0].receivers == "":
+                                        self.messages[0].receivers = receiver
+                                    elif receiver:
+                                        self.messages[0].receivers += ", " + receiver
+    
+                                    if self.messages[0].disciplines == "":
+                                        self.messages[0].disciplines = discipline
+                                    elif discipline:
+                                        self.messages[0].disciplines += ", " + discipline
+                                    if self.messages[0].remarks == "":
+                                        self.messages[0].remarks = remark
+                                    elif remark:
+                                        self.messages[0].remarks += ", " + remark
 
-                            self.messages[0].capcodes.append(capcode)
-                            self.messages[0].location = location
-                            self.messages[0].postcode = postcode
-                            self.messages[0].city = city
-                            self.messages[0].street = street
-                            self.messages[0].address = address
-                        else:
-                            msg = MessageItem()
-                            msg.groupid = groupid
-                            msg.receivers = receiver
-                            msg.capcodes = [capcode]
-                            msg.body = message
-                            msg.message_raw = line.strip()
-                            msg.disciplines = discipline
-                            msg.priority = priority
-                            msg.region = region
-                            msg.location = location
-                            msg.postcode = postcode
-                            msg.city = city
-                            msg.street = street
-                            msg.address = address
-                            msg.remarks = remark
-                            msg.timestamp = to_local_datetime(timestamp)
-                            msg.is_posted = False
-                            self.messages.insert(0, msg)
+                                    self.messages[0].capcodes.append(capcode)
+                                    self.messages[0].location = location
+                                    self.messages[0].postcode = postcode
+                                    self.messages[0].city = city
+                                    self.messages[0].street = street
+                                    self.messages[0].address = address
+                                else:
+                                    msg = MessageItem()
+                                    msg.groupid = groupid
+                                    msg.receivers = receiver
+                                    msg.capcodes = [capcode]
+                                    msg.body = message
+                                    msg.message_raw = line.strip()
+                                    msg.disciplines = discipline
+                                    msg.priority = priority
+                                    msg.region = region
+                                    msg.location = location
+                                    msg.postcode = postcode
+                                    msg.city = city
+                                    msg.street = street
+                                    msg.address = address
+                                    msg.remarks = remark
+                                    msg.timestamp = to_local_datetime(timestamp)
+                                    msg.is_posted = False
+                                    self.messages.insert(0, msg)
 
-                    # Limit the message list size
-                    if len(self.messages) > 100:
-                        self.messages = self.messages[:100]
+                            # Limit the message list size
+                            if len(self.messages) > 100:
+                                self.messages = self.messages[:100]
 
         except KeyboardInterrupt:
             os.kill(multimon_ng.pid, 9)
