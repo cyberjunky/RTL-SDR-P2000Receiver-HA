@@ -324,15 +324,17 @@ ignore_text.txt
 ignore_capcodes.txt
 
 
-Type of filtering is ignored if a file is empty or only has commented line in it (leading with a #)
+A specific type of filtering is ignored if the file is empty or only has commented lines in it. (lines with leading #)
 
-The syntax for match_text and ignore_text is using fnmatch.
+The syntax for *match_text.txt* and *ignore_text.txt* is using fnmatch.
 
 https://docs.python.org/3/library/fnmatch.html
 
 So entries need to match whole message exactly, or use wildcards to match parts of it.
 
-This is the order in which they are processed:
+While *ignore_capcodes.txt* and *match_capcodes.txt* use the exact capcode (9 chars long), description is not used in code
+
+This is the order in which the filters are processed:
 
 ![View](/screenshots/filters.png)
  
