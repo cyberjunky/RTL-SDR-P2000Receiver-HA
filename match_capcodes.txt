@@ -1,2 +1,3 @@
-# Only process messages with these capcodes, one per line, empty is all
-# Not yet implemented
+# Messages with one or more of these capcodes (9 chars long) will be passed.
+# capcode[,description]
+#987654321,NICE GROUP

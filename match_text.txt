@@ -1,6 +1,6 @@
 # Only pass messages when filter matches, format: one string per line, * and ? masks are allowed.
 # When empty or all entries are commented with # all messages pass
-*Dordrecht*
-*DORDRT*
-*Zwijndrecht*
-*ZWIJND*
+#*Dordrecht*
+#*DORDRT*
+#*Zwijndrecht*
+#*ZWIJND*

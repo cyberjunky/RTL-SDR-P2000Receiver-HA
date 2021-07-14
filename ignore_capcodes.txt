@@ -1,3 +1,3 @@
-# This capcodes will be excluded from the messages list, one per line.
-# capcode,description
+# Messages with one or more of these capcodes (9 chars long) will be ignored.
+# capcode[,description]
 123456789,TEST GROUP
