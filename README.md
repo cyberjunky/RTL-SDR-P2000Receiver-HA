@@ -43,7 +43,14 @@ sudo make install
 sudo ldconfig
 ```
 
-Insert your dongle and test the rtl-sdr functionality like so:
+To be able to communicate with the dongle as a non-root user install and activate the udev rules
+```
+sudo cp 20-rtl-sdr.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules && sudo udevadm trigger
+```
+Then remove and insert the RTL-SDR dongle.
+
+Test the rtl-sdr functionality like so:
 ```
 $ rtl_test 
 Found 1 device(s):
