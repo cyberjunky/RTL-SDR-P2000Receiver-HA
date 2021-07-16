@@ -1,4 +1,10 @@
 # Byte-compiled / optimized / DLL files
+ignore_text.txt
+ignore_capcodes.txt
+match_text.txt
+match_capcodes.txt
+match_disciplines.txt
+match_regios.txt
 __pycache__/
 *.py[cod]
 *$py.class

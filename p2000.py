@@ -114,7 +114,7 @@ def load_capcodes_dict(filename):
     except KeyError:
         print(f"Could not parse file contents of: {filename}")
     except OSError:
-        print(f"Could not open/read file: {filename}")
+        print(f"Could not open/read file: {filename}, ignore filter")
 
     return capcodes
 
@@ -140,8 +140,9 @@ def load_capcodes_filter_dict(filename):
     except KeyError:
         print(f"Could not parse file contents of: {filename}")
     except OSError:
-        print(f"Could not open/read file: {filename}")
-    return dict()
+        print(f"Could not open/read file: {filename}, ignore filter")
+
+    return capcodes
 
 
 def load_list(filename):
@@ -166,7 +167,8 @@ def load_list(filename):
         print(f"Could not parse file contents of: {filename}")
     except OSError:
         print(f"Could not open/read file: {filename}")
-    return []
+
+    return tmplist
 
 
 def check_filter(mylist, text):
@@ -391,7 +393,7 @@ class Main:
                     if not check_filter(self.matchtext, message):
                         if self.debug:
                             print(
-                                f"Message '{message}' ignored (didn't match matched_text)")
+                                f"Message '{message}' ignored (didn't match match_text)")
                     else:
                         if check_filter(self.ignoretext, message):
                             if self.debug:
@@ -402,14 +404,14 @@ class Main:
                             ignore = False
                             for capcode in capcodes.split(" "):
                                 # Apply filter
-                                if not capcode in self.matchcapcodes:
+                                if not capcode in self.matchcapcodes and self.matchcapcodes:
                                     if self.debug:
                                         print(
-                                            f"Message '{message}' ignored (didn't match matched_capcodes)"
+                                            f"Message '{message}' ignored (didn't match match_capcodes)"
                                         )
                                     ignore = True
                                     break
-                                if capcode in self.ignorecapcodes:
+                                if capcode in self.ignorecapcodes and self.ignorecapcodes:
                                     if self.debug:
                                         print(
                                             f"Message '{message}' to '{capcode}' ignored (capcode in ignore_capcodes)"
