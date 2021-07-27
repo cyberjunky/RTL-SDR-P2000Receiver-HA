@@ -276,6 +276,10 @@ cmd = rtl_fm -f 169.65M -M fm -s 22050 | multimon-ng -a FLEX -t raw -
 baseurl = http://192.168.2.123:8123
 token = Place Your Long-Lived Access Token Here
 sensorname = P2000
+
+[opencage]
+gpstoken = Place your Opencage token here
+
 ```
 *main - debug*
 
