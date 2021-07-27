@@ -13,10 +13,11 @@ import sys
 import threading
 import time
 from datetime import datetime
+from opencage.geocoder import OpenCageGeocode
 
 import requests
 
-VERSION = "0.0.1"
+VERSION = "0.0.3"
 
 
 class MessageItem:
@@ -40,6 +41,8 @@ class MessageItem:
         self.priority = 0
         self.disciplines = ""
         self.remarks = ""
+        self.longitude = ""
+        self.latitude = ""
         self.is_posted = False
 
 
@@ -58,6 +61,9 @@ def load_config():
         "baseurl": "http://192.168.2.123:8123",
         "token": "Place Your Long-Lived Access Token Here",
         "sensorname": "P2000",
+    }
+    config["opencage"] = {
+        "gpstoken": "Place your Opencage token here",
     }
     with open("config.ini", "w") as configfile:
         config.write(configfile)
@@ -235,6 +241,7 @@ class Main:
         self.baseurl = self.config.get("home-assistant", "baseurl")
         self.token = self.config.get("home-assistant", "token")
         self.sensorname = self.config.get("home-assistant", "sensorname")
+        self.gpstoken = self.config.get("opencage", "gpstoken")
 
         # Load capcodes data
         self.capcodes = load_capcodes_dict("db_capcodes.txt")
@@ -295,6 +302,8 @@ class Main:
                 "address": msg.address,
                 "street": msg.street,
                 "remarks": msg.remarks,
+                "longitude": msg.longitude,
+                "latitude": msg.latitude,
             },
         }
 
@@ -360,6 +369,8 @@ class Main:
                     city = ""
                     address = ""
                     street = ""
+                    longitude = ""
+                    latitude = ""
 
                     if self.debug:
                         print(line.strip())
@@ -389,6 +400,14 @@ class Main:
                             for afkorting in afkortingen:
                                 if afkorting in self.pltsnmn:
                                     city = self.pltsnmn[afkorting]["plaatsnaam"]
+                                    
+                                    # If uppercase city is found, grab first word before that city name, likely to be the address
+                                    regex_address = r"(\w*.) ([A-Z]{2,})"
+                                    addr = re.search(regex_address, message)
+                                    if addr:
+                                        street = addr.group(1)
+                                        city = city
+                                    address = f"{street} {city}"
 
                     if not check_filter(self.matchtext, message):
                         if self.debug:
@@ -461,6 +480,16 @@ class Main:
                                         self.messages[0].street = street
                                         self.messages[0].address = address
                                     else:
+                                        # If address is filled, check for GPS coordinates
+                                        geocoder = OpenCageGeocode(self.gpstoken)
+                                        gps = geocoder.geocode(address,countrycode='nl')
+                                        if gps:
+                                            latitude = gps[0]['geometry']['lat']
+                                            longitude = gps[0]['geometry']['lng']
+                                        else:
+                                            latitude = ""
+                                            longitude = ""                               
+                                            
                                         msg = MessageItem()
                                         msg.groupid = groupid
                                         msg.receivers = receiver
