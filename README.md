@@ -12,6 +12,7 @@ Read the Credits section below.
 - Capcodes database (text based for now), see 'db_capcodes.txt'
 - Optional text match filter (white-list), see 'match_text.txt'
 - Capcode ignore filter (black-list), see 'ignore_capcodes.txt'
+- Get lat/long for addresses using OpenCage
 
 
 ## Screenshots
@@ -301,8 +302,8 @@ cmd = rtl_fm -f 169.65M -M fm -s 22050 | multimon-ng -a FLEX -t raw -
 [home-assistant]
 enabled = True
 baseurl = http://homeassistant.local:8123
-token = Place Your Long-Lived Access Token Here
-sensorname = p2000
+token = Place your Long-Lived Access Token here
+sensorname = P2000
 
 [mqtt]
 enabled = False
@@ -311,6 +312,10 @@ mqtt_port = 1883
 mqtt_user = mqttuser
 mqtt_password = somepassword
 mqtt_topic = p2000
+
+[opencage]
+enabled = False
+token = Place your OpenCage API Token here
 
 ```
 *main - debug*
@@ -363,6 +368,15 @@ True to post data to MQTT, False to disable
 *mqtt - mqtt_topic*
 
 MQTT server address, port, user credentials to connect with and topic to post to
+
+*opencage - enabled*
+
+True to fetch latitude/longitude for address
+
+*opencage - token*
+
+To use OpenCage support you need to create a (free max 2500 request per day, 1 per second) account at https://opencagedata.com
+Then fill in your API key here
 
 ## Filtering
 
@@ -428,8 +442,8 @@ I rewrote it heavily though, left out all unneeded code for my specific purpose,
 - Added tools to create these files, find them under 'tools'
 - Pylint, flake8, black, isort checked code, some rewriting todo to get pylint 10 score.
 
-- https://github.com/bduijnhouwer for adding MQTT support
-
+- https://github.com/bduijnhouwer for MQTT support
+- https://github.com/Dinges28 for OpenCage geolocation support
 
 ### Capcodes, Disciplines, Regions etc.
 
@@ -453,8 +467,6 @@ Could be that we re-add websocket functionality, and create a matching Home Assi
 There is a chance we make other big breaking changes.
 
 Focus of development is now on getting as much as data from the FLEX messages as possible.
-
-Adding GPS location lat/long, from Cloud service or database
 
 Replace text files with a database (MongoDB/SQLite?)
 
