@@ -440,11 +440,18 @@ class Main:
                                     city = self.pltsnmn[afkorting]["plaatsnaam"]
                                     
                                     # If uppercase city is found, grab first word before that city name, likely to be the address
-                                    regex_address = r"(\w*.) ([A-Z]{2,})(?!.*[A-Z]{2,})"
+                                    regex_address = r"(\w*.) ([A-Z]{3,})"
                                     addr = re.search(regex_address, message)
                                     if addr:
                                         street = addr.group(1)
-                                        city = city
+                                        plaats = addr.group(2)
+
+                                        # Check if found string is a shortened city name, if so get full city name
+                                        if plaats in self.pltsnmn:
+                                            city = self.pltsnmn[plaats]["plaatsnaam"]
+                                        else:
+                                            city = plaats.capitalize()
+
                                     address = f"{street} {city}"
 
                     if not check_filter(self.matchtext, message):
