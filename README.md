@@ -144,7 +144,7 @@ Except from the MQTT package, the needed packages are installed by default on De
 If you get errors about missing packages when starting the software, you may need to install them for your distro.
 
 ```
-pip3 install paho.mqtt
+sudo pip3 install paho.mqtt
 ```
 
 
