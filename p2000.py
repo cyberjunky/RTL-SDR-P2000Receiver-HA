@@ -402,7 +402,7 @@ class Main:
                                     city = self.pltsnmn[afkorting]["plaatsnaam"]
                                     
                                     # If uppercase city is found, grab first word before that city name, likely to be the address
-                                    regex_address = r"(\w*.) ([A-Z]{2,})"
+                                    regex_address = r"(\w*.) ([A-Z]{2,})(?!.*[A-Z]{2,})"
                                     addr = re.search(regex_address, message)
                                     if addr:
                                         street = addr.group(1)
