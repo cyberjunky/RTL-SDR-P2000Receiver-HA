@@ -14,11 +14,10 @@ import threading
 import time
 from datetime import datetime
 from opencage.geocoder import OpenCageGeocode
-
+import paho.mqtt.client as mqtt
 import requests
 
 VERSION = "0.0.3"
-
 
 class MessageItem:
     """Contains all the Message data."""
@@ -58,12 +57,21 @@ def load_config():
         "cmd": "rtl_fm -f 169.65M -M fm -s 22050 | multimon-ng -a FLEX -t raw -"
     }
     config["home-assistant"] = {
-        "baseurl": "http://192.168.2.123:8123",
+        "enabled": True,
+        "baseurl": "http://homeassistant.local:8123",
         "token": "Place Your Long-Lived Access Token Here",
-        "sensorname": "P2000",
+        "sensorname": "p2000",
+    }
+    config["mqtt"] = {
+        "enabled": False,
+        "mqtt_server": "192.168.1.100",
+        "mqtt_port": 1883,
+        "mqtt_user": "mqttuser",
+        "mqtt_password": "somepassword",
+        "mqtt_topic": "p2000",
     }
     config["opencage"] = {
-        "gpstoken": "Place your Opencage token here",
+        "gpstoken": "Place your OpenCage token here",
     }
     with open("config.ini", "w") as configfile:
         config.write(configfile)
@@ -238,10 +246,17 @@ class Main:
         self.config = load_config()
         self.debug = self.config.getboolean("main", "debug")
         self.rtlfm_cmd = self.config.get("rtl-sdr", "cmd")
+        self.use_hass = self.config.getboolean("home-assistant", "enabled")
         self.baseurl = self.config.get("home-assistant", "baseurl")
         self.token = self.config.get("home-assistant", "token")
         self.sensorname = self.config.get("home-assistant", "sensorname")
         self.gpstoken = self.config.get("opencage", "gpstoken")
+        self.use_mqtt = self.config.getboolean("mqtt","enabled")
+        self.mqtt_server = self.config.get("mqtt","mqtt_server")
+        self.mqtt_port = int(self.config.get("mqtt","mqtt_port"))
+        self.mqtt_username = self.config.get("mqtt","mqtt_user")
+        self.mqtt_password = self.config.get("mqtt","mqtt_password")
+        self.mqtt_topic = self.config.get("mqtt","mqtt_topic")
 
         # Load capcodes data
         self.capcodes = load_capcodes_dict("db_capcodes.txt")
@@ -326,7 +341,7 @@ class Main:
                 print(f"POST text: {response.text}")
         except requests.HTTPError:
             print(
-                f"HTTP Error while trying to post data, check your baseurl and token in config.ini: {response.status_code} {response.reason}"
+                f"HTTP Error while trying to post data, check baseurl and token in config.ini: {response.status_code} {response.reason}"
             )
         except requests.exceptions.SSLError as err:
             print(
@@ -334,8 +349,47 @@ class Main:
             )
         except requests.exceptions.ConnectionError as err:
             print(
-                f"Connection Error occurred while trying to post data, check your baseurl in config.ini:\n{err}"
+                f"Connection Error occurred while trying to post data, check baseurl in config.ini:\n{err}"
             )
+        finally:
+            # Mark as posted to prevent race conditions
+            msg.is_posted = True
+
+    def post_to_mqtt(self, msg):
+        """Post data to MQTT."""
+        data = {
+            "state": msg.body,
+            "attributes": {
+                "time received": msg.timestamp,
+                "group id": msg.groupid,
+                "receivers": msg.receivers,
+                "capcodes": msg.capcodes,
+                "priority": msg.priority,
+                "disciplines": msg.disciplines,
+                "raw message": msg.message_raw,
+                "region": msg.region,
+                "location": msg.location,
+                "postcode": msg.postcode,
+                "city": msg.city,
+                "address": msg.address,
+                "street": msg.street,
+                "remarks": msg.remarks,
+            },
+        }
+
+        try:
+            print(f"Posting to MQTT")
+
+            data=json.dumps(data)
+            client = mqtt.Client()
+            client.username_pw_set(self.mqtt_username, self.mqtt_password)
+            client.connect(self.mqtt_server,self.mqtt_port,60)
+            client.publish(self.mqtt_topic, data);
+            client.disconnect();
+
+            if self.debug:
+                print(f"MQTT status: Posting to {self.mqtt_server}:{self.mqtt_port} topic:{self.mqtt_topic}")
+                print(f"MQTT json: {data}")
         finally:
             # Mark as posted to prevent race conditions
             msg.is_posted = True
@@ -531,7 +585,10 @@ class Main:
             now = time.monotonic()
             for msg in self.messages:
                 if msg.is_posted is False and now - msg.timereceived >= 1.0:
-                    self.post_to_homeassistant(msg)
+                    if self.use_hass:
+                        self.post_to_homeassistant(msg)
+                    if self.use_mqtt:
+                        self.post_to_mqtt(msg)
             time.sleep(1.0)
         if self.debug:
             print("Post thread stopped")

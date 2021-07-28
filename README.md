@@ -1,5 +1,5 @@
 # RTL-SDR-P2000Receiver-HA
-Receiving P2000 messages using RTL-SDR stick and post them to Home Assistant.
+Receiving P2000 messages using RTL-SDR stick and post them to Home Assistant and/or MQTT.
 
 Read the Credits section below.
 
@@ -8,6 +8,7 @@ Read the Credits section below.
 - Standalone P2000 messages receiver using a local RTL-SDR compatible receiver
 - Linux based only
 - Post P2000 message information to a Home Assistant sensor using the REST API (no need to install something on HA side)
+- Post P2000 message information to an MQTT topic
 - Capcodes database (text based for now), see 'db_capcodes.txt'
 - Optional text match filter (white-list), see 'match_text.txt'
 - Capcode ignore filter (black-list), see 'ignore_capcodes.txt'
@@ -137,7 +138,17 @@ Usage: multimon-ng [file] [file] [file] ...
 ```
 
 
-### 3) Install this RTL-SDR-P2000Receiver-HA software
+### 3) Install dependencies
+
+Except from the MQTT package, the needed packages are installed by default on Debian 10.
+If you get errors about missing packages when starting the software, you may need to install them for your distro.
+
+```
+sudo pip3 install paho.mqtt
+```
+
+
+### 4) Install RTL-SDR-P2000Receiver-HA software
 
 ```
 cd
@@ -150,24 +161,38 @@ cd RTL-SDR-P2000Receiver-HA
 See the Configuration section for more information
 
 
-After successful configuraton and testing by running it manually you may add it to the startup script
+After successful configuraton and testing by running it manually you have two options to start it automatically
+
+a) Add it to the startup script
 ```
 sudo nano /etc/rc.local
 python3 /home/<YOUR USER>/RTL-SDR-P2000Receiver-HA/p2000.py &
 ```
 
-Python packages, the needed packages are installed by default on Debian 10.
-If you get errors about missing packages when starting the software, you may need to install them for your distro.
+b) Edit and use supplied systemd config
+```
+sudo nano rtlsdrp2000.service
+
+# Change these line to match location of software:
+
+StandardOutput=file:/home/<YOUR USER>/RTL-SDR-P2000Receiver-HA/rtlsdrp2000.log
+StandardError=file:/home/<YOUR USER>/RTL-SDR-P2000Receiver-HA/rtlsdrp2000.log
+ExecStart=/usr/bin/python3 /home/<YOUR USER>/RTL-SDR-P2000Receiver-HA/p2000.py
+
+sudo cp rtlsdrp2000.service /etc/systemd/system
+sudo systemctl enable rtlsdrp2000
+sudo systemctl start rtlsdrp2000
+```
 
 
-### 4) Cleanup build environments (optional)
+### 5) Cleanup build environments (optional)
 
 ```
 cd
 sudo rm -r rtl-sdr multimon-ng
 ```
 
-### 5) Tools (optional)
+### 6) Tools (optional)
 
 I have created some tools to download and/or convert or extract data from.
 You can find them in the tools directory, you must run them from there.
@@ -273,9 +298,19 @@ debug = False
 cmd = rtl_fm -f 169.65M -M fm -s 22050 | multimon-ng -a FLEX -t raw -
 
 [home-assistant]
-baseurl = http://192.168.2.123:8123
+enabled = True
+baseurl = http://homeassistant.local:8123
 token = Place Your Long-Lived Access Token Here
-sensorname = P2000
+sensorname = p2000
+
+[mqtt]
+enabled = False
+mqtt_server = 192.168.1.100
+mqtt_port = 1883
+mqtt_user = mqttuser
+mqtt_password = somepassword
+mqtt_topic = p2000
+
 ```
 *main - debug*
 
@@ -297,6 +332,10 @@ cmd = rtl_fm -f 169.65M -M fm -s 22050 -g 20 -p 0 | multimon-ng -a FLEX -t raw -
 U can test this by running the command line from the shell, see RTL-SDR dongle section above.
 You should see the FLEX messages appear after some seconds.
 
+*home-assistant - enabled*
+
+True to post data to HA, False to disable
+
 *home-assistant - baseurl*
 
 Enter the url to your local Home Assistant instance including port.
@@ -310,7 +349,19 @@ Name it 'P2000Receiver' for example and copy and paste this token here in the co
 
 Name of sensor to create and update inside Home Assistant.
 
-Change default sensor name 'P2000' if you want too.
+Change default sensor name pP2000' if you want too.
+
+*mqtt - enabled*
+
+True to post data to MQTT, False to disable
+
+*mqtt - mqtt_server*
+*mqtt - mqtt_port*
+*mqtt - mqtt_user*
+*mqtt - mqtt_password*
+*mqtt - mqtt_topic*
+
+MQTT server address, port, user credentials to connect with and topic to post to
 
 ## Filtering
 
@@ -376,6 +427,9 @@ I rewrote it heavily though, left out all unneeded code for my specific purpose,
 - Added tools to create these files, find them under 'tools'
 - Pylint, flake8, black, isort checked code, some rewriting todo to get pylint 10 score.
 
+- https://github.com/bduijnhouwer for adding MQTT support
+
+
 ### Capcodes, Disciplines, Regions etc.
 
 http://p2000.bommel.net
@@ -391,7 +445,7 @@ https://www.tomzulu10capcodes.nl/
 NOTE: We only support one sensor for now.
 Some filter functionalty (e.g. disciplinces, regions) is not implemented yet.
 
-Unless you fill match_filter.txtr you will receive all P2000 messages!
+Unless you fill match_filter.txt you will receive all P2000 messages!
 
 Could be that we re-add websocket functionality, and create a matching Home Assistant custom integration.
 
@@ -401,7 +455,7 @@ Focus of development is now on getting as much as data from the FLEX messages as
 
 Adding GPS location lat/long, from Cloud service or database
 
-Replace text files with a database (MongoDB/sSQLite?)
+Replace text files with a database (MongoDB/SQLite?)
 
 
 ## Debugging
