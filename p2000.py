@@ -48,8 +48,8 @@ class MessageItem:
 def load_config():
     """Create default or load existing config file."""
     config = configparser.ConfigParser()
-    if config.read("config_mqtt.ini"):
-        print("Loading configuration from 'config_mqtt.ini'")
+    if config.read("config.ini"):
+        print("Loading configuration from 'config.ini'")
         return config
 
     config["main"] = {"debug": False}
@@ -250,7 +250,7 @@ class Main:
         self.use_mqtt = self.config.getboolean("mqtt","enabled")
         self.mqtt_server = self.config.get("mqtt","mqtt_server")
         self.mqtt_port = int(self.config.get("mqtt","mqtt_port"))
-        self.mqtt_username = self.config.get("mqtt","mqtt_username")
+        self.mqtt_username = self.config.get("mqtt","mqtt_user")
         self.mqtt_password = self.config.get("mqtt","mqtt_password")
         self.mqtt_topic = self.config.get("mqtt","mqtt_topic")
 
