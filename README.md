@@ -303,7 +303,7 @@ baseurl = http://homeassistant.local:8123
 token = Place Your Long-Lived Access Token Here
 sensorname = p2000
 
-["mqtt"]
+[mqtt]
 enabled = False
 mqtt_server = 192.168.1.100
 mqtt_port = 1883
