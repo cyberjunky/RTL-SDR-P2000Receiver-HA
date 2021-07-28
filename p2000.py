@@ -59,7 +59,7 @@ def load_config():
     config["home-assistant"] = {
         "enabled": True,
         "baseurl": "http://homeassistant.local:8123",
-        "token": "Place Your Long-Lived Access Token Here",
+        "token": "Place your Long-Lived Access Token here",
         "sensorname": "p2000",
     }
     config["mqtt"] = {
@@ -71,7 +71,8 @@ def load_config():
         "mqtt_topic": "p2000",
     }
     config["opencage"] = {
-        "gpstoken": "Place your OpenCage token here",
+        "enabled": False,
+        "gpstoken": "Place your OpenCage API Token here",
     }
     with open("config.ini", "w") as configfile:
         config.write(configfile)
@@ -250,13 +251,14 @@ class Main:
         self.baseurl = self.config.get("home-assistant", "baseurl")
         self.token = self.config.get("home-assistant", "token")
         self.sensorname = self.config.get("home-assistant", "sensorname")
-        self.gpstoken = self.config.get("opencage", "gpstoken")
         self.use_mqtt = self.config.getboolean("mqtt","enabled")
         self.mqtt_server = self.config.get("mqtt","mqtt_server")
         self.mqtt_port = int(self.config.get("mqtt","mqtt_port"))
         self.mqtt_username = self.config.get("mqtt","mqtt_user")
         self.mqtt_password = self.config.get("mqtt","mqtt_password")
         self.mqtt_topic = self.config.get("mqtt","mqtt_topic")
+        self.use_opencage = self.config.getboolean("opencage","enabled")
+        self.gpstoken = self.config.get("opencage", "gpstoken")
 
         # Load capcodes data
         self.capcodes = load_capcodes_dict("db_capcodes.txt")
@@ -298,8 +300,8 @@ class Main:
         self.running = False
         print("Application stopped")
 
-    def post_to_homeassistant(self, msg):
-        """Post data to Home Assistant via Rest API."""
+    def post_data(self, msg):
+        """Post data to Home Assistant via Rest API and/or MQTT topic."""
         data = {
             "state": msg.body,
             "attributes": {
@@ -322,77 +324,59 @@ class Main:
             },
         }
 
-        try:
-            headers = {
-                "Authorization": "Bearer " + self.token,
-                "content-type": "application/json",
-            }
+        if self.use_hass:
+            try:
+                headers = {
+                    "Authorization": "Bearer " + self.token,
+                    "content-type": "application/json",
+                }
 
-            response = requests.post(
-                self.baseurl + "/api/states/sensor." + self.sensorname,
-                headers=headers,
-                data=json.dumps(
-                    data, default=lambda o: o.__dict__, sort_keys=True, indent=4
-                ),
-            )
-            response.raise_for_status()
-            if self.debug:
-                print(f"POST status: {response.status_code} {response.reason}")
-                print(f"POST text: {response.text}")
-        except requests.HTTPError:
-            print(
-                f"HTTP Error while trying to post data, check baseurl and token in config.ini: {response.status_code} {response.reason}"
-            )
-        except requests.exceptions.SSLError as err:
-            print(
-                f"SSL Error occurred while trying to post data, check baseurl in config.ini:\n{err}"
-            )
-        except requests.exceptions.ConnectionError as err:
-            print(
-                f"Connection Error occurred while trying to post data, check baseurl in config.ini:\n{err}"
-            )
-        finally:
-            # Mark as posted to prevent race conditions
-            msg.is_posted = True
+                response = requests.post(
+                    self.baseurl + "/api/states/sensor." + self.sensorname,
+                    headers=headers,
+                    data=json.dumps(
+                        data, default=lambda o: o.__dict__, sort_keys=True, indent=4
+                    ),
+                )
+                response.raise_for_status()
+                if self.debug:
+                    print(f"POST data: {data}")
+                    print(f"POST status: {response.status_code} {response.reason}")
+                    print(f"POST text: {response.text}")
+            except requests.HTTPError:
+                print(
+                    f"HTTP Error while trying to post data, check baseurl and token in config.ini: {response.status_code} {response.reason}"
+                )
+            except requests.exceptions.SSLError as err:
+                print(
+                    f"SSL Error occurred while trying to post data, check baseurl in config.ini:\n{err}"
+                )
+            except requests.exceptions.ConnectionError as err:
+                print(
+                    f"Connection Error occurred while trying to post data, check baseurl in config.ini:\n{err}"
+                )
+            finally:
+                # Mark as posted to prevent race conditions
+                msg.is_posted = True
 
-    def post_to_mqtt(self, msg):
-        """Post data to MQTT."""
-        data = {
-            "state": msg.body,
-            "attributes": {
-                "time received": msg.timestamp,
-                "group id": msg.groupid,
-                "receivers": msg.receivers,
-                "capcodes": msg.capcodes,
-                "priority": msg.priority,
-                "disciplines": msg.disciplines,
-                "raw message": msg.message_raw,
-                "region": msg.region,
-                "location": msg.location,
-                "postcode": msg.postcode,
-                "city": msg.city,
-                "address": msg.address,
-                "street": msg.street,
-                "remarks": msg.remarks,
-            },
-        }
 
-        try:
-            print(f"Posting to MQTT")
+        if self.use_mqtt:
+            try:
+                print(f"Posting to MQTT")
+ 
+                data=json.dumps(data)
+                client = mqtt.Client()
+                client.username_pw_set(self.mqtt_username, self.mqtt_password)
+                client.connect(self.mqtt_server,self.mqtt_port,60)
+                client.publish(self.mqtt_topic, data)
+                client.disconnect()
 
-            data=json.dumps(data)
-            client = mqtt.Client()
-            client.username_pw_set(self.mqtt_username, self.mqtt_password)
-            client.connect(self.mqtt_server,self.mqtt_port,60)
-            client.publish(self.mqtt_topic, data);
-            client.disconnect();
-
-            if self.debug:
-                print(f"MQTT status: Posting to {self.mqtt_server}:{self.mqtt_port} topic:{self.mqtt_topic}")
-                print(f"MQTT json: {data}")
-        finally:
-            # Mark as posted to prevent race conditions
-            msg.is_posted = True
+                if self.debug:
+                    print(f"MQTT status: Posting to {self.mqtt_server}:{self.mqtt_port} topic:{self.mqtt_topic}")
+                    print(f"MQTT json: {data}")
+            finally:
+                # Mark as posted to prevent race conditions
+                msg.is_posted = True
 
     def data_thread_call(self):
         """Thread for parsing data from RTL-SDR."""
@@ -534,15 +518,16 @@ class Main:
                                         self.messages[0].street = street
                                         self.messages[0].address = address
                                     else:
-                                        # If address is filled, check for GPS coordinates
-                                        geocoder = OpenCageGeocode(self.gpstoken)
-                                        gps = geocoder.geocode(address,countrycode='nl')
-                                        if gps:
-                                            latitude = gps[0]['geometry']['lat']
-                                            longitude = gps[0]['geometry']['lng']
-                                        else:
-                                            latitude = ""
-                                            longitude = ""                               
+                                        # If address is filled and OpenCage is enabled check for GPS coordinates
+                                        if address and self.use_opencage:
+                                            geocoder = OpenCageGeocode(self.gpstoken)
+                                            gps = geocoder.geocode(address, countrycode='nl')
+                                            if gps:
+                                                latitude = gps[0]['geometry']['lat']
+                                                longitude = gps[0]['geometry']['lng']
+                                            else:
+                                                latitude = ""
+                                                longitude = ""                               
                                             
                                         msg = MessageItem()
                                         msg.groupid = groupid
@@ -555,6 +540,8 @@ class Main:
                                         msg.region = region
                                         msg.location = location
                                         msg.postcode = postcode
+                                        msg.longitude = longitude
+                                        msg.latitude = latitude
                                         msg.city = city
                                         msg.street = street
                                         msg.address = address
@@ -585,10 +572,7 @@ class Main:
             now = time.monotonic()
             for msg in self.messages:
                 if msg.is_posted is False and now - msg.timereceived >= 1.0:
-                    if self.use_hass:
-                        self.post_to_homeassistant(msg)
-                    if self.use_mqtt:
-                        self.post_to_mqtt(msg)
+                    self.post_data(msg)
             time.sleep(1.0)
         if self.debug:
             print("Post thread stopped")
