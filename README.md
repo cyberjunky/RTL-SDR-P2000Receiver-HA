@@ -145,6 +145,7 @@ If you get errors about missing packages when starting the software, you may nee
 
 ```
 sudo pip3 install paho.mqtt
+sudo pip3 install opencage
 ```
 
 
