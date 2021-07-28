@@ -144,7 +144,7 @@ Except from the MQTT package, the needed packages are installed by default on De
 If you get errors about missing packages when starting the software, you may need to install them for your distro.
 
 ```
-pip install paho.mqtt
+pip3 install paho.mqtt
 ```
 
 
@@ -180,8 +180,8 @@ StandardError=file:/home/<YOUR USER>/RTL-SDR-P2000Receiver-HA/rtlsdrp2000.log
 ExecStart=/usr/bin/python3 /home/<YOUR USER>/RTL-SDR-P2000Receiver-HA/p2000.py
 
 sudo cp rtlsdrp2000.service /etc/systemd/system
-sudo systemctl enable rtlsdrp2000.service
-sudo systemctl start rtlsdrp2000.service
+sudo systemctl enable rtlsdrp2000
+sudo systemctl start rtlsdrp2000
 ```
 
 
