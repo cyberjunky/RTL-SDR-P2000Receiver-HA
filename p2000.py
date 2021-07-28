@@ -13,11 +13,13 @@ import sys
 import threading
 import time
 from datetime import datetime
-from opencage.geocoder import OpenCageGeocode
+
 import paho.mqtt.client as mqtt
 import requests
+from opencage.geocoder import OpenCageGeocode
 
 VERSION = "0.0.3"
+
 
 class MessageItem:
     """Contains all the Message data."""
@@ -149,7 +151,7 @@ def load_capcodes_filter_dict(filename):
                 if len(fields) == 2:
                     capcodes[fields[0].strip()] = fields[1].strip()
                 elif len(fields) == 1:
-                    capcodes[fields[0].strip()] = 'NO DESCR'
+                    capcodes[fields[0].strip()] = "NO DESCR"
         print("{} records loaded".format(len(capcodes)))
         return capcodes
     except KeyError:
@@ -251,13 +253,13 @@ class Main:
         self.baseurl = self.config.get("home-assistant", "baseurl")
         self.token = self.config.get("home-assistant", "token")
         self.sensorname = self.config.get("home-assistant", "sensorname")
-        self.use_mqtt = self.config.getboolean("mqtt","enabled")
-        self.mqtt_server = self.config.get("mqtt","mqtt_server")
-        self.mqtt_port = int(self.config.get("mqtt","mqtt_port"))
-        self.mqtt_username = self.config.get("mqtt","mqtt_user")
-        self.mqtt_password = self.config.get("mqtt","mqtt_password")
-        self.mqtt_topic = self.config.get("mqtt","mqtt_topic")
-        self.use_opencage = self.config.getboolean("opencage","enabled")
+        self.use_mqtt = self.config.getboolean("mqtt", "enabled")
+        self.mqtt_server = self.config.get("mqtt", "mqtt_server")
+        self.mqtt_port = int(self.config.get("mqtt", "mqtt_port"))
+        self.mqtt_username = self.config.get("mqtt", "mqtt_user")
+        self.mqtt_password = self.config.get("mqtt", "mqtt_password")
+        self.mqtt_topic = self.config.get("mqtt", "mqtt_topic")
+        self.use_opencage = self.config.getboolean("opencage", "enabled")
         self.opencagetoken = self.config.get("opencage", "token")
 
         # Load capcodes data
@@ -326,6 +328,8 @@ class Main:
 
         if self.use_hass:
             try:
+                if self.debug:
+                    print("Posting to Home Assistant")
                 headers = {
                     "Authorization": "Bearer " + self.token,
                     "content-type": "application/json",
@@ -359,20 +363,22 @@ class Main:
                 # Mark as posted to prevent race conditions
                 msg.is_posted = True
 
-
         if self.use_mqtt:
             try:
-                print(f"Posting to MQTT")
- 
-                data=json.dumps(data)
+                if self.debug:
+                    print("Posting to MQTT")
+
+                data = json.dumps(data)
                 client = mqtt.Client()
                 client.username_pw_set(self.mqtt_username, self.mqtt_password)
-                client.connect(self.mqtt_server,self.mqtt_port,60)
+                client.connect(self.mqtt_server, self.mqtt_port, 60)
                 client.publish(self.mqtt_topic, data)
                 client.disconnect()
 
                 if self.debug:
-                    print(f"MQTT status: Posting to {self.mqtt_server}:{self.mqtt_port} topic:{self.mqtt_topic}")
+                    print(
+                        f"MQTT status: Posting to {self.mqtt_server}:{self.mqtt_port} topic:{self.mqtt_topic}"
+                    )
                     print(f"MQTT json: {data}")
             finally:
                 # Mark as posted to prevent race conditions
@@ -438,7 +444,7 @@ class Main:
                             for afkorting in afkortingen:
                                 if afkorting in self.pltsnmn:
                                     city = self.pltsnmn[afkorting]["plaatsnaam"]
-                                    
+
                                     # If uppercase city is found, grab first word before that city name, likely to be the address
                                     regex_address = r"(\w*.) ([A-Z]{3,})"
                                     addr = re.search(regex_address, message)
@@ -457,25 +463,33 @@ class Main:
                     if not check_filter(self.matchtext, message):
                         if self.debug:
                             print(
-                                f"Message '{message}' ignored (didn't match match_text)")
+                                f"Message '{message}' ignored (didn't match match_text)"
+                            )
                     else:
                         if check_filter(self.ignoretext, message):
                             if self.debug:
                                 print(
-                                    f"Message '{message}' ignored (matched ignore_text)")
+                                    f"Message '{message}' ignored (matched ignore_text)"
+                                )
                         else:
                             # There can be several capcodes in one message
                             ignore = False
                             for capcode in capcodes.split(" "):
                                 # Apply filter
-                                if not capcode in self.matchcapcodes and self.matchcapcodes:
+                                if (
+                                    capcode not in self.matchcapcodes
+                                    and self.matchcapcodes
+                                ):
                                     if self.debug:
                                         print(
                                             f"Message '{message}' ignored (didn't match match_capcodes)"
                                         )
                                     ignore = True
                                     break
-                                if capcode in self.ignorecapcodes and self.ignorecapcodes:
+                                if (
+                                    capcode in self.ignorecapcodes
+                                    and self.ignorecapcodes
+                                ):
                                     if self.debug:
                                         print(
                                             f"Message '{message}' to '{capcode}' ignored (capcode in ignore_capcodes)"
@@ -488,10 +502,12 @@ class Main:
                                     # Get data from capcode, if exist
                                     if capcode in self.capcodes:
                                         receiver = "{} ({})".format(
-                                            self.capcodes[capcode]["description"], capcode
+                                            self.capcodes[capcode]["description"],
+                                            capcode,
                                         )
                                         discipline = "{} ({})".format(
-                                            self.capcodes[capcode]["discipline"], capcode
+                                            self.capcodes[capcode]["discipline"],
+                                            capcode,
                                         )
                                         region = self.capcodes[capcode]["region"]
                                         location = self.capcodes[capcode]["location"]
@@ -501,18 +517,25 @@ class Main:
                                         discipline = ""
                                         region = ""
                                         remark = ""
-    
+
                                     # If this message was already received, only add extra info
-                                    if len(self.messages) > 0 and self.messages[0].body == message:
+                                    if (
+                                        len(self.messages) > 0
+                                        and self.messages[0].body == message
+                                    ):
                                         if self.messages[0].receivers == "":
                                             self.messages[0].receivers = receiver
                                         elif receiver:
-                                            self.messages[0].receivers += ", " + receiver
-    
+                                            self.messages[0].receivers += (
+                                                ", " + receiver
+                                            )
+
                                         if self.messages[0].disciplines == "":
                                             self.messages[0].disciplines = discipline
                                         elif discipline:
-                                            self.messages[0].disciplines += ", " + discipline
+                                            self.messages[0].disciplines += (
+                                                ", " + discipline
+                                            )
                                         if self.messages[0].remarks == "":
                                             self.messages[0].remarks = remark
                                         elif remark:
@@ -527,15 +550,19 @@ class Main:
                                     else:
                                         # If address is filled and OpenCage is enabled check for GPS coordinates
                                         if address and self.use_opencage:
-                                            geocoder = OpenCageGeocode(self.opencagetoken)
-                                            gps = geocoder.geocode(address, countrycode='nl')
+                                            geocoder = OpenCageGeocode(
+                                                self.opencagetoken
+                                            )
+                                            gps = geocoder.geocode(
+                                                address, countrycode="nl"
+                                            )
                                             if gps:
-                                                latitude = gps[0]['geometry']['lat']
-                                                longitude = gps[0]['geometry']['lng']
+                                                latitude = gps[0]["geometry"]["lat"]
+                                                longitude = gps[0]["geometry"]["lng"]
                                             else:
                                                 latitude = ""
-                                                longitude = ""                               
-                                            
+                                                longitude = ""
+
                                         msg = MessageItem()
                                         msg.groupid = groupid
                                         msg.receivers = receiver
