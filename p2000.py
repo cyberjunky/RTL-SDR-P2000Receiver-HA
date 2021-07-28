@@ -72,7 +72,7 @@ def load_config():
     }
     config["opencage"] = {
         "enabled": False,
-        "gpstoken": "Place your OpenCage API Token here",
+        "token": "Place your OpenCage API Token here",
     }
     with open("config.ini", "w") as configfile:
         config.write(configfile)
@@ -258,7 +258,7 @@ class Main:
         self.mqtt_password = self.config.get("mqtt","mqtt_password")
         self.mqtt_topic = self.config.get("mqtt","mqtt_topic")
         self.use_opencage = self.config.getboolean("opencage","enabled")
-        self.gpstoken = self.config.get("opencage", "gpstoken")
+        self.opencagetoken = self.config.get("opencage", "token")
 
         # Load capcodes data
         self.capcodes = load_capcodes_dict("db_capcodes.txt")
@@ -520,7 +520,7 @@ class Main:
                                     else:
                                         # If address is filled and OpenCage is enabled check for GPS coordinates
                                         if address and self.use_opencage:
-                                            geocoder = OpenCageGeocode(self.gpstoken)
+                                            geocoder = OpenCageGeocode(self.opencagetoken)
                                             gps = geocoder.geocode(address, countrycode='nl')
                                             if gps:
                                                 latitude = gps[0]['geometry']['lat']
