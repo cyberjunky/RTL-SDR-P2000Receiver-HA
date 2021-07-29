@@ -17,8 +17,9 @@ from datetime import datetime
 import paho.mqtt.client as mqtt
 import requests
 from opencage.geocoder import OpenCageGeocode
+from opencage.geocoder import InvalidInputError, RateLimitExceededError, UnknownError
 
-VERSION = "0.0.3"
+VERSION = "0.0.4"
 
 
 class MessageItem:
@@ -44,6 +45,7 @@ class MessageItem:
         self.remarks = ""
         self.longitude = ""
         self.latitude = ""
+        self.opencageinfo = ""        
         self.is_posted = False
 
 
@@ -261,6 +263,7 @@ class Main:
         self.mqtt_topic = self.config.get("mqtt", "mqtt_topic")
         self.use_opencage = self.config.getboolean("opencage", "enabled")
         self.opencagetoken = self.config.get("opencage", "token")
+        self.opencage_disabled = False        
 
         # Load capcodes data
         self.capcodes = load_capcodes_dict("db_capcodes.txt")
@@ -323,6 +326,7 @@ class Main:
                 "remarks": msg.remarks,
                 "longitude": msg.longitude,
                 "latitude": msg.latitude,
+                "opencage info": msg.opencageinfo,                
             },
         }
 
@@ -347,6 +351,7 @@ class Main:
                     print(f"POST data: {data}")
                     print(f"POST status: {response.status_code} {response.reason}")
                     print(f"POST text: {response.text}")
+                    print(f"OPENCAGE status: {msg.opencageinfo}")                    
             except requests.HTTPError:
                 print(
                     f"HTTP Error while trying to post data, check baseurl and token in config.ini: {response.status_code} {response.reason}"
@@ -415,6 +420,7 @@ class Main:
                     street = ""
                     longitude = ""
                     latitude = ""
+                    opencageinfo = ""                    
 
                     if self.debug:
                         print(line.strip())
@@ -548,20 +554,39 @@ class Main:
                                         self.messages[0].street = street
                                         self.messages[0].address = address
                                     else:
+                                        # After midnight (UTC), reset the opencage disable
+                                        hour = datetime.utcnow()
+                                        if hour.hour >= 0 and hour.minute >= 1 and hour.hour < 1 and hour.minute < 15:
+                                            self.opencage_disabled = False
+
                                         # If address is filled and OpenCage is enabled check for GPS coordinates
-                                        if address and self.use_opencage:
+                                        if address and self.use_opencage and (self.opencage_disabled == False):
                                             geocoder = OpenCageGeocode(
                                                 self.opencagetoken
                                             )
-                                            gps = geocoder.geocode(
+                                            try:
+                                                gps = geocoder.geocode(
                                                 address, countrycode="nl"
-                                            )
-                                            if gps:
-                                                latitude = gps[0]["geometry"]["lat"]
-                                                longitude = gps[0]["geometry"]["lng"]
-                                            else:
-                                                latitude = ""
-                                                longitude = ""
+                                                )
+                                                gpscheck = True   
+                                                if gps:
+                                                    latitude = gps[0]["geometry"]["lat"]
+                                                    longitude = gps[0]["geometry"]["lng"]
+                                                else:
+                                                    latitude = ""
+                                                    longitude = ""
+                                            # Rate-error check from opencage
+                                            except RateLimitExceededError as rle:
+                                                print(rle)
+                                                # Over rate, opencage check disabled
+                                                if rle:
+                                                    self.opencage_disabled = True
+                                            except InvalidInputError as ex:
+                                                print(ex)
+                                        else:
+                                            gpscheck = False
+
+                                        opencageinfo = f"Opencage: {self.use_opencage} OpencageRATE: {self.opencage_disabled} GPS-checked: {gpscheck}" 
 
                                         msg = MessageItem()
                                         msg.groupid = groupid
@@ -580,6 +605,7 @@ class Main:
                                         msg.street = street
                                         msg.address = address
                                         msg.remarks = remark
+                                        msg.opencageinfo = opencageinfo                                        
                                         msg.timestamp = to_local_datetime(timestamp)
                                         msg.is_posted = False
                                         self.messages.insert(0, msg)
