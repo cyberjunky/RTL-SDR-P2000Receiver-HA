@@ -16,8 +16,7 @@ from datetime import datetime
 
 import paho.mqtt.client as mqtt
 import requests
-from opencage.geocoder import OpenCageGeocode
-from opencage.geocoder import InvalidInputError, RateLimitExceededError, UnknownError
+from opencage.geocoder import OpenCageGeocode, InvalidInputError, RateLimitExceededError, UnknownError
 
 VERSION = "0.0.4"
 
@@ -45,7 +44,8 @@ class MessageItem:
         self.remarks = ""
         self.longitude = ""
         self.latitude = ""
-        self.opencageinfo = ""        
+        self.opencage = ""        
+        self.mapurl = ""        
         self.is_posted = False
 
 
@@ -326,7 +326,8 @@ class Main:
                 "remarks": msg.remarks,
                 "longitude": msg.longitude,
                 "latitude": msg.latitude,
-                "opencage info": msg.opencageinfo,                
+                "opencage": msg.opencage,                
+                "mapurl": msg.mapurl,                
             },
         }
 
@@ -351,7 +352,7 @@ class Main:
                     print(f"POST data: {data}")
                     print(f"POST status: {response.status_code} {response.reason}")
                     print(f"POST text: {response.text}")
-                    print(f"OPENCAGE status: {msg.opencageinfo}")                    
+                    print(f"OPENCAGE status: {msg.opencage}")                    
             except requests.HTTPError:
                 print(
                     f"HTTP Error while trying to post data, check baseurl and token in config.ini: {response.status_code} {response.reason}"
@@ -420,7 +421,8 @@ class Main:
                     street = ""
                     longitude = ""
                     latitude = ""
-                    opencageinfo = ""                    
+                    opencage = ""                    
+                    mapurl = ""                    
 
                     if self.debug:
                         print(line.strip())
@@ -451,18 +453,11 @@ class Main:
                                 if afkorting in self.pltsnmn:
                                     city = self.pltsnmn[afkorting]["plaatsnaam"]
 
-                                    # If uppercase city is found, grab first word before that city name, likely to be the address
+                                    # If uppercase city is found, grab first word before that city name, likely to be the street
                                     regex_address = r"(\w*.) ([A-Z]{2,})(?!.*[A-Z]{2,})"
                                     addr = re.search(regex_address, message)
                                     if addr:
                                         street = addr.group(1)
-                                        plaats = addr.group(2)
-
-                                        # Check if found string is a shortened city name, if so get full city name
-                                        if plaats in self.pltsnmn:
-                                            city = self.pltsnmn[plaats]["plaatsnaam"]
-                                        else:
-                                            city = plaats.capitalize()
 
                                     address = f"{street} {city}"
 
@@ -572,9 +567,11 @@ class Main:
                                                 if gps:
                                                     latitude = gps[0]["geometry"]["lat"]
                                                     longitude = gps[0]["geometry"]["lng"]
+                                                    mapurl = gps[0]["annotations"]["OSM"]["url"]
                                                 else:
                                                     latitude = ""
                                                     longitude = ""
+                                                    mapurl = ""
                                             # Rate-error check from opencage
                                             except RateLimitExceededError as rle:
                                                 print(rle)
@@ -586,7 +583,7 @@ class Main:
                                         else:
                                             gpscheck = False
 
-                                        opencageinfo = f"Opencage: {self.use_opencage} OpencageRATE: {self.opencage_disabled} GPS-checked: {gpscheck}" 
+                                        opencage = f"enabled: {self.use_opencage} ratelimit: {self.opencage_disabled} gps-checked: {gpscheck}" 
 
                                         msg = MessageItem()
                                         msg.groupid = groupid
@@ -605,7 +602,8 @@ class Main:
                                         msg.street = street
                                         msg.address = address
                                         msg.remarks = remark
-                                        msg.opencageinfo = opencageinfo                                        
+                                        msg.opencage = opencage                                        
+                                        msg.mapurl = mapurl                                        
                                         msg.timestamp = to_local_datetime(timestamp)
                                         msg.is_posted = False
                                         self.messages.insert(0, msg)
