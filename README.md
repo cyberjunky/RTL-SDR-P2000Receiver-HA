@@ -12,7 +12,7 @@ Read the Credits section below.
 - Capcodes database (text based for now), see 'db_capcodes.txt'
 - Optional text match filter (white-list), see 'match_text.txt'
 - Capcode ignore filter (black-list), see 'ignore_capcodes.txt'
-- Get lat/long for addresses using OpenCage
+- Get GPS latitude/longitude for addresses using OpenCage service
 
 
 ## Screenshots
@@ -417,6 +417,49 @@ automation:
       data_template:
         message: >
           {{ states.sensor.p2000.state + "\n" + states.sensor.p2000.attributes.disciplines }}
+```
+
+If you want an OpenStreetMap link included (if GPS locaton was found using OpenCage):
+```
+automation:
+  - alias: "Melding P2000 Bericht"
+    trigger:
+      platform: state
+      entity_id: sensor.p2000
+    action:
+      service: notify.telegram
+      data_template:
+        message: >
+          {{ states.sensor.p2000.state + "\n" + states.sensor.p2000.attributes.disciplines + "\n" + states.sensor.p2000.attributes.mapurl }}
+```
+
+If you want to use native Telegram location support (if GPS locaton was found using OpenCage):
+```
+automation:
+  - alias: "Melding P2000 Bericht"
+    trigger:
+      platform: state
+      entity_id: sensor.p2000
+    action:
+      service: notify.telegram
+      data_template:
+        message: >
+          {{ states.sensor.p2000.state + "\n" + states.sensor.p2000.attributes.disciplines }}
+      - condition: or
+        conditions: "{{ states.sensor.p2000.attributes.latitude|float > 0 }}"
+      - service: script.notify_telegram_location
+
+script:
+  notify_telegram_location:
+    alias: Test notify.telegram location template
+    sequence:
+      - service: notify.telegram
+        data:
+          message: "Not used here but needed..."
+          data:
+            location:
+              latitude: "{{ states.sensor.p2000.attributes.latitude|float }}"
+              longitude: "{{ states.sensor.p2000.attributes.longitude|float }}"
 ```
 
 ## Credits
