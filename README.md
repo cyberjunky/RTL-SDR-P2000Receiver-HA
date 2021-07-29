@@ -419,7 +419,7 @@ automation:
           {{ states.sensor.p2000.state + "\n" + states.sensor.p2000.attributes.disciplines }}
 ```
 
-If you want an OpenStreetMap link included (if GPS locaton was found using OpenCage):
+If you want an OpenStreetMap link included (if GPS location was found using OpenCage):
 ```
 automation:
   - alias: "Melding P2000 Bericht"
@@ -433,7 +433,7 @@ automation:
           {{ states.sensor.p2000.state + "\n" + states.sensor.p2000.attributes.disciplines + "\n" + states.sensor.p2000.attributes.mapurl }}
 ```
 
-If you want to use native Telegram location support (if GPS locaton was found using OpenCage):
+If you want to use native Telegram location support (if GPS location was found using OpenCage):
 ```
 automation:
   - alias: "Melding P2000 Bericht"
