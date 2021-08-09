@@ -18,7 +18,7 @@ import paho.mqtt.client as mqtt
 import requests
 from opencage.geocoder import OpenCageGeocode, InvalidInputError, RateLimitExceededError, UnknownError
 
-VERSION = "0.0.4"
+VERSION = "0.0.4.1"
 
 
 class MessageItem:
@@ -437,6 +437,13 @@ class Main:
                         city = addr.group(3)
                         address = f"{street} {postcode} {city}"
 
+                        # remove Capitalized city name from message (when postcode is found)
+                        regex_afkortingen = "[A-Z]{2,}"
+                        afkortingen = re.findall(regex_afkortingen, message)
+                        for afkorting in afkortingen:
+                            if afkorting in self.pltsnmn:
+                                message = re.sub(afkorting, "", message)
+
                     # Try to get city only when there is one after a prio
                     # A1 Breda
                     else:
@@ -452,14 +459,47 @@ class Main:
                             for afkorting in afkortingen:
                                 if afkorting in self.pltsnmn:
                                     city = self.pltsnmn[afkorting]["plaatsnaam"]
-
                                     # If uppercase city is found, grab first word before that city name, likely to be the street
-                                    regex_address = r"(\w*.) ([A-Z]{2,})(?!.*[A-Z]{2,})"
+                                    regex_address = rf"(\w*.) ({afkorting})"                                    
                                     addr = re.search(regex_address, message)
                                     if addr:
                                         street = addr.group(1)
-
                                     address = f"{street} {city}"
+                                    # Change uppercase city to normal city in message 
+                                    message = re.sub(afkorting, city, message)
+                        
+                        # if no adress found, do wild guess
+                        if not address:
+                            if self.debug:
+                                print("Using message stripping to find address")
+                            # strip all status info from messag
+                            regex_messagestrip = r"(^A\s?1|\s?A\s?2|B\s?1|^B\s?2|^B\s?3|PRIO\s?1|^P\s?1|PRIO\s?2|^P\s?2|^PRIO\s?3|^P\s?3|^PRIO\s?4|^P\s?4)(\W\d{2,}|.*(BR)\b|)|(rit:|rit|bon|bon:|ambu|dia|DIA)\W\d{5,8}|\b\d{5,}$|( : )|\(([^\)]+)\)( \b\d{5,}|)|directe (\w*)|(-)+/gi"
+                            strip = (re.sub(regex_messagestrip, "", message, flags=re.I))
+                            # strip any double spaces from message
+                            regex_doublespaces = r"(^[ \t]+|[ \t]+$)"
+                            strip = re.sub(regex_doublespaces, "",strip)
+                            # strip all double words from message
+                            regex_doublewords = r"(\b\S+\b)(?=.*\1)"
+                            strip = re.sub(regex_doublewords, "",strip)
+                            # search in leftover message for a city corrosponding to city list
+                            for plaatsnaam in self.plaatsnamen:
+                                if plaatsnaam in strip:
+                                    if self.debug:
+                                        print("City found: " + plaatsnaam)
+                                    # find first word left from city
+                                    regex_plaatsnamen_strip = rf"\w*.[a-z|A-Z] \b{plaatsnaam}\b"
+                                    plaatsnamen_strip = re.search(regex_plaatsnamen_strip, strip)
+                                    if self.debug:
+                                        print("What and where is there an possible adress match? " + plaatsnamen_strip)
+                                    if plaatsnamen_strip:
+                                        addr = plaatsnamen_strip.group(0)
+                                        # Final non address symbols strip
+                                        regex_plaatsnamen_strip_strip = r"(- )|(\w[0-9] )"
+                                        addr = re.sub(regex_plaatsnamen_strip_strip, "",addr)
+                                        address = addr
+                                        city = plaatsnaam
+                                        if self.debug:
+                                            print("Adress found: " + plaatsnamen_strip.group(0))
 
                     if not check_filter(self.matchtext, message):
                         if self.debug:
