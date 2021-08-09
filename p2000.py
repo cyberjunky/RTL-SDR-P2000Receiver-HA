@@ -490,7 +490,7 @@ class Main:
                                     regex_plaatsnamen_strip = rf"\w*.[a-z|A-Z] \b{plaatsnaam}\b"
                                     plaatsnamen_strip = re.search(regex_plaatsnamen_strip, strip)
                                     if self.debug:
-                                        print("What and where is there an possible adress match? " + plaatsnamen_strip)
+                                        print(plaatsnamen_strip)
                                     if plaatsnamen_strip:
                                         addr = plaatsnamen_strip.group(0)
                                         # Final non address symbols strip
