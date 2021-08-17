@@ -5,7 +5,9 @@ import os
 import csv
 
 # Change dir to working directory
-os.chdir('..')
+dir_path = os.path.dirname(os.path.realpath(__file__))
+os.chdir(dir_path)
+os.chdir('../..')
 
 if (not os.path.exists('tools')):
    print('Cannot find working directory of p2000')
