@@ -1638,7 +1638,7 @@ OUDSCD,Oudeschild
 OUDSCP,Oudeschip
 OUDSCT,Oudeschoot
 OUDSLS,Oudesluis
-OUDTNG,Oude-Tonge
+OUDTNG,OUDWET
 OUDWTR,Oudewater
 OUDEZL,Oudezijl
 OUDHSD,Oudheusden

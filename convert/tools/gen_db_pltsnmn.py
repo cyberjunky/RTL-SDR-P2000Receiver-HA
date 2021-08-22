@@ -3,6 +3,7 @@ import requests
 import time
 import os
 import csv
+import sys
 
 # Create timestamp
 timestamp = time.strftime("%Y%m%d-%H%M%S")
@@ -12,7 +13,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 os.chdir(dir_path)
 os.chdir('../..')
 
-if (not os.path.exists('tools')):
+if (not os.path.exists('convert')):
    print('Cannot find working directory of p2000')
    sys.exit(0)
 

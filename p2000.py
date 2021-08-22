@@ -18,7 +18,7 @@ import paho.mqtt.client as mqtt
 import requests
 from opencage.geocoder import OpenCageGeocode, InvalidInputError, RateLimitExceededError, UnknownError
 
-VERSION = "0.0.4.1"
+VERSION = "0.0.5"
 
 
 class MessageItem:
