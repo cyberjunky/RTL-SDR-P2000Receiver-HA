@@ -196,8 +196,8 @@ sudo rm -r rtl-sdr multimon-ng
 
 ### 6) Tools (optional)
 
-I have created some tools to download and/or convert or extract data from.
-You can find them in the tools directory, you must run them from there.
+Tools to download and/or convert or extract data from are located under convert/tools directory.
+You can execute them by running *update_db.py* from the root directory.
 
 *gen_db_capcodes.py*
 
@@ -492,11 +492,11 @@ I rewrote it heavily though, left out all unneeded code for my specific purpose,
 
 http://p2000.bommel.net
 
+https://www.tomzulu10capcodes.nl/
 
 ### Plaatsnamen & Pltsnmn
 
 https://www.tomzulu10capcodes.nl/
-
 
 ## Development state
 
