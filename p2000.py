@@ -18,7 +18,7 @@ import paho.mqtt.client as mqtt
 import requests
 from opencage.geocoder import OpenCageGeocode, InvalidInputError, RateLimitExceededError, UnknownError
 
-VERSION = "0.0.5"
+VERSION = "0.0.6"
 
 
 class MessageItem:
@@ -45,7 +45,8 @@ class MessageItem:
         self.longitude = ""
         self.latitude = ""
         self.opencage = ""        
-        self.mapurl = ""        
+        self.mapurl = ""
+        self.friendly_name = "P2000 SDR"        
         self.is_posted = False
 
 
@@ -327,7 +328,8 @@ class Main:
                 "longitude": msg.longitude,
                 "latitude": msg.latitude,
                 "opencage": msg.opencage,                
-                "mapurl": msg.mapurl,                
+                "mapurl": msg.mapurl,
+                "friendly_name": msg.friendly_name
             },
         }
 
@@ -422,7 +424,8 @@ class Main:
                     longitude = ""
                     latitude = ""
                     opencage = ""                    
-                    mapurl = ""                    
+                    mapurl = "" 
+                    friendly_name = "P2000 SDR"
 
                     if self.debug:
                         print(line.strip())
@@ -529,7 +532,7 @@ class Main:
                                     break
                                 if (
                                     capcode in self.ignorecapcodes
-                                    and self.ignorecapcodes
+                                    and self.ignorecapcodes and (len(capcodes.split(" ")) == 1)
                                 ):
                                     if self.debug:
                                         print(
@@ -541,7 +544,10 @@ class Main:
                             if not ignore:
                                 for capcode in capcodes.split(" "):
                                     # Get data from capcode, if exist
-                                    if capcode in self.capcodes:
+                                    if (
+                                        capcode in self.capcodes
+                                        and capcode not in self.ignorecapcodes
+                                        ):    
                                         receiver = "{} ({})".format(
                                             self.capcodes[capcode]["description"],
                                             capcode,
@@ -581,6 +587,9 @@ class Main:
                                             self.messages[0].remarks = remark
                                         elif remark:
                                             self.messages[0].remarks += ", " + remark
+                                            
+                                        if self.messages[0].region == "":
+                                            self.messages[0].region = region                                              
 
                                         self.messages[0].capcodes.append(capcode)
                                         self.messages[0].location = location
@@ -646,6 +655,7 @@ class Main:
                                         msg.mapurl = mapurl                                        
                                         msg.timestamp = to_local_datetime(timestamp)
                                         msg.is_posted = False
+                                        msg.friendly_name = "P2000 SDR"                                        
                                         self.messages.insert(0, msg)
 
                                 # Limit the message list size
