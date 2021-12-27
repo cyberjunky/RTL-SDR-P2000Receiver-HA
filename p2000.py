@@ -134,7 +134,7 @@ def load_capcodes_dict(filename):
     except KeyError:
         print(f"Could not parse file contents of: {filename}")
     except OSError:
-        print(f"Could not open/read file: {filename}, ignore filter")
+        print(f"Could not open/read file: {filename}, ignoring filter")
 
     return capcodes
 
@@ -160,7 +160,7 @@ def load_capcodes_filter_dict(filename):
     except KeyError:
         print(f"Could not parse file contents of: {filename}")
     except OSError:
-        print(f"Could not open/read file: {filename}, ignore filter")
+        print(f"Could not open/read file: {filename}, ignoring filter")
 
     return capcodes
 
@@ -492,8 +492,6 @@ class Main:
                                     # find first word left from city
                                     regex_plaatsnamen_strip = rf"\w*.[a-z|A-Z] \b{plaatsnaam}\b"
                                     plaatsnamen_strip = re.search(regex_plaatsnamen_strip, strip)
-                                    if self.debug:
-                                        print(plaatsnamen_strip)
                                     if plaatsnamen_strip:
                                         addr = plaatsnamen_strip.group(0)
                                         # Final non address symbols strip
