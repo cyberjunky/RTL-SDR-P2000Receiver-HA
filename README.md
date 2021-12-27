@@ -47,7 +47,7 @@ sudo ldconfig
 
 To be able to communicate with the dongle as a non-root user install and activate the udev rules
 ```
-sudo cp 20-rtl-sdr.rules /etc/udev/rules.d/
+sudo cp ../rtl-sdr.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules && sudo udevadm trigger
 ```
 Then remove and insert the RTL-SDR dongle.
