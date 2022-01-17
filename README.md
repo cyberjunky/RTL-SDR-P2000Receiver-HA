@@ -23,10 +23,49 @@ Read the Credits section below.
 
 ## Installation
 
-### 0) Install required build tools and libraries (tested on Debian 10)
+Preparing a Raspberry Pi:
+
+Download and install Raspbian software on an SD card using Raspberry Imager from
+https://www.raspberrypi.com/software/
+Choose Raspberry Pi OS Other and then Raspberry Pi OS Lite (32-bit)
+
+Insert the SD card, connect the display and keyboard and boot the Raspberry Pi.
+Default login pi/raspberry
+
+NOTE: Use a good quality SD card otherwise it will wear out soon (also make backups of your config)
 
 ```
-sudo apt-get install build-essential cmake unzip pkg-config libusb-1.0-0-dev git qt4-qmake libpulse-dev libx11-dev qt4-default
+sudo raspi-config
+```
+Select Interface options and then P2 SSH to enable SSH
+Back Finish
+Set your own password for user ‘pi’
+```
+passwd
+```
+Gather assigned IP address to login with SSH
+```
+ip addr
+```
+Look for `eth0` when connected wired
+If you want to use Wi-Fi use raspi-config to set country and Wi-Fi credentials using System
+Options, S1 Wireless LAN
+Fix timezone settings if time is incorrect:
+```
+sudo dpkg-reconfigure tzdata
+```
+Login and update software:
+```
+sudo apt update
+sudo apt upgrade
+sudo reboot
+```
+
+### 0) Install required build tools and libraries (tested on Debian and Raspbian 11)
+
+```
+sudo apt-get install build-essential cmake unzip pkg-config libusb-1.0-0-dev git qt5-qmake \
+libpulse-dev libx11-dev python3-pip
 ```
 
 ### 1) Install RTL-SDR software
@@ -54,28 +93,21 @@ Then remove and insert the RTL-SDR dongle.
 
 Test the rtl-sdr functionality like so:
 ```
-$ rtl_test 
+$ rtl_test
 Found 1 device(s):
-  0:  Realtek, RTL2838UHIDIR, SN: 00000001
-
+0: Realtek, RTL2838UHIDIR, SN: 00000001
 Using device 0: Generic RTL2832U OEM
 Detached kernel driver
 Found Rafael Micro R820T tuner
-Supported gain values (29): 0.0 0.9 1.4 2.7 3.7 7.7 8.7 12.5 14.4 15.7 16.6 19.7 20.7 22.9 25.4 28.0 29.7 32.8 33.8 36.4 37.2 38.6 40.2 42.1 43.4 43.9 44.5 48.0 49.6 
+Supported gain values (29): 0.0 0.9 1.4 2.7 3.7 7.7 8.7 12.5 14.4 15.7 16.6 19.7 20.7 22.9
+25.4 28.0 29.7 32.8 33.8 36.4 37.2 38.6 40.2 42.1 43.4 43.9 44.5 48.0 49.6
 [R82XX] PLL not locked!
 Sampling at 2048000 S/s.
-
 Info: This tool will continuously read from the device, and report if
 samples get lost. If you observe no further output, everything is fine.
-
 Reading samples in async mode...
-lost at least 1460 bytes
-lost at least 1600 bytes
-lost at least 1336 bytes
-lost at least 908 bytes
 ...
 [Ctrl-C]
-
 ```
 
 
@@ -89,7 +121,7 @@ cd multimon-ng
 
 mkdir build;cd build
 
-qmake ../multimon-ng.pro
+qmake -qt=qt5 ../multimon-ng.pro
 make
 sudo make install
 ```
@@ -139,16 +171,15 @@ Usage: multimon-ng [file] [file] [file] ...
 ```
 
 
-### 3) Install dependencies
+### 3) Install Python3 package dependencies
 
-Except from the MQTT package, the needed packages are installed by default on Debian 10.
-If you get errors about missing packages when starting the software, you may need to install them for your distro.
-
+Most of the needed packages are installed by default on Debian 11. If you get errors about
+missing packages when starting the software, you may need to install them for your distro.
+Install these packages to support MQTT and opencage:
 ```
 sudo pip3 install paho.mqtt
 sudo pip3 install opencage
 ```
-
 
 ### 4) Install RTL-SDR-P2000Receiver-HA software
 
@@ -158,28 +189,33 @@ git clone https://github.com/cyberjunky/RTL-SDR-P2000Receiver-HA.git
 
 cd RTL-SDR-P2000Receiver-HA
 ./p2000.py
+RTL-SDR P2000 Receiver for Home Assistant Version 0.0.6
+Checking if required software is installed
+rtl_fm is found
+multimon-ng is found
+Created config file 'config.ini', edit it and restart the program.
 ```
 
 See the Configuration section for more information
 
 
-After successful configuraton and testing by running it manually you have two options to start it automatically
+After successful configuraton and testing by running it manually you have two options to start it automatically:
 
-a) Add it to the startup script
+#### a) Add it to the debian rc.local startup script
 ```
 sudo nano /etc/rc.local
-python3 /home/<YOUR USER>/RTL-SDR-P2000Receiver-HA/p2000.py &
+python3 /home/pi/RTL-SDR-P2000Receiver-HA/p2000.py &
 ```
 
-b) Edit and use supplied systemd config
+#### b) Edit and use supplied systemd config
 ```
 sudo nano rtlsdrp2000.service
 
-# Change these line to match location of software:
+# If needed change these lines to match the location of the software on your system:
 
-StandardOutput=file:/home/<YOUR USER>/RTL-SDR-P2000Receiver-HA/rtlsdrp2000.log
-StandardError=file:/home/<YOUR USER>/RTL-SDR-P2000Receiver-HA/rtlsdrp2000.log
-ExecStart=/usr/bin/python3 /home/<YOUR USER>/RTL-SDR-P2000Receiver-HA/p2000.py
+StandardOutput=file:/home/pi/RTL-SDR-P2000Receiver-HA/rtlsdrp2000.log
+StandardError=file:/home/pi/RTL-SDR-P2000Receiver-HA/rtlsdrp2000.log
+ExecStart=/usr/bin/python3 /home/pi/RTL-SDR-P2000Receiver-HA/p2000.py
 
 sudo cp rtlsdrp2000.service /etc/systemd/system
 sudo systemctl enable rtlsdrp2000
@@ -194,48 +230,46 @@ cd
 sudo rm -r rtl-sdr multimon-ng
 ```
 
-### 6) Tools (optional)
+### 6) Quick setup RTL-SDR-P2000Receiver-HA
 
-Tools to download and/or convert or extract data from are located under convert/tools directory.
-You can execute them by running *update_db.py* from the root directory.
-
-*gen_db_capcodes.py*
-
-Downloads capcodes file from http://p2000.bommel.net/cap2csv.php
-And created the db_capcodes.txt file from it.
-Different delimiter, lowercase header names, fill capcodes with zero's to 9 char lenght.
-Format: capcode,discipline,region,location,description,remark
-
-*gen_db_plaatsnamen.py*
-
-Downloads Afkortingen_Plaatsnamen sheet from Google Docs file https://www.tomzulu10capcodes.nl/
-And extracts the plaatsnamen from it to create db_plaatsnamen.txt.
-It's used to check for valid plaatsnamen.
-Format: plaatsnaam
-
-*gen_db_pltsnmn.py*
-
-Downloads Afkortingen_Plaatsnamen sheet from google Docs file https://www.tomzulu10capcodes.nl/
-And creates the db_pltsnmn.txt file from it.
-And extracts the pltsnmn and plaatsnamen from it to create db_pltsnmn.txt.
-It's used to look up plaatsnamen by there short name and convert them.
-Format: pltsnmn,plaatsnaam
-
-*gen_match_regions.py*
-
-Extract all regions from db_capcodes.txt and create match_regions.txt.
-Format: regio
-
-This file is not used yet, but will be a filter later.
-
-*gen_match_disciplines.py*
-
-Extract all disciplines from db_capcodes.txt and create match_disciplines.txt
-Format: disciplines
-
-This file is not used yet, but will be a filter later.
-
-
+Fill in the generated `config.ini ` (after the first run of p2000.py)
+Set `debug = True` to see what's happening to check your configuration, disable if all is
+working to save writes to SD card.
+home-assistant section:
+enabled = True
+baseurl = the IP address or url of your Home-Assistant instance including port.
+token = A long lived token generated inside Home-Assistant
+If you want to use geocoding set opencage
+opencage section:
+enabled = True
+token = Your opencage tokenUpdate all database files:
+```
+update_db.py
+```
+Run p2000.py
+Check Home Assistant sensor after first message trigger
+Filtering
+I use match_text.txt to match all my plaatsnamen:
+```
+# Only pass messages when filter matches, format: one string per line, * and ? masks are
+allowed.
+# When empty or all entries are commented with # all messages pass
+*Dordrecht*
+*DORDRT*
+*Zwijndrecht*
+*ZWIJND*
+*Sliedrecht*
+*SLIEDR*
+```
+And ignore_text.txt to ignore unwanted stuff:
+```
+# Ignore messages when filter matches, format: one string per line, * and ? masks are
+allowed.
+# When empty or all commented with # all messages pass
+*Test*
+*test*
+*TEST*
+```
 NOTE: All tools makes backups of current files inside the 'convert' directory with timestamps appended to filename.
 This is also the location the temp data is downloaded to.
 
