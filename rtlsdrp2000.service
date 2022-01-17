@@ -10,9 +10,9 @@ Restart=on-failure
 RestartSec=5s
 
 Type=simple
-StandardOutput=file:/home/<YOUR USER>/RTL-SDR-P2000Receiver-HA/rtlsdrp2000.log
-StandardError=file:/home/<YOUR USER>/RTL-SDR-P2000Receiver-HA/rtlsdrp2000.log
-ExecStart=/usr/bin/python3 /home/<YOUR USER>/RTL-SDR-P2000Receiver-HA/p2000.py
+StandardOutput=file:/home/pi/RTL-SDR-P2000Receiver-HA/rtlsdrp2000.log
+StandardError=file:/home/pi/RTL-SDR-P2000Receiver-HA/rtlsdrp2000.log
+ExecStart=/usr/bin/python3 /home/pi/RTL-SDR-P2000Receiver-HA/p2000.py
 WatchdogSec=30s
 Restart=on-failure
 

@@ -12,13 +12,138 @@ import subprocess
 import sys
 import threading
 import time
+import logging
 from datetime import datetime
-
+from logging.handlers import TimedRotatingFileHandler as _TimedRotatingFileHandler
 import paho.mqtt.client as mqtt
 import requests
 from opencage.geocoder import OpenCageGeocode, InvalidInputError, RateLimitExceededError, UnknownError
 
 VERSION = "0.0.6"
+
+class TimedRotatingFileHandler(_TimedRotatingFileHandler):
+    """Override original code to fix bug with not deleting old logfiles."""
+
+    def __init__(self, filename="", when="midnight", interval=1, backupCount=7):
+        super().__init__(
+            filename=filename,
+            when=when,
+            interval=int(interval),
+            backupCount=int(backupCount),
+        )
+
+    def getFilesToDelete(self):
+        """Find all logfiles present."""
+        dirname, basename = os.path.split(self.baseFilename)
+        filenames = os.listdir(dirname)
+        result = []
+        prefix = basename + "."
+        plen = len(prefix)
+        for filename in filenames:
+            if filename[:plen] == prefix:
+                suffix = filename[plen:]
+                if self.extMatch.match(suffix):
+                    result.append(os.path.join(dirname, filename))
+        result.sort()
+        if len(result) < self.backupCount:
+            result = []
+        else:
+            result = result[: len(result) - self.backupCount]
+        return result
+
+    def doRollover(self):
+        """Delete old logfiles but keep latest backupCount amount."""
+        super().doRollover()
+        self.close()
+        timetuple = time.localtime(time.time())
+        dfn = self.baseFilename + "." + time.strftime(self.suffix, timetuple)
+
+        if os.path.exists(dfn):
+            os.remove(dfn)
+
+        os.rename(self.baseFilename, dfn)
+
+        if self.backupCount > 0:
+            for oldlog in self.getFilesToDelete():
+                os.remove(oldlog)
+
+        self.stream = open(self.baseFilename, "w")
+
+        currenttime = int(time.time())
+        newrolloverat = self.computeRollover(currenttime)
+        while newrolloverat <= currenttime:
+            newrolloverat = newrolloverat + self.interval
+
+        self.rolloverAt = newrolloverat
+
+
+class Logger:
+    """Logger class."""
+
+    my_logger = None
+
+    def __init__(self, datadir, logstokeep, debug_enabled):
+        """Logger init."""
+        self.my_logger = logging.getLogger()
+        if debug_enabled:
+            self.my_logger.setLevel(logging.DEBUG)
+            self.my_logger.propagate = False
+        else:
+            self.my_logger.setLevel(logging.INFO)
+            self.my_logger.propagate = False
+
+        date_fmt = "%Y-%m-%d %H:%M:%S"
+        formatter = logging.Formatter(
+            u"%(asctime)s - (%(threadName)-10s) - %(filename)s - %(levelname)s - %(message)s", date_fmt
+        )
+        console_formatter = logging.Formatter(
+            u"%(asctime)s - (%(threadName)-10s) - %(filename)s - %(levelname)s - %(message)s", date_fmt
+        )
+        # Create directory if not exists
+        if not os.path.exists(f"{datadir}/logs"):
+            os.makedirs(f"{datadir}/logs")
+
+        # Log to file and rotate if needed
+        file_handle = TimedRotatingFileHandler(
+            filename=f"{datadir}/logs/p2000.log", backupCount=logstokeep
+        )
+        # file_handle.setLevel(logging.DEBUG)
+        file_handle.setFormatter(formatter)
+        self.my_logger.addHandler(file_handle)
+
+        # Log to console
+        console_handle = logging.StreamHandler()
+        console_handle.setLevel(logging.INFO)
+        console_handle.setLevel(logging.DEBUG)
+        console_handle.setFormatter(console_formatter)
+        self.my_logger.addHandler(console_handle)
+
+    def log(self, message, level="info"):
+        """Call the log levels."""
+        if level == "info":
+            self.my_logger.info(message)
+        elif level == "warning":
+            self.my_logger.warning(message)
+        elif level == "error":
+            self.my_logger.error(message)
+        elif level == "debug":
+            self.my_logger.debug(message)
+
+    def info(self, message):
+        """Info level."""
+        self.log(message, "info")
+
+    def warning(self, message):
+        """Warning level."""
+        self.log(message, "warning")
+
+    def error(self, message):
+        """Error level."""
+        self.log(message, "error")
+
+    def debug(self, message):
+        """Debug level."""
+        self.log(message, "debug")
 
 
 class MessageItem:
@@ -50,11 +175,10 @@ class MessageItem:
         self.is_posted = False
 
 
-def load_config():
+def load_config(filename):
     """Create default or load existing config file."""
     config = configparser.ConfigParser()
-    if config.read("config.ini"):
-        print("Loading configuration from 'config.ini'")
+    if config.read(filename):
         return config
 
     config["main"] = {"debug": False}
@@ -79,15 +203,15 @@ def load_config():
         "enabled": False,
         "token": "Place your OpenCage API Token here",
     }
-    with open("config.ini", "w") as configfile:
-        config.write(configfile)
-    print("Created config file 'config.ini', edit it and restart the program.")
-    sys.exit(0)
+    with open(cfgfile, "w") as configfile:
+        config.write(filename)
+
+    return False
 
 
-def check_requirements():
+def check_requirements(self):
     """Check if required software is installed."""
-    print("Checking if required software is installed")
+    self.logger.info("Checking if required software is installed")
     # Check if rtl_fm is installed
     process = subprocess.Popen(
         "rtl_fm", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
@@ -96,10 +220,10 @@ def check_requirements():
     dummy, err = process.communicate()
     error_str = err.decode("utf8")
     if "not found" in error_str or "not recognized" in error_str:
-        print("rtl_fm command not found, please install RTL-SDR software")
+        self.logger.debug("rtl_fm command not found, please install RTL-SDR software")
         return False
 
-    print("rtl_fm is found")
+    self.logger.debug("rtl_fm is found")
 
     # Check if multimon-ng is installed
     process = subprocess.Popen(
@@ -109,18 +233,18 @@ def check_requirements():
     dummy, err = process.communicate()
     error_str = err.decode("utf8")
     if "not found" in error_str:
-        print("multimon-ng not found, please install the multimon-ng package")
+        self.logger.error("multimon-ng not found, please install the multimon-ng package")
         return False
 
-    print("multimon-ng is found")
+    self.logger.debug("multimon-ng is found")
     return True
 
 
-def load_capcodes_dict(filename):
+def load_capcodes_dict(self, filename):
     """Load capcodes to dictionary."""
     capcodes = {}
     try:
-        print("Loading data from '{}'".format(filename))
+        self.logger.info("Loading data from '{}'".format(filename))
         with open(filename, "r") as csv_file:
             csv_list = [
                 [val.strip() for val in r.split(",")] for r in csv_file.readlines()
@@ -130,20 +254,20 @@ def load_capcodes_dict(filename):
         for row in data:
             key, *values = row
             capcodes[key] = {key: value for key, value in zip(header, values)}
-        print("{} records loaded".format(len(capcodes)))
+        self.logger.info("{} records loaded".format(len(capcodes)))
     except KeyError:
-        print(f"Could not parse file contents of: {filename}")
+        self.logger.error(f"Could not parse file contents of: {filename}")
     except OSError:
-        print(f"Could not open/read file: {filename}, ignoring filter")
+        self.logger.info(f"Could not open/read file: {filename}, ignoring filter")
 
     return capcodes
 
 
-def load_capcodes_filter_dict(filename):
+def load_capcodes_filter_dict(self, filename):
     """Load capcodes ignore or match data to dictionary."""
     capcodes = dict()
     try:
-        print("Loading data from '{}'".format(filename))
+        self.logger.info("Loading data from '{}'".format(filename))
         with open(filename, "r") as text_file:
             lines = text_file.readlines()
             for item in lines:
@@ -155,21 +279,21 @@ def load_capcodes_filter_dict(filename):
                     capcodes[fields[0].strip()] = fields[1].strip()
                 elif len(fields) == 1:
                     capcodes[fields[0].strip()] = "NO DESCR"
-        print("{} records loaded".format(len(capcodes)))
+        self.logger.info("{} records loaded".format(len(capcodes)))
         return capcodes
     except KeyError:
-        print(f"Could not parse file contents of: {filename}")
+        self.logger.debug(f"Could not parse file contents of: {filename}")
     except OSError:
-        print(f"Could not open/read file: {filename}, ignoring filter")
+        self.logger.debug(f"Could not open/read file: {filename}, ignoring filter")
 
     return capcodes
 
 
-def load_list(filename):
+def load_list(self, filename):
     """Load data in list."""
     tmplist = []
     try:
-        print("Loading data from '{}'".format(filename))
+        self.logger.info("Loading data from '{}'".format(filename))
         with open(filename, "r") as text_file:
             lines = text_file.readlines()
             lines_strip = map((lambda line: line.strip()), lines)
@@ -181,12 +305,12 @@ def load_list(filename):
                     lines_strip,
                 )
             )
-        print("{} records loaded".format(len(tmplist)))
+        self.logger.info("{} records loaded".format(len(tmplist)))
         return tmplist
     except KeyError:
-        print(f"Could not parse file contents of: {filename}")
+        self.logger.debug(f"Could not parse file contents of: {filename}")
     except OSError:
-        print(f"Could not open/read file: {filename}")
+        self.logger.debug(f"Could not open/read file: {filename}")
 
     return tmplist
 
@@ -232,6 +356,9 @@ def p2000_get_prio(message):
     return priority
 
 
+# Init logging
+logger = Logger("/home/pi/RTL-SDR-P2000Receiver-HA/", 7, True)
+
 class Main:
     """Main class, start of application."""
 
@@ -239,18 +366,31 @@ class Main:
         self.running = True
         self.messages = []
 
-        print(f"RTL-SDR P2000 Receiver for Home Assistant Version {VERSION}\n")
+        # Init logging
+        self.logger = logger
+
+        cfgfile = "config.ini"
+
+        # Load configuration
+        self.config = load_config(cfgfile)
+        if self.config:
+            self.logger.info(f"Loading configuration from '{cfgfile}'")
+        else:
+            self.logger.info(f"Created config file '{cfgfile}', edit it and restart the program.")
+
+        self.debug = self.config.getboolean("main", "debug")
+
         # Set current folder so we can find the config files
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+        self.logger.info(f"RTL-SDR P2000 Receiver for Home Assistant Version {VERSION}")
+        self.logger.info("Started at %s" % time.strftime("%A %H:%M:%S %d-%m-%Y"))
+
         # Check if required software is installed
-        if not check_requirements():
-            print("Application stopped, required software was not found!")
+        if not check_requirements(self):
+            self.logger.error("Application stopped, required software was not found!")
             sys.exit(0)
 
-        # Load configuration
-        self.config = load_config()
-        self.debug = self.config.getboolean("main", "debug")
         self.rtlfm_cmd = self.config.get("rtl-sdr", "cmd")
         self.use_hass = self.config.getboolean("home-assistant", "enabled")
         self.baseurl = self.config.get("home-assistant", "baseurl")
@@ -267,32 +407,32 @@ class Main:
         self.opencage_disabled = False        
 
         # Load capcodes data
-        self.capcodes = load_capcodes_dict("db_capcodes.txt")
+        self.capcodes = load_capcodes_dict(self, "db_capcodes.txt")
 
         # Load plaatsnamen data
-        self.plaatsnamen = load_list("db_plaatsnamen.txt")
+        self.plaatsnamen = load_list(self, "db_plaatsnamen.txt")
 
         # Load plaatsnamen afkortingen data
-        self.pltsnmn = load_capcodes_dict("db_pltsnmn.txt")
+        self.pltsnmn = load_capcodes_dict(self, "db_pltsnmn.txt")
 
         # Load capcodes ignore data
-        self.ignorecapcodes = load_capcodes_filter_dict("ignore_capcodes.txt")
+        self.ignorecapcodes = load_capcodes_filter_dict(self, "ignore_capcodes.txt")
 
         # Load text ignore data
-        self.ignoretext = load_list("ignore_text.txt")
+        self.ignoretext = load_list(self, "ignore_text.txt")
 
         # Load match text filter data
-        self.matchtext = load_list("match_text.txt")
+        self.matchtext = load_list(self, "match_text.txt")
 
         # Load match capcodes filter data
-        self.matchcapcodes = load_capcodes_filter_dict("match_capcodes.txt")
+        self.matchcapcodes = load_capcodes_filter_dict(self, "match_capcodes.txt")
 
         # Start thread to get data from RTL-SDR stick
-        data_thread = threading.Thread(target=self.data_thread_call)
+        data_thread = threading.Thread(name="DataThread", target=self.data_thread_call)
         data_thread.start()
 
         # Start thread to post messages to Home Assistant
-        post_thread = threading.Thread(target=self.post_thread_call)
+        post_thread = threading.Thread(name="PostThread", target=self.post_thread_call)
         post_thread.start()
 
         # Run the wait loop
@@ -304,7 +444,7 @@ class Main:
 
         # Application is interrupted and is stopping
         self.running = False
-        print("Application stopped")
+        self.logger.info("Application stopped")
 
     def post_data(self, msg):
         """Post data to Home Assistant via Rest API and/or MQTT topic."""
@@ -335,8 +475,7 @@ class Main:
 
         if self.use_hass:
             try:
-                if self.debug:
-                    print("Posting to Home Assistant")
+                self.logger.debug("Posting to Home Assistant")
                 headers = {
                     "Authorization": "Bearer " + self.token,
                     "content-type": "application/json",
@@ -350,21 +489,20 @@ class Main:
                     ),
                 )
                 response.raise_for_status()
-                if self.debug:
-                    print(f"POST data: {data}")
-                    print(f"POST status: {response.status_code} {response.reason}")
-                    print(f"POST text: {response.text}")
-                    print(f"OPENCAGE status: {msg.opencage}")                    
+                self.logger.debug(f"POST data: {data}")
+                self.logger.debug(f"POST status: {response.status_code} {response.reason}")
+                self.logger.debug(f"POST text: {response.text}")
+                self.logger.debug(f"OpenCage status: {msg.opencage}")                    
             except requests.HTTPError:
-                print(
+                self.logger.error(
                     f"HTTP Error while trying to post data, check baseurl and token in config.ini: {response.status_code} {response.reason}"
                 )
             except requests.exceptions.SSLError as err:
-                print(
+                self.logger.error(
                     f"SSL Error occurred while trying to post data, check baseurl in config.ini:\n{err}"
                 )
             except requests.exceptions.ConnectionError as err:
-                print(
+                self.logger.error(
                     f"Connection Error occurred while trying to post data, check baseurl in config.ini:\n{err}"
                 )
             finally:
@@ -373,8 +511,7 @@ class Main:
 
         if self.use_mqtt:
             try:
-                if self.debug:
-                    print("Posting to MQTT")
+                self.logger.debug("Posting to MQTT")
 
                 data = json.dumps(data)
                 client = mqtt.Client()
@@ -383,18 +520,17 @@ class Main:
                 client.publish(self.mqtt_topic, data)
                 client.disconnect()
 
-                if self.debug:
-                    print(
-                        f"MQTT status: Posting to {self.mqtt_server}:{self.mqtt_port} topic:{self.mqtt_topic}"
-                    )
-                    print(f"MQTT json: {data}")
+                self.logger.debug(
+                    f"MQTT status: Posting to {self.mqtt_server}:{self.mqtt_port} topic:{self.mqtt_topic}"
+                )
+                self.logger.debug(f"MQTT json: {data}")
             finally:
                 # Mark as posted to prevent race conditions
                 msg.is_posted = True
 
     def data_thread_call(self):
         """Thread for parsing data from RTL-SDR."""
-        print(f"RTL-SDR process started with: {self.rtlfm_cmd}")
+        self.logger.info(f"RTL-SDR process started with: {self.rtlfm_cmd}")
         multimon_ng = subprocess.Popen(
             self.rtlfm_cmd, stdout=subprocess.PIPE, shell=True
         )
@@ -404,9 +540,9 @@ class Main:
                 line = multimon_ng.stdout.readline()
                 try:
                     line = line.decode("utf8", "backslashreplace")
+#                    self.logger.debug(line)
                 except UnicodeDecodeError:
-                    if self.debug:
-                        print(f"Error while decoding utf8 string: {line}")
+                    self.logger.debug(f"Error while decoding utf8 string: {line}")
                     line = ""
                 multimon_ng.poll()
                 if line.startswith("FLEX") and line.__contains__("ALN"):
@@ -427,8 +563,7 @@ class Main:
                     mapurl = "" 
                     friendly_name = "P2000 SDR"
 
-                    if self.debug:
-                        print(line.strip())
+                    self.logger.debug(line.strip())
 
                     # Get address info if any, look for valid postcode and get the two words around them
                     # A2 (DIA: ja) AMBU 17106 Schiedamseweg 3134BA Vlaardingen VLAARD bon 8576
@@ -473,8 +608,6 @@ class Main:
                         
                         # if no adress found, do wild guess
                         if not address:
-                            if self.debug:
-                                print("Using message stripping to find address")
                             # strip all status info from messag
                             regex_messagestrip = r"(^A\s?1|\s?A\s?2|B\s?1|^B\s?2|^B\s?3|PRIO\s?1|^P\s?1|PRIO\s?2|^P\s?2|^PRIO\s?3|^P\s?3|^PRIO\s?4|^P\s?4)(\W\d{2,}|.*(BR)\b|)|(rit:|rit|bon|bon:|ambu|dia|DIA)\W\d{5,8}|\b\d{5,}$|( : )|\(([^\)]+)\)( \b\d{5,}|)|directe (\w*)|(-)+/gi"
                             strip = (re.sub(regex_messagestrip, "", message, flags=re.I))
@@ -487,8 +620,7 @@ class Main:
                             # search in leftover message for a city corrosponding to city list
                             for plaatsnaam in self.plaatsnamen:
                                 if plaatsnaam in strip:
-                                    if self.debug:
-                                        print("City found: " + plaatsnaam)
+                                    self.logger.debug("City found: " + plaatsnaam)
                                     # find first word left from city
                                     regex_plaatsnamen_strip = rf"\w*.[a-z|A-Z] \b{plaatsnaam}\b"
                                     plaatsnamen_strip = re.search(regex_plaatsnamen_strip, strip)
@@ -499,47 +631,53 @@ class Main:
                                         addr = re.sub(regex_plaatsnamen_strip_strip, "",addr)
                                         address = addr
                                         city = plaatsnaam
-                                        if self.debug:
-                                            print("Adress found: " + plaatsnamen_strip.group(0))
+                                        self.logger.debug("Adress found: " + plaatsnamen_strip.group(0))
 
                     if not check_filter(self.matchtext, message):
-                        if self.debug:
-                            print(
-                                f"Message '{message}' ignored (didn't match match_text)"
-                            )
+                        self.logger.debug(
+                            f"Message '{message}' ignored (didn't match match_text)"
+                        )
                     else:
                         if check_filter(self.ignoretext, message):
-                            if self.debug:
-                                print(
-                                    f"Message '{message}' ignored (matched ignore_text)"
-                                )
+                            self.logger.debug(
+                                f"Message '{message}' ignored (matched ignore_text)"
+                            )
                         else:
                             # There can be several capcodes in one message
+                            ignorematch = True
                             ignore = False
                             for capcode in capcodes.split(" "):
                                 # Apply filter
                                 if (
-                                    capcode not in self.matchcapcodes
+                                    capcode in self.matchcapcodes
                                     and self.matchcapcodes
                                 ):
-                                    if self.debug:
-                                        print(
-                                            f"Message '{message}' ignored (didn't match match_capcodes)"
-                                        )
-                                    ignore = True
+                                    self.logger.debug(
+                                        f"Capcode '{capcode}' found in '{self.matchcapcodes}' (capcode in match_capcodes)"
+                                    )
+                                    ignorematch = False
                                     break
+                                else:
+                                    self.logger.debug(
+                                        f"Capcode '{capcode}' not found in '{self.matchcapcodes}'"
+                                    )
+                                    continue
+
                                 if (
                                     capcode in self.ignorecapcodes
                                     and self.ignorecapcodes and (len(capcodes.split(" ")) == 1)
                                 ):
-                                    if self.debug:
-                                        print(
-                                            f"Message '{message}' to '{capcode}' ignored (capcode in ignore_capcodes)"
-                                        )
+                                    self.logger.debug(
+                                        f"Message '{message}' ignored because msg contains only one capcode '{capcode}' which is found in '{self.ignorecapcodes}' (capcode in ignore_capcodes)")
                                     ignore = True
                                     break
 
-                            if not ignore:
+                            if ignorematch:
+                                    self.logger.debug(
+                                        f"Message '{message}' ignored because none of the capcodes '{capcodes}' where found in '{self.matchcapcodes}' (didn't match match_capcodes)"
+                                    )
+
+                            if ignore==False and ignorematch==False:
                                 for capcode in capcodes.split(" "):
                                     # Get data from capcode, if exist
                                     if (
@@ -610,23 +748,24 @@ class Main:
                                                 gps = geocoder.geocode(
                                                 address, countrycode="nl"
                                                 )
-                                                gpscheck = True   
+                                                gpscheck = True
                                                 if gps:
                                                     latitude = gps[0]["geometry"]["lat"]
                                                     longitude = gps[0]["geometry"]["lng"]
                                                     mapurl = gps[0]["annotations"]["OSM"]["url"]
+                                                    self.logger.debug(f"OpenCage results: {latitude}, {longitude}, {mapurl}")
                                                 else:
                                                     latitude = ""
                                                     longitude = ""
                                                     mapurl = ""
                                             # Rate-error check from opencage
                                             except RateLimitExceededError as rle:
-                                                print(rle)
+                                                self.logger.error(rle)
                                                 # Over rate, opencage check disabled
                                                 if rle:
                                                     self.opencage_disabled = True
                                             except InvalidInputError as ex:
-                                                print(ex)
+                                                self.logger.error(ex)
                                         else:
                                             gpscheck = False
 
@@ -663,14 +802,12 @@ class Main:
         except KeyboardInterrupt:
             os.kill(multimon_ng.pid, 9)
 
-        if self.debug:
-            print("Data thread stopped")
+        self.logger.debug("Data thread stopped")
 
     # Thread for posting data to Home Assistant
     def post_thread_call(self):
         """Thread for posting data."""
-        if self.debug:
-            print("Post thread started")
+        self.logger.debug("Post thread started")
         while True:
             if self.running is False:
                 break
@@ -680,8 +817,7 @@ class Main:
                 if msg.is_posted is False and now - msg.timereceived >= 1.0:
                     self.post_data(msg)
             time.sleep(1.0)
-        if self.debug:
-            print("Post thread stopped")
+        self.logger.debug("Post thread stopped")
 
 
 # Start application
