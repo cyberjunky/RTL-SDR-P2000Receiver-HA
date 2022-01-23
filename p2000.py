@@ -176,6 +176,7 @@ class MessageItem:
 def load_config(filename):
     """Create default or load existing config file."""
     config = configparser.ConfigParser()
+    filename = f"{datadir}/{filename}"
     if config.read(filename):
         return config
 
@@ -201,7 +202,7 @@ def load_config(filename):
         "enabled": False,
         "token": "Place your OpenCage API Token here",
     }
-    with open(CFGFILE, "w") as configfile:
+    with open(filename, "w") as configfile:
         config.write(filename)
 
     return False
@@ -241,9 +242,10 @@ def check_requirements(self):
 def load_capcodes_dict(self, filename):
     """Load capcodes to dictionary."""
     capcodes = {}
+    filename = f"{datadir}/{filename}"
     try:
         self.logger.info("Loading data from '{}'".format(filename))
-        with open(filename, "r") as csv_file:
+        with open(f"{datadir}{filename}", "r") as csv_file:
             csv_list = [
                 [val.strip() for val in r.split(",")] for r in csv_file.readlines()
             ]
@@ -264,6 +266,7 @@ def load_capcodes_dict(self, filename):
 def load_capcodes_filter_dict(self, filename):
     """Load capcodes ignore or match data to dictionary."""
     capcodes = dict()
+    filename = f"{datadir}/{filename}"
     try:
         self.logger.info("Loading data from '{}'".format(filename))
         with open(filename, "r") as text_file:
@@ -290,6 +293,7 @@ def load_capcodes_filter_dict(self, filename):
 def load_list(self, filename):
     """Load data in list."""
     tmplist = []
+    filename = f"{datadir}/{filename}"
     try:
         self.logger.info("Loading data from '{}'".format(filename))
         with open(filename, "r") as text_file:
@@ -353,12 +357,15 @@ def p2000_get_prio(message):
 
     return priority
 
+# Set and change to program directory
+datadir = os.path.dirname(os.path.realpath(__file__))
+os.chdir(datadir)
 
 # Load configuration
 config = load_config(CFGFILE)
 
 # Init logging
-logger = Logger("/home/pi/RTL-SDR-P2000Receiver-HA/", 7, config.getboolean("main", "debug"))
+logger = Logger(datadir, 7, config.getboolean("main", "debug"))
 
 class Main:
     """Main class, start of application."""
