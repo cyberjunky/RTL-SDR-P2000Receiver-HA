@@ -2,19 +2,10 @@
 Description=RTL-SDR P2000 Receiver
 After=network.target
 
-StartLimitIntervalSec=500
-StartLimitBurst=5
-
 [Service]
-Restart=on-failure
-RestartSec=5s
 
 Type=simple
-StandardOutput=file:/home/pi/RTL-SDR-P2000Receiver-HA/rtlsdrp2000.log
-StandardError=file:/home/pi/RTL-SDR-P2000Receiver-HA/rtlsdrp2000.log
 ExecStart=/usr/bin/python3 /home/pi/RTL-SDR-P2000Receiver-HA/p2000.py
-WatchdogSec=30s
-Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target

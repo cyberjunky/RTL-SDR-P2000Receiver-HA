@@ -19,7 +19,8 @@ import paho.mqtt.client as mqtt
 import requests
 from opencage.geocoder import OpenCageGeocode, InvalidInputError, RateLimitExceededError, UnknownError
 
-VERSION = "0.0.6"
+VERSION = "0.0.7"
+CFGFILE = "config.ini"
 
 class TimedRotatingFileHandler(_TimedRotatingFileHandler):
     """Override original code to fix bug with not deleting old logfiles."""
@@ -107,14 +108,11 @@ class Logger:
         file_handle = TimedRotatingFileHandler(
             filename=f"{datadir}/logs/p2000.log", backupCount=logstokeep
         )
-        # file_handle.setLevel(logging.DEBUG)
         file_handle.setFormatter(formatter)
         self.my_logger.addHandler(file_handle)
 
         # Log to console
         console_handle = logging.StreamHandler()
-        console_handle.setLevel(logging.INFO)
-        console_handle.setLevel(logging.DEBUG)
         console_handle.setFormatter(console_formatter)
         self.my_logger.addHandler(console_handle)
 
@@ -203,7 +201,7 @@ def load_config(filename):
         "enabled": False,
         "token": "Place your OpenCage API Token here",
     }
-    with open(cfgfile, "w") as configfile:
+    with open(CFGFILE, "w") as configfile:
         config.write(filename)
 
     return False
@@ -356,8 +354,11 @@ def p2000_get_prio(message):
     return priority
 
 
+# Load configuration
+config = load_config(CFGFILE)
+
 # Init logging
-logger = Logger("/home/pi/RTL-SDR-P2000Receiver-HA/", 7, True)
+logger = Logger("/home/pi/RTL-SDR-P2000Receiver-HA/", 7, config.getboolean("main", "debug"))
 
 class Main:
     """Main class, start of application."""
@@ -368,15 +369,12 @@ class Main:
 
         # Init logging
         self.logger = logger
+        self.config = config
 
-        cfgfile = "config.ini"
-
-        # Load configuration
-        self.config = load_config(cfgfile)
         if self.config:
-            self.logger.info(f"Loading configuration from '{cfgfile}'")
+            self.logger.info(f"Loading configuration from '{CFGFILE}'")
         else:
-            self.logger.info(f"Created config file '{cfgfile}', edit it and restart the program.")
+            self.logger.info(f"Created config file '{CFGFILE}', edit it and restart the program.")
 
         self.debug = self.config.getboolean("main", "debug")
 
@@ -650,7 +648,7 @@ class Main:
                                 # Apply filter
                                 if (
                                     capcode in self.matchcapcodes
-                                    and self.matchcapcodes
+                                    and self.matchcapcodes != {}
                                 ):
                                     self.logger.debug(
                                         f"Capcode '{capcode}' found in '{self.matchcapcodes}' (capcode in match_capcodes)"
@@ -665,7 +663,7 @@ class Main:
 
                                 if (
                                     capcode in self.ignorecapcodes
-                                    and self.ignorecapcodes and (len(capcodes.split(" ")) == 1)
+                                    and self.ignorecapcodes != {} and (len(capcodes.split(" ")) == 1)
                                 ):
                                     self.logger.debug(
                                         f"Message '{message}' ignored because msg contains only one capcode '{capcode}' which is found in '{self.ignorecapcodes}' (capcode in ignore_capcodes)")
