@@ -1,26 +1,28 @@
 #!/usr/bin/env python3
 """RTL-SDR P2000 Receiver for Home Assistant."""
-
-# See README for installation instructions
 import calendar
 import configparser
 import fnmatch
 import json
+import logging
 import os
 import re
 import subprocess
 import sys
 import threading
 import time
-import logging
 from datetime import datetime
 from logging.handlers import TimedRotatingFileHandler as _TimedRotatingFileHandler
+
+import geopy.distance
 import paho.mqtt.client as mqtt
 import requests
-from opencage.geocoder import OpenCageGeocode, InvalidInputError, RateLimitExceededError, UnknownError
 
-VERSION = "0.0.7"
+from opencage.geocoder import InvalidInputError, OpenCageGeocode, RateLimitExceededError
+
+VERSION = "0.0.8"
 CFGFILE = "config.ini"
+
 
 class TimedRotatingFileHandler(_TimedRotatingFileHandler):
     """Override original code to fix bug with not deleting old logfiles."""
@@ -95,10 +97,12 @@ class Logger:
 
         date_fmt = "%Y-%m-%d %H:%M:%S"
         formatter = logging.Formatter(
-            u"%(asctime)s - (%(threadName)-10s) - %(filename)s - %(levelname)s - %(message)s", date_fmt
+            "%(asctime)s - (%(threadName)-10s) - %(filename)s - %(levelname)s - %(message)s",
+            date_fmt,
         )
         console_formatter = logging.Formatter(
-            u"%(asctime)s - (%(threadName)-10s) - %(filename)s - %(levelname)s - %(message)s", date_fmt
+            "%(asctime)s - (%(threadName)-10s) - %(filename)s - %(levelname)s - %(message)s",
+            date_fmt,
         )
         # Create directory if not exists
         if not os.path.exists(f"{datadir}/logs"):
@@ -157,7 +161,7 @@ class MessageItem:
         self.capcodes = []
         self.body = ""
         self.location = ""
-        self.postcode = ""
+        self.postalcode = ""
         self.city = ""
         self.address = ""
         self.street = ""
@@ -167,9 +171,10 @@ class MessageItem:
         self.remarks = ""
         self.longitude = ""
         self.latitude = ""
-        self.opencage = ""        
+        self.opencage = ""
         self.mapurl = ""
-        self.friendly_name = "P2000 SDR"        
+        self.distance = ""
+        self.friendly_name = "P2000 SDR"
         self.is_posted = False
 
 
@@ -177,7 +182,29 @@ def load_config(filename):
     """Create default or load existing config file."""
     config = configparser.ConfigParser()
     filename = f"{datadir}/{filename}"
+
     if config.read(filename):
+
+        # Upgrade config if needed
+        if config.has_option("home-assistant", "sensorname"):
+            config.add_section("sensor_p2000")
+            config.set(
+                "sensor_p2000",
+                "zone_latitude","52.37602835336776"
+            )
+            config.set(
+                "sensor_p2000",
+                "zone_longitude","4.902929475786443"
+            )
+            config.set(
+                "sensor_p2000",
+                "zone_radius","0"
+            )
+            config.remove_option("home-assistant", "sensorname")
+
+            with open(filename, "w+") as cfgfile:
+                config.write(cfgfile)
+
         return config
 
     config["main"] = {"debug": False}
@@ -187,8 +214,7 @@ def load_config(filename):
     config["home-assistant"] = {
         "enabled": True,
         "baseurl": "http://homeassistant.local:8123",
-        "token": "Place your Long-Lived Access Token here",
-        "sensorname": "p2000",
+        "token": "Place your Long-Lived Access Token here"
     }
     config["mqtt"] = {
         "enabled": False,
@@ -196,14 +222,19 @@ def load_config(filename):
         "mqtt_port": 1883,
         "mqtt_user": "mqttuser",
         "mqtt_password": "somepassword",
-        "mqtt_topic": "p2000",
+        "mqtt_topic": "p2000"
     }
     config["opencage"] = {
         "enabled": False,
-        "token": "Place your OpenCage API Token here",
+        "token": "Place your OpenCage API Token here"
+    }
+    config["sensor_p2000"] = {
+        "zone_latitude": "52.37602835336776",
+        "zone_longitude": "4.902929475786443",
+        "zone_radius": "0"
     }
     with open(filename, "w") as configfile:
-        config.write(filename)
+        config.write(configfile)
 
     return False
 
@@ -232,7 +263,9 @@ def check_requirements(self):
     dummy, err = process.communicate()
     error_str = err.decode("utf8")
     if "not found" in error_str:
-        self.logger.error("multimon-ng not found, please install the multimon-ng package")
+        self.logger.error(
+            "multimon-ng not found, please install the multimon-ng package"
+        )
         return False
 
     self.logger.debug("multimon-ng is found")
@@ -357,6 +390,7 @@ def p2000_get_prio(message):
 
     return priority
 
+
 # Set and change to program directory
 datadir = os.path.dirname(os.path.realpath(__file__))
 os.chdir(datadir)
@@ -366,6 +400,7 @@ config = load_config(CFGFILE)
 
 # Init logging
 logger = Logger(datadir, 7, config.getboolean("main", "debug"))
+
 
 class Main:
     """Main class, start of application."""
@@ -381,7 +416,9 @@ class Main:
         if self.config:
             self.logger.info(f"Loading configuration from '{CFGFILE}'")
         else:
-            self.logger.info(f"Created config file '{CFGFILE}', edit it and restart the program.")
+            self.logger.info(
+                f"Created config file '{CFGFILE}', edit it and restart the program."
+            )
 
         self.debug = self.config.getboolean("main", "debug")
 
@@ -400,7 +437,7 @@ class Main:
         self.use_hass = self.config.getboolean("home-assistant", "enabled")
         self.baseurl = self.config.get("home-assistant", "baseurl")
         self.token = self.config.get("home-assistant", "token")
-        self.sensorname = self.config.get("home-assistant", "sensorname")
+
         self.use_mqtt = self.config.getboolean("mqtt", "enabled")
         self.mqtt_server = self.config.get("mqtt", "mqtt_server")
         self.mqtt_port = int(self.config.get("mqtt", "mqtt_port"))
@@ -409,7 +446,36 @@ class Main:
         self.mqtt_topic = self.config.get("mqtt", "mqtt_topic")
         self.use_opencage = self.config.getboolean("opencage", "enabled")
         self.opencagetoken = self.config.get("opencage", "token")
-        self.opencage_disabled = False        
+        self.opencage_disabled = False
+
+        # Read sensors
+        for section in config.sections():
+            # Each section is a sensor
+            if section.startswith("sensor_"):
+
+                self.sensorname = section.replace("sensor_", "")
+                self.home_coordinates = (
+                    float(self.config.get(section, "zone_latitude")),
+                    float(self.config.get(section, "zone_longitude")),
+                )
+                self.radius = self.config.get(section, "zone_radius")
+                # if botid:
+                #     boterror, botdata = api.request(
+                #         entity="bots",
+                #         action="show",
+                #         action_id=str(botid),
+                #     )
+                #     if botdata:
+                #         compound_bot(config, botdata)
+                #     else:
+                #         if boterror and "msg" in boterror:
+                #             logger.error(
+                #                 "Error occurred updating bots: %s" % boterror["msg"]
+                #             )
+                #         else:
+                #             logger.error("Error occurred updating bots")
+                # else:
+                #     logger.error("Invalid botid found: %s" % botid)
 
         # Load capcodes data
         self.capcodes = load_capcodes_dict(self, "db_capcodes.txt")
@@ -465,16 +531,17 @@ class Main:
                 "raw message": msg.message_raw,
                 "region": msg.region,
                 "location": msg.location,
-                "postcode": msg.postcode,
+                "postal code": msg.postalcode,
                 "city": msg.city,
                 "address": msg.address,
                 "street": msg.street,
                 "remarks": msg.remarks,
                 "longitude": msg.longitude,
                 "latitude": msg.latitude,
-                "opencage": msg.opencage,                
+                "opencage": msg.opencage,
                 "mapurl": msg.mapurl,
-                "friendly_name": msg.friendly_name
+                "distance": msg.distance,
+                "friendly_name": msg.friendly_name,
             },
         }
 
@@ -495,9 +562,11 @@ class Main:
                 )
                 response.raise_for_status()
                 self.logger.debug(f"POST data: {data}")
-                self.logger.debug(f"POST status: {response.status_code} {response.reason}")
+                self.logger.debug(
+                    f"POST status: {response.status_code} {response.reason}"
+                )
                 self.logger.debug(f"POST text: {response.text}")
-                self.logger.debug(f"OpenCage status: {msg.opencage}")                    
+                self.logger.debug(f"OpenCage status: {msg.opencage}")
             except requests.HTTPError:
                 self.logger.error(
                     f"HTTP Error while trying to post data, check baseurl and token in config.ini: {response.status_code} {response.reason}"
@@ -545,7 +614,6 @@ class Main:
                 line = multimon_ng.stdout.readline()
                 try:
                     line = line.decode("utf8", "backslashreplace")
-#                    self.logger.debug(line)
                 except UnicodeDecodeError:
                     self.logger.debug(f"Error while decoding utf8 string: {line}")
                     line = ""
@@ -558,29 +626,65 @@ class Main:
                     message = line_data[6].strip()
                     priority = p2000_get_prio(message)
                     location = ""
-                    postcode = ""
+                    postalcode = ""
                     city = ""
                     address = ""
                     street = ""
                     longitude = ""
                     latitude = ""
-                    opencage = ""                    
-                    mapurl = "" 
-                    friendly_name = "P2000 SDR"
+                    opencage = ""
+                    distance = ""
+                    mapurl = ""
 
                     self.logger.debug(line.strip())
 
-                    # Get address info if any, look for valid postcode and get the two words around them
+                    # Check capcodes first, only if they are defined in config
+                    if self.matchcapcodes or self.ignorecapcodes:
+                        for capcode in capcodes.split(" "):
+                            if self.matchcapcodes:
+                                # Apply filter
+                                if capcode in self.matchcapcodes:
+                                    self.logger.debug(
+                                        f"Capcode '{capcode}' found in '{self.matchcapcodes}' (capcode in match_capcodes)"
+                                    )
+                                else:
+                                    self.logger.debug(
+                                        f"Message '{message}' ignored because capcode '{capcode}' not found in '{self.matchcapcodes}'"
+                                    )
+                                    continue
+
+                            if self.ignorecapcodes and len(capcodes.split(" ")) == 1:
+                                if capcode in self.ignorecapcodes:
+                                    self.logger.debug(
+                                        f"Message '{message}' ignored because it contains only one capcode '{capcode}' which is found in '{self.ignorecapcodes}' (capcode in ignore_capcodes)"
+                                    )
+                                    continue
+
+                    # Check for ignore texts
+                    if check_filter(self.ignoretext, message):
+                        self.logger.debug(
+                            f"Message '{message}' ignored (matched ignore_text)"
+                        )
+                        continue
+
+                    # Check for matched texts
+                    if not check_filter(self.matchtext, message):
+                        self.logger.debug(
+                            f"Message '{message}' ignored (didn't match match_text)"
+                        )
+                        continue
+
+                    # Get address info if any, look for valid postalcode and get the two words around them
                     # A2 (DIA: ja) AMBU 17106 Schiedamseweg 3134BA Vlaardingen VLAARD bon 8576
                     regex_address = r"(\w*.) ([1-9][0-9]{3}[a-zA-Z]{2}) (.\w*)"
                     addr = re.search(regex_address, message)
                     if addr:
                         street = addr.group(1)
-                        postcode = addr.group(2)
+                        postalcode = addr.group(2)
                         city = addr.group(3)
-                        address = f"{street} {postcode} {city}"
+                        address = f"{street} {postalcode} {city}"
 
-                        # remove Capitalized city name from message (when postcode is found)
+                        # Remove Capitalized city name from message (when postalcode is found)
                         regex_afkortingen = "[A-Z]{2,}"
                         afkortingen = re.findall(regex_afkortingen, message)
                         for afkorting in afkortingen:
@@ -602,207 +706,189 @@ class Main:
                             for afkorting in afkortingen:
                                 if afkorting in self.pltsnmn:
                                     city = self.pltsnmn[afkorting]["plaatsnaam"]
-                                    # If uppercase city is found, grab first word before that city name, likely to be the street
-                                    regex_address = rf"(\w*.) ({afkorting})"                                    
+                                    # If uppercase city is found, grab first word before that city name, since it's likely to be the streetname
+                                    regex_address = rf"(\w*.) ({afkorting})"
                                     addr = re.search(regex_address, message)
                                     if addr:
                                         street = addr.group(1)
                                     address = f"{street} {city}"
-                                    # Change uppercase city to normal city in message 
+                                    # Change uppercase city to normal city in message
                                     message = re.sub(afkorting, city, message)
-                        
-                        # if no adress found, do wild guess
+
+                        # If no address is found, do a wild guess
                         if not address:
-                            # strip all status info from messag
+                            # Strip all status info from messag
                             regex_messagestrip = r"(^A\s?1|\s?A\s?2|B\s?1|^B\s?2|^B\s?3|PRIO\s?1|^P\s?1|PRIO\s?2|^P\s?2|^PRIO\s?3|^P\s?3|^PRIO\s?4|^P\s?4)(\W\d{2,}|.*(BR)\b|)|(rit:|rit|bon|bon:|ambu|dia|DIA)\W\d{5,8}|\b\d{5,}$|( : )|\(([^\)]+)\)( \b\d{5,}|)|directe (\w*)|(-)+/gi"
-                            strip = (re.sub(regex_messagestrip, "", message, flags=re.I))
-                            # strip any double spaces from message
+                            strip = re.sub(regex_messagestrip, "", message, flags=re.I)
+                            # Strip any double spaces from message
                             regex_doublespaces = r"(^[ \t]+|[ \t]+$)"
-                            strip = re.sub(regex_doublespaces, "",strip)
-                            # strip all double words from message
+                            strip = re.sub(regex_doublespaces, "", strip)
+                            # Strip all double words from message
                             regex_doublewords = r"(\b\S+\b)(?=.*\1)"
-                            strip = re.sub(regex_doublewords, "",strip)
-                            # search in leftover message for a city corrosponding to city list
+                            strip = re.sub(regex_doublewords, "", strip)
+                            # Search in leftover message for a city corresponding to City list
                             for plaatsnaam in self.plaatsnamen:
                                 if plaatsnaam in strip:
                                     self.logger.debug("City found: " + plaatsnaam)
-                                    # find first word left from city
-                                    regex_plaatsnamen_strip = rf"\w*.[a-z|A-Z] \b{plaatsnaam}\b"
-                                    plaatsnamen_strip = re.search(regex_plaatsnamen_strip, strip)
+                                    # Find first word left from city
+                                    regex_plaatsnamen_strip = (
+                                        rf"\w*.[a-z|A-Z] \b{plaatsnaam}\b"
+                                    )
+                                    plaatsnamen_strip = re.search(
+                                        regex_plaatsnamen_strip, strip
+                                    )
                                     if plaatsnamen_strip:
                                         addr = plaatsnamen_strip.group(0)
                                         # Final non address symbols strip
-                                        regex_plaatsnamen_strip_strip = r"(- )|(\w[0-9] )"
-                                        addr = re.sub(regex_plaatsnamen_strip_strip, "",addr)
+                                        regex_plaatsnamen_strip_strip = (
+                                            r"(- )|(\w[0-9] )"
+                                        )
+                                        addr = re.sub(
+                                            regex_plaatsnamen_strip_strip, "", addr
+                                        )
                                         address = addr
                                         city = plaatsnaam
-                                        self.logger.debug("Adress found: " + plaatsnamen_strip.group(0))
+                                        self.logger.debug(
+                                            "Adress found: "
+                                            + plaatsnamen_strip.group(0)
+                                        )
 
-                    if not check_filter(self.matchtext, message):
-                        self.logger.debug(
-                            f"Message '{message}' ignored (didn't match match_text)"
-                        )
-                    else:
-                        if check_filter(self.ignoretext, message):
-                            self.logger.debug(
-                                f"Message '{message}' ignored (matched ignore_text)"
+                    # Get more info about the capcodes
+                    for capcode in capcodes.split(" "):
+                        if capcode in self.capcodes:
+                            receiver = "{} ({})".format(
+                                self.capcodes[capcode]["description"],
+                                capcode,
                             )
+                            discipline = "{} ({})".format(
+                                self.capcodes[capcode]["discipline"],
+                                capcode,
+                            )
+                            region = self.capcodes[capcode]["region"]
+                            location = self.capcodes[capcode]["location"]
+                            remark = self.capcodes[capcode]["remark"]
                         else:
-                            # There can be several capcodes in one message
-                            ignorematch = True
-                            ignore = False
-                            for capcode in capcodes.split(" "):
-                                # Apply filter
-                                if (
-                                    capcode in self.matchcapcodes
-                                    and self.matchcapcodes != {}
-                                ):
+                            receiver = capcode
+                            discipline = ""
+                            region = ""
+                            remark = ""
+
+                    # If this message was already received, only add extra info
+                    if len(self.messages) > 0 and self.messages[0].body == message:
+                        if self.messages[0].receivers == "":
+                            self.messages[0].receivers = receiver
+                        elif receiver:
+                            self.messages[0].receivers += ", " + receiver
+
+                        if self.messages[0].disciplines == "":
+                            self.messages[0].disciplines = discipline
+                        elif discipline:
+                            self.messages[0].disciplines += ", " + discipline
+                        if self.messages[0].remarks == "":
+                            self.messages[0].remarks = remark
+                        elif remark:
+                            self.messages[0].remarks += ", " + remark
+
+                        if self.messages[0].region == "":
+                            self.messages[0].region = region
+
+                        self.messages[0].capcodes.append(capcode)
+                        self.messages[0].location = location
+                        self.messages[0].postalcode = postalcode
+                        self.messages[0].city = city
+                        self.messages[0].street = street
+                        self.messages[0].address = address
+                    else:
+                        # After midnight (UTC), reset the opencage disable
+                        hour = datetime.utcnow()
+                        if (
+                            hour.hour >= 0
+                            and hour.minute >= 1
+                            and hour.hour < 1
+                            and hour.minute < 15
+                        ):
+                            self.opencage_disabled = False
+
+                        # If address is filled and OpenCage is enabled check for GPS coordinates
+                        if (
+                            address
+                            and self.use_opencage
+                            and (self.opencage_disabled is False)
+                        ):
+                            geocoder = OpenCageGeocode(self.opencagetoken)
+                            try:
+                                gps = geocoder.geocode(address, countrycode="nl")
+                                gpscheck = True
+                                if gps:
+                                    latitude = gps[0]["geometry"]["lat"]
+                                    longitude = gps[0]["geometry"]["lng"]
+                                    mapurl = gps[0]["annotations"]["OSM"]["url"]
                                     self.logger.debug(
-                                        f"Capcode '{capcode}' found in '{self.matchcapcodes}' (capcode in match_capcodes)"
+                                        f"OpenCage results: {latitude}, {longitude}, {mapurl}"
                                     )
-                                    ignorematch = False
-                                    break
                                 else:
-                                    self.logger.debug(
-                                        f"Capcode '{capcode}' not found in '{self.matchcapcodes}'"
-                                    )
-                                    continue
+                                    latitude = ""
+                                    longitude = ""
+                                    mapurl = ""
+                            # Rate-error check from opencage
+                            except RateLimitExceededError as rle:
+                                self.logger.error(rle)
+                                # Over rate, opencage check disabled
+                                if rle:
+                                    self.opencage_disabled = True
+                            except InvalidInputError as ex:
+                                self.logger.error(ex)
+                        else:
+                            gpscheck = False
 
-                                if (
-                                    capcode in self.ignorecapcodes
-                                    and self.ignorecapcodes != {} and (len(capcodes.split(" ")) == 1)
-                                ):
-                                    self.logger.debug(
-                                        f"Message '{message}' ignored because msg contains only one capcode '{capcode}' which is found in '{self.ignorecapcodes}' (capcode in ignore_capcodes)")
-                                    ignore = True
-                                    break
+                        opencage = f"enabled: {self.use_opencage} ratelimit: {self.opencage_disabled} gps-checked: {gpscheck}"
 
-                            if ignorematch:
-                                    self.logger.debug(
-                                        f"Message '{message}' ignored because none of the capcodes '{capcodes}' where found in '{self.matchcapcodes}' (didn't match match_capcodes)"
-                                    )
+                        # If location is known and radius is specified in config calculate distance and check radius
+                        if latitude and longitude and self.radius:
+                            event_coordinates = (latitude, longitude)
+                            distance = round(
+                                geopy.distance.geodesic(
+                                    self.home_coordinates, event_coordinates
+                                ).km,
+                                2,
+                            )
+                            self.logger.debug(
+                                f"Distance from home {distance} km, radius set to {self.radius} km"
+                            )
+                            if distance > float(self.radius):
+                                self.logger.debug(
+                                    f"Message '{message}' ignored (distance outside radius)"
+                                )
+                                continue
 
-                            if ignore==False and ignorematch==False:
-                                for capcode in capcodes.split(" "):
-                                    # Get data from capcode, if exist
-                                    if (
-                                        capcode in self.capcodes
-                                        and capcode not in self.ignorecapcodes
-                                        ):    
-                                        receiver = "{} ({})".format(
-                                            self.capcodes[capcode]["description"],
-                                            capcode,
-                                        )
-                                        discipline = "{} ({})".format(
-                                            self.capcodes[capcode]["discipline"],
-                                            capcode,
-                                        )
-                                        region = self.capcodes[capcode]["region"]
-                                        location = self.capcodes[capcode]["location"]
-                                        remark = self.capcodes[capcode]["remark"]
-                                    else:
-                                        receiver = capcode
-                                        discipline = ""
-                                        region = ""
-                                        remark = ""
+                        msg = MessageItem()
+                        msg.groupid = groupid
+                        msg.receivers = receiver
+                        msg.capcodes = [capcode]
+                        msg.body = message
+                        msg.message_raw = line.strip()
+                        msg.disciplines = discipline
+                        msg.priority = priority
+                        msg.region = region
+                        msg.location = location
+                        msg.postalcode = postalcode
+                        msg.longitude = longitude
+                        msg.latitude = latitude
+                        msg.city = city
+                        msg.street = street
+                        msg.address = address
+                        msg.remarks = remark
+                        msg.opencage = opencage
+                        msg.mapurl = mapurl
+                        msg.timestamp = to_local_datetime(timestamp)
+                        msg.is_posted = False
+                        msg.friendly_name = "P2000 SDR"
+                        msg.distance = distance
+                        self.messages.insert(0, msg)
 
-                                    # If this message was already received, only add extra info
-                                    if (
-                                        len(self.messages) > 0
-                                        and self.messages[0].body == message
-                                    ):
-                                        if self.messages[0].receivers == "":
-                                            self.messages[0].receivers = receiver
-                                        elif receiver:
-                                            self.messages[0].receivers += (
-                                                ", " + receiver
-                                            )
-
-                                        if self.messages[0].disciplines == "":
-                                            self.messages[0].disciplines = discipline
-                                        elif discipline:
-                                            self.messages[0].disciplines += (
-                                                ", " + discipline
-                                            )
-                                        if self.messages[0].remarks == "":
-                                            self.messages[0].remarks = remark
-                                        elif remark:
-                                            self.messages[0].remarks += ", " + remark
-                                            
-                                        if self.messages[0].region == "":
-                                            self.messages[0].region = region                                              
-
-                                        self.messages[0].capcodes.append(capcode)
-                                        self.messages[0].location = location
-                                        self.messages[0].postcode = postcode
-                                        self.messages[0].city = city
-                                        self.messages[0].street = street
-                                        self.messages[0].address = address
-                                    else:
-                                        # After midnight (UTC), reset the opencage disable
-                                        hour = datetime.utcnow()
-                                        if hour.hour >= 0 and hour.minute >= 1 and hour.hour < 1 and hour.minute < 15:
-                                            self.opencage_disabled = False
-
-                                        # If address is filled and OpenCage is enabled check for GPS coordinates
-                                        if address and self.use_opencage and (self.opencage_disabled == False):
-                                            geocoder = OpenCageGeocode(
-                                                self.opencagetoken
-                                            )
-                                            try:
-                                                gps = geocoder.geocode(
-                                                address, countrycode="nl"
-                                                )
-                                                gpscheck = True
-                                                if gps:
-                                                    latitude = gps[0]["geometry"]["lat"]
-                                                    longitude = gps[0]["geometry"]["lng"]
-                                                    mapurl = gps[0]["annotations"]["OSM"]["url"]
-                                                    self.logger.debug(f"OpenCage results: {latitude}, {longitude}, {mapurl}")
-                                                else:
-                                                    latitude = ""
-                                                    longitude = ""
-                                                    mapurl = ""
-                                            # Rate-error check from opencage
-                                            except RateLimitExceededError as rle:
-                                                self.logger.error(rle)
-                                                # Over rate, opencage check disabled
-                                                if rle:
-                                                    self.opencage_disabled = True
-                                            except InvalidInputError as ex:
-                                                self.logger.error(ex)
-                                        else:
-                                            gpscheck = False
-
-                                        opencage = f"enabled: {self.use_opencage} ratelimit: {self.opencage_disabled} gps-checked: {gpscheck}" 
-
-                                        msg = MessageItem()
-                                        msg.groupid = groupid
-                                        msg.receivers = receiver
-                                        msg.capcodes = [capcode]
-                                        msg.body = message
-                                        msg.message_raw = line.strip()
-                                        msg.disciplines = discipline
-                                        msg.priority = priority
-                                        msg.region = region
-                                        msg.location = location
-                                        msg.postcode = postcode
-                                        msg.longitude = longitude
-                                        msg.latitude = latitude
-                                        msg.city = city
-                                        msg.street = street
-                                        msg.address = address
-                                        msg.remarks = remark
-                                        msg.opencage = opencage                                        
-                                        msg.mapurl = mapurl                                        
-                                        msg.timestamp = to_local_datetime(timestamp)
-                                        msg.is_posted = False
-                                        msg.friendly_name = "P2000 SDR"                                        
-                                        self.messages.insert(0, msg)
-
-                                # Limit the message list size
-                                if len(self.messages) > 100:
-                                    self.messages = self.messages[:100]
+                # Limit the message list size
+                if len(self.messages) > 100:
+                    self.messages = self.messages[:100]
 
         except KeyboardInterrupt:
             os.kill(multimon_ng.pid, 9)
