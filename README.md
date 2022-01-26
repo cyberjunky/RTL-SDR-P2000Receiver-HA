@@ -201,10 +201,13 @@ See the Configuration section for more information
 
 After successful configuraton and testing by running it manually you have two options to start it automatically:
 
-#### a) Add it to the debian rc.local startup script
+#### a) Add it to the debian rc.local startup script 
 ```
 sudo nano /etc/rc.local
-python3 /home/pi/RTL-SDR-P2000Receiver-HA/p2000.py &
+
+# Insert this just above the exit 0 line
+su - pi -c /home/pi/RTL-SDR-P2000Receiver-HA/p2000.py > /dev/null 2>&1 &
+
 ```
 
 #### b) Edit and use supplied systemd config
