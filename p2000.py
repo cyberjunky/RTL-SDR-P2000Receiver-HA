@@ -278,7 +278,7 @@ def load_capcodes_dict(self, filename):
     filename = f"{datadir}/{filename}"
     try:
         self.logger.info("Loading data from '{}'".format(filename))
-        with open(f"{datadir}{filename}", "r") as csv_file:
+        with open(filename, "r") as csv_file:
             csv_list = [
                 [val.strip() for val in r.split(",")] for r in csv_file.readlines()
             ]
