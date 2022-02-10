@@ -20,7 +20,7 @@ import requests
 
 from opencage.geocoder import InvalidInputError, OpenCageGeocode, RateLimitExceededError
 
-VERSION = "0.0.8"
+VERSION = "0.1.0"
 CFGFILE = "config.ini"
 
 
@@ -174,8 +174,7 @@ class MessageItem:
         self.opencage = ""
         self.mapurl = ""
         self.distance = ""
-        self.friendly_name = "P2000 SDR"
-        self.is_posted = False
+        self.friendly_name = ""
 
 
 def load_config(filename):
@@ -207,7 +206,9 @@ def load_config(filename):
 
         return config
 
-    config["main"] = {"debug": False}
+    config["main"] = {"debug": False,
+        "logtofile": False
+    }
     config["rtl-sdr"] = {
         "cmd": "rtl_fm -f 169.65M -M fm -s 22050 | multimon-ng -a FLEX -t raw -"
     }
@@ -278,7 +279,7 @@ def load_capcodes_dict(self, filename):
     filename = f"{datadir}/{filename}"
     try:
         self.logger.info("Loading data from '{}'".format(filename))
-        with open(f"{datadir}{filename}", "r") as csv_file:
+        with open(filename, "r") as csv_file:
             csv_list = [
                 [val.strip() for val in r.split(",")] for r in csv_file.readlines()
             ]
@@ -390,6 +391,15 @@ def p2000_get_prio(message):
 
     return priority
 
+# Log all messages send or ignored to a logfile in folder logfiles
+def log2file(logmessage):
+    print("log2file called")
+    datestamp = time.strftime("%Y%m%d")
+    logfilename = 'logfiles/p2000-log-' + datestamp + '.log' 
+    open(logfilename,'a').write(logmessage)
+    open(logfilename,'a').write("\n")
+    return
+
 
 # Set and change to program directory
 datadir = os.path.dirname(os.path.realpath(__file__))
@@ -421,9 +431,15 @@ class Main:
             )
 
         self.debug = self.config.getboolean("main", "debug")
+        self.logtofile = self.config.getboolean("main", "logtofile")
 
         # Set current folder so we can find the config files
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+        # If log2file is enabled, check if logfiles folder exists
+        if self.logtofile:
+            if (not os.path.exists('logfiles')):
+                os.mkdir('logfiles')
 
         self.logger.info(f"RTL-SDR P2000 Receiver for Home Assistant Version {VERSION}")
         self.logger.info("Started at %s" % time.strftime("%A %H:%M:%S %d-%m-%Y"))
@@ -448,35 +464,6 @@ class Main:
         self.opencagetoken = self.config.get("opencage", "token")
         self.opencage_disabled = False
 
-        # Read sensors
-        for section in config.sections():
-            # Each section is a sensor
-            if section.startswith("sensor_"):
-
-                self.sensorname = section.replace("sensor_", "")
-                self.home_coordinates = (
-                    float(self.config.get(section, "zone_latitude")),
-                    float(self.config.get(section, "zone_longitude")),
-                )
-                self.radius = self.config.get(section, "zone_radius")
-                # if botid:
-                #     boterror, botdata = api.request(
-                #         entity="bots",
-                #         action="show",
-                #         action_id=str(botid),
-                #     )
-                #     if botdata:
-                #         compound_bot(config, botdata)
-                #     else:
-                #         if boterror and "msg" in boterror:
-                #             logger.error(
-                #                 "Error occurred updating bots: %s" % boterror["msg"]
-                #             )
-                #         else:
-                #             logger.error("Error occurred updating bots")
-                # else:
-                #     logger.error("Invalid botid found: %s" % botid)
-
         # Load capcodes data
         self.capcodes = load_capcodes_dict(self, "db_capcodes.txt")
 
@@ -493,6 +480,7 @@ class Main:
         self.ignoretext = load_list(self, "ignore_text.txt")
 
         # Load match text filter data
+        # self.matchtext = load_list(self, "match_text.txt.example")
         self.matchtext = load_list(self, "match_text.txt")
 
         # Load match capcodes filter data
@@ -517,90 +505,193 @@ class Main:
         self.running = False
         self.logger.info("Application stopped")
 
-    def post_data(self, msg):
-        """Post data to Home Assistant via Rest API and/or MQTT topic."""
-        data = {
-            "state": msg.body,
-            "attributes": {
-                "time received": msg.timestamp,
-                "group id": msg.groupid,
-                "receivers": msg.receivers,
-                "capcodes": msg.capcodes,
-                "priority": msg.priority,
-                "disciplines": msg.disciplines,
-                "raw message": msg.message_raw,
-                "region": msg.region,
-                "location": msg.location,
-                "postal code": msg.postalcode,
-                "city": msg.city,
-                "address": msg.address,
-                "street": msg.street,
-                "remarks": msg.remarks,
-                "longitude": msg.longitude,
-                "latitude": msg.latitude,
-                "opencage": msg.opencage,
-                "mapurl": msg.mapurl,
-                "distance": msg.distance,
-                "friendly_name": msg.friendly_name,
-            },
-        }
 
-        if self.use_hass:
-            try:
-                self.logger.debug("Posting to Home Assistant")
-                headers = {
-                    "Authorization": "Bearer " + self.token,
-                    "content-type": "application/json",
+    def post_data(self, msg):
+        # Loop through all sensors
+        for section in config.sections():
+        # Each section is a sensor
+            self.radius = ""
+            self.sensorname = ""
+            self.home_coordinates = ""
+            self.friendly_name = ""
+            self.searchkeyword = ""
+            self.searchcapcode = ""
+            self.searchregion = ""
+            post = False
+
+            if section.startswith("sensor_"):
+                self.sensorname = section.replace("sensor_", "")
+                if "zone_radius" in self.config.options(section):
+                    self.home_coordinates = (
+                        float(self.config.get(section, "zone_latitude")),
+                        float(self.config.get(section, "zone_longitude"))
+                    )
+                    self.radius = self.config.get(section, "zone_radius", fallback="")
+
+                msg.friendly_name = self.config.get(section, "friendlyname", fallback="P2000-SDR")
+                self.searchkeyword = self.config.get(section, "searchkeyword", fallback="").split(",")
+                self.searchcapcode = self.config.get(section, "searchcapcode", fallback="").split(",")
+                self.searchregion = self.config.get(section, "searchregion", fallback="").split(",")
+
+                # If location is known and radius is specified in config calculate distance and check radius
+                if msg.latitude and msg.longitude and self.radius:
+                    event_coordinates = (msg.latitude, msg.longitude)
+                    msg.distance = round(
+                        geopy.distance.geodesic(
+                            self.home_coordinates, event_coordinates
+                        ).km,
+                        2,
+                    )
+                    self.logger.debug(
+                        f"Distance from home {msg.distance} km, radius set to {self.radius} km"
+                    )
+                    if msg.distance > float(self.radius):
+                        self.logger.debug(
+                            f"Message '{msg.body}' ignored (distance outside radius)"
+                        )                         
+                        msg.is_posted = True
+                        continue
+                    post = True
+                
+                # Check for matched text/keyword
+                if "searchkeyword" in self.config.options(section):
+                    if not check_filter(self.searchkeyword, msg.body):
+                        self.logger.debug(
+                            f"Message '{msg.body}' ignored (didn't match keyword) - {self.searchkeyword}"
+                        )                     
+                        msg.is_posted = True
+                        continue
+                    self.logger.debug(
+                        f"Message '{msg.body}' posted (sensor succesfull match keyword) - {self.searchkeyword}"
+                        )
+                    post = True
+
+                # Check for matched regions
+                if "searchregion" in self.config.options(section):
+                    if not check_filter(self.searchregion, msg.region):
+                        self.logger.debug(
+                            f"Message '{msg.body}' ignored (didn't match region) - {self.searchregion}"
+                        )                     
+                        msg.is_posted = True
+                        continue
+                    self.logger.debug(
+                        f"Message '{msg.body}' posted (sensor succesfull match region) - {self.searchregion}"
+                        )
+                    post = True
+
+                # Check for matched capcodes
+                if "searchcapcode" in self.config.options(section):
+                    capcodes = ' '.join(map(str, msg.capcodes))
+                    if not check_filter(self.searchcapcode, capcodes):
+                        self.logger.debug(
+                            f"Message '{msg.body}'{capcodes} ignored (didn't match capcode) - {self.searchcapcode}"
+                        )                        
+                        msg.is_posted = True
+                        continue
+                    self.logger.debug(
+                        f"Message '{msg.body}'{capcodes} posted (sensor succesfull match capcode) - {self.searchcapcode}"
+                    )
+                    post = True
+
+                # No other matches valid, if distance is not valid, skip
+                if post is False:
+                    self.logger.debug(
+                        f"Message '{msg.body}' ignored (no post criteria)"
+                    )
+                    msg.is_posted = True
+                    continue
+
+                # If logging all messages to file is requested, log message
+                if self.logtofile:
+                    logmessage = "Posted" + ' -|- ' + msg.message_raw + ' -|- ' + self.sensorname  + ' -|- ' + msg.region + ' -|- ' + msg.mapurl
+                    log2file(logmessage)
+
+                """Post data to Home Assistant via Rest API and/or MQTT topic."""
+                data = {
+                    "state": msg.body,
+                    "attributes": {
+                        "time received": msg.timestamp,
+                        "group id": msg.groupid,
+                        "receivers": msg.receivers,
+                        "capcodes": msg.capcodes,
+                        "priority": msg.priority,
+                        "disciplines": msg.disciplines,
+                        "raw message": msg.message_raw,
+                        "region": msg.region,
+                        "location": msg.location,
+                        "postal code": msg.postalcode,
+                        "city": msg.city,
+                        "address": msg.address,
+                        "street": msg.street,
+                        "remarks": msg.remarks,
+                        "longitude": msg.longitude,
+                        "latitude": msg.latitude,
+                        "opencage": msg.opencage,
+                        "mapurl": msg.mapurl,
+                        "distance": msg.distance,
+                        "friendly_name": msg.friendly_name,
+                    },
+                }
+                heartbeat = {
+                    "state": time.strftime("%Y%m%d"),
                 }
 
-                response = requests.post(
-                    self.baseurl + "/api/states/sensor." + self.sensorname,
-                    headers=headers,
-                    data=json.dumps(
-                        data, default=lambda o: o.__dict__, sort_keys=True, indent=4
-                    ),
-                )
-                response.raise_for_status()
-                self.logger.debug(f"POST data: {data}")
-                self.logger.debug(
-                    f"POST status: {response.status_code} {response.reason}"
-                )
-                self.logger.debug(f"POST text: {response.text}")
-                self.logger.debug(f"OpenCage status: {msg.opencage}")
-            except requests.HTTPError:
-                self.logger.error(
-                    f"HTTP Error while trying to post data, check baseurl and token in config.ini: {response.status_code} {response.reason}"
-                )
-            except requests.exceptions.SSLError as err:
-                self.logger.error(
-                    f"SSL Error occurred while trying to post data, check baseurl in config.ini:\n{err}"
-                )
-            except requests.exceptions.ConnectionError as err:
-                self.logger.error(
-                    f"Connection Error occurred while trying to post data, check baseurl in config.ini:\n{err}"
-                )
-            finally:
-                # Mark as posted to prevent race conditions
-                msg.is_posted = True
+                if self.use_hass:
+                    try:
+                        self.logger.debug(f"Posting to Home Assistant - {self.sensorname}")
+                        headers = {
+                            "Authorization": "Bearer " + self.token,
+                            "content-type": "application/json",
+                        }
 
-        if self.use_mqtt:
-            try:
-                self.logger.debug("Posting to MQTT")
+                        response = requests.post(
+                            self.baseurl + "/api/states/sensor." + self.sensorname,
+                            headers=headers,
+                            data=json.dumps(
+                                data, default=lambda o: o.__dict__, sort_keys=True, indent=4
+                            ),
+                        )
+                        response.raise_for_status()
+                        self.logger.debug(f"POST data: {data}")
+                        self.logger.debug(
+                            f"POST status: {response.status_code} {response.reason}"
+                        )
+                        self.logger.debug(f"POST text: {response.text}")
+                        self.logger.debug(f"OpenCage status: {msg.opencage}")
+                    except requests.HTTPError:
+                        self.logger.error(
+                            f"HTTP Error while trying to post data, check baseurl and token in config.ini: {response.status_code} {response.reason}"
+                        )
+                    except requests.exceptions.SSLError as err:
+                        self.logger.error(
+                            f"SSL Error occurred while trying to post data, check baseurl in config.ini:\n{err}"
+                        )
+                    except requests.exceptions.ConnectionError as err:
+                        self.logger.error(
+                            f"Connection Error occurred while trying to post data, check baseurl in config.ini:\n{err}"
+                        )
+                    finally:
+                        # Mark as posted to prevent race conditions
+                        msg.is_posted = True
 
-                data = json.dumps(data)
-                client = mqtt.Client()
-                client.username_pw_set(self.mqtt_username, self.mqtt_password)
-                client.connect(self.mqtt_server, self.mqtt_port, 60)
-                client.publish(self.mqtt_topic, data)
-                client.disconnect()
+                if self.use_mqtt:
+                    try:
+                        self.logger.debug("Posting to MQTT")
 
-                self.logger.debug(
-                    f"MQTT status: Posting to {self.mqtt_server}:{self.mqtt_port} topic:{self.mqtt_topic}"
-                )
-                self.logger.debug(f"MQTT json: {data}")
-            finally:
-                # Mark as posted to prevent race conditions
-                msg.is_posted = True
+                        data = json.dumps(data)
+                        client = mqtt.Client()
+                        client.username_pw_set(self.mqtt_username, self.mqtt_password)
+                        client.connect(self.mqtt_server, self.mqtt_port, 60)
+                        client.publish(self.mqtt_topic, data)
+                        client.disconnect()
+
+                        self.logger.debug(
+                            f"MQTT status: Posting to {self.mqtt_server}:{self.mqtt_port} topic:{self.mqtt_topic}"
+                        )
+                        self.logger.debug(f"MQTT json: {data}")
+                    finally:
+                        # Mark as posted to prevent race conditions
+                        msg.is_posted = True
 
     def data_thread_call(self):
         """Thread for parsing data from RTL-SDR."""
@@ -635,6 +726,7 @@ class Main:
                     opencage = ""
                     distance = ""
                     mapurl = ""
+                    gpscheck = False
 
                     self.logger.debug(line.strip())
 
@@ -665,13 +757,9 @@ class Main:
                         self.logger.debug(
                             f"Message '{message}' ignored (matched ignore_text)"
                         )
-                        continue
-
-                    # Check for matched texts
-                    if not check_filter(self.matchtext, message):
-                        self.logger.debug(
-                            f"Message '{message}' ignored (didn't match match_text)"
-                        )
+                        if self.logtofile:
+                            logmessage = "Ignore text" + ' -|- ' + line.strip() 
+                            log2file(logmessage)
                         continue
 
                     # Get address info if any, look for valid postalcode and get the two words around them
@@ -690,6 +778,26 @@ class Main:
                         for afkorting in afkortingen:
                             if afkorting in self.pltsnmn:
                                 message = re.sub(afkorting, "", message)
+
+                    # Get address in info if any, look for valid postalcode without letters and get the two words around them
+                    # A1 13108 Surinameplein 1058 Amsterdam 12006
+                    regex_address2 = r"(\w*.) ([1-9][0-9]{3}) (.\w*)"
+                    addr2 = re.search(regex_address2, message)
+                    if addr2:
+                        # print("Regex Amsterdam")
+                        street = addr2.group(1)
+                        postalcode = addr2.group(2)
+                        city = addr2.group(3)
+                        address = f"{street} {city}"
+
+                        # Remove Capitalized city name from message (when postalcode is found)
+                        regex_afkortingen = "[A-Z]{2,}"
+                        afkortingen = re.findall(regex_afkortingen, message)
+                        for afkorting in afkortingen:
+                            if afkorting in self.pltsnmn:
+                                message = re.sub(afkorting, "", message)
+
+
 
                     # Try to get city only when there is one after a prio
                     # A1 Breda
@@ -726,6 +834,7 @@ class Main:
                             # Strip all double words from message
                             regex_doublewords = r"(\b\S+\b)(?=.*\1)"
                             strip = re.sub(regex_doublewords, "", strip)
+                            # print("Strip: " + strip)
                             # Search in leftover message for a city corresponding to City list
                             for plaatsnaam in self.plaatsnamen:
                                 if plaatsnaam in strip:
@@ -814,6 +923,7 @@ class Main:
                             address
                             and self.use_opencage
                             and (self.opencage_disabled is False)
+                            and not gpscheck is True
                         ):
                             geocoder = OpenCageGeocode(self.opencagetoken)
                             try:
@@ -843,28 +953,10 @@ class Main:
 
                         opencage = f"enabled: {self.use_opencage} ratelimit: {self.opencage_disabled} gps-checked: {gpscheck}"
 
-                        # If location is known and radius is specified in config calculate distance and check radius
-                        if latitude and longitude and self.radius:
-                            event_coordinates = (latitude, longitude)
-                            distance = round(
-                                geopy.distance.geodesic(
-                                    self.home_coordinates, event_coordinates
-                                ).km,
-                                2,
-                            )
-                            self.logger.debug(
-                                f"Distance from home {distance} km, radius set to {self.radius} km"
-                            )
-                            if distance > float(self.radius):
-                                self.logger.debug(
-                                    f"Message '{message}' ignored (distance outside radius)"
-                                )
-                                continue
-
                         msg = MessageItem()
                         msg.groupid = groupid
                         msg.receivers = receiver
-                        msg.capcodes = [capcode]
+                        msg.capcodes = [capcodes]
                         msg.body = message
                         msg.message_raw = line.strip()
                         msg.disciplines = discipline
@@ -882,7 +974,6 @@ class Main:
                         msg.mapurl = mapurl
                         msg.timestamp = to_local_datetime(timestamp)
                         msg.is_posted = False
-                        msg.friendly_name = "P2000 SDR"
                         msg.distance = distance
                         self.messages.insert(0, msg)
 
