@@ -332,6 +332,7 @@ Then edit the file config.ini:
 ```
 [main]
 debug = False
+logtofile = True
 
 [rtl-sdr]
 cmd = rtl_fm -f 169.65M -M fm -s 22050 | multimon-ng -a FLEX -t raw -
@@ -354,10 +355,32 @@ mqtt_topic = p2000
 enabled = False
 token = Place your OpenCage API Token here
 
+[sensor_p2000_radius]
+friendlyname = P2000 1km from GPS
+zone_latitude = 52.37602835336776
+zone_longitude = 4.902929475786443
+zone_radius = 1
+
+[sensor_p2000_keyword]
+friendlyname = P2000 keyword
+searchkeyword = *GRIP*,*Grip*,*grip*
+
+[sensor_p2000_capcode]
+friendlyname = P2000 capcodes Lifeliners
+searchcapcode = *000120901*,*000726001*,*000923993*
+
+[sensor_p2000_region]
+friendlyname = P2000 Region Amsterdam-Amstelland and Utrecht
+searchregion = Amsterdam-Amstelland,Flevoland
+
 ```
 *main - debug*
 
 Set to True to get debugging output.
+
+*main - logtofile*
+
+Set to True to create daily logfiles from all send and ignored messages
 
 *rtl-sdr - cmd*
 
@@ -388,12 +411,6 @@ Enter the url to your local Home Assistant instance including port.
 Goto your user profile menu in Home Assistant lovelace GUI, and create a so called 'Long-Lived Access Token'.
 Name it 'P2000Receiver' for example and copy and paste this token here in the config.ini file.
 
-*home-assistant - sensorname*
-
-Name of sensor to create and update inside Home Assistant.
-
-Change default sensor name pP2000' if you want too.
-
 *mqtt - enabled*
 
 True to post data to MQTT, False to disable
@@ -415,17 +432,40 @@ True to fetch latitude/longitude for address
 To use OpenCage support you need to create a (free max 2500 request per day, 1 per second) account at https://opencagedata.com
 Then fill in your API key here
 
+*sensor_p2000_radius*
+
+Sensor naming in Home-Assistant, you may name the sensor as you want, but it has to start with "sensor_" 
+
+*friendlyname*
+
+This is the displayname from the sensor in Home-Assistant, change to whatever you find suitable
+
+*zone_latitude*
+*zone_longitude*
+*zone_radius*
+
+These three values are mandatory for a GPS based sensor, zone_radius is defined in KM
+
+*searchkeyword*
+
+Keywords for the sensor, comma separated and with use of wildcards
+
+*searchregion*
+
+Regions as criteria for a sensor, values are case-sensitive and can be comma separated 
+
+*searchcapcode*
+Capcodes for the sensor, comma separated and with use of wildcards
+
+
 ## Filtering
 
 There is basic filtering implemented (this can be changed during development)
 
 The following files are used:
 
-match_text.txt
-match_capcodes.txt
 ignore_text.txt
 ignore_capcodes.txt
-
 
 A specific type of filtering is ignored if the file is empty or only has commented lines in it. (lines with leading #)
 
@@ -435,7 +475,7 @@ https://docs.python.org/3/library/fnmatch.html
 
 So entries need to match whole message exactly, or use wildcards to match parts of it.
 
-While *ignore_capcodes.txt* and *match_capcodes.txt* use the exact capcode (9 chars long), description is not used in code
+
 
 This is the order in which the filters are processed:
 
