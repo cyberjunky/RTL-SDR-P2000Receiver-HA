@@ -364,6 +364,17 @@ def check_filter(mylist, text):
 
     return False
 
+def check_filter_with_list(searchlist, list_to_be_searched):
+    # If list is not loaded or empty allow all
+    if len(searchlist) == 0:
+        return True
+
+    # Check every text in the searchedlist
+    for searchedtext in list_to_be_searched:
+        if check_filter(searchlist, searchedtext) == True:
+            return True
+
+    return False
 
 def to_local_datetime(utc_dt):
     """Convert utc to local time."""
@@ -532,6 +543,7 @@ class Main:
                 self.searchkeyword = self.config.get(section, "searchkeyword", fallback="").split(",")
                 self.searchcapcode = self.config.get(section, "searchcapcode", fallback="").split(",")
                 self.searchregion = self.config.get(section, "searchregion", fallback="").split(",")
+                self.searchdiscipline = self.config.get(section, "searchdiscipline", fallback="").split(",")
 
                 # If location is known and radius is specified in config calculate distance and check radius
                 if msg.latitude and msg.longitude and self.radius:
@@ -547,7 +559,7 @@ class Main:
                     )
                     if msg.distance > float(self.radius):
                         self.logger.debug(
-                            f"Message '{msg.body}' ignored (distance outside radius)"
+                            f"Message '{msg.body}' ignored for sensor {self.sensorname} (distance outside radius)"
                         )                         
                         msg.is_posted = True
                         continue
@@ -557,12 +569,12 @@ class Main:
                 if "searchkeyword" in self.config.options(section):
                     if not check_filter(self.searchkeyword, msg.body):
                         self.logger.debug(
-                            f"Message '{msg.body}' ignored (didn't match keyword) - {self.searchkeyword}"
+                            f"Message '{msg.body}' ignored for sensor {self.sensorname} (didn't match keyword) - {self.searchkeyword}"
                         )                     
                         msg.is_posted = True
                         continue
                     self.logger.debug(
-                        f"Message '{msg.body}' posted (sensor succesfull match keyword) - {self.searchkeyword}"
+                        f"Message '{msg.body}' posted for sensor {self.sensorname} (sensor succesfull match keyword) - {self.searchkeyword}"
                         )
                     post = True
 
@@ -570,33 +582,45 @@ class Main:
                 if "searchregion" in self.config.options(section):
                     if not check_filter(self.searchregion, msg.region):
                         self.logger.debug(
-                            f"Message '{msg.body}' ignored (didn't match region) - {self.searchregion}"
+                            f"Message '{msg.body}' ignored for sensor {self.sensorname} (didn't match region) - {self.searchregion}"
                         )                     
                         msg.is_posted = True
                         continue
                     self.logger.debug(
-                        f"Message '{msg.body}' posted (sensor succesfull match region) - {self.searchregion}"
+                        f"Message '{msg.body}' posted for sensor {self.sensorname} (sensor succesfull match region) - {self.searchregion}"
                         )
                     post = True
 
                 # Check for matched capcodes
                 if "searchcapcode" in self.config.options(section):
-                    capcodes = ' '.join(map(str, msg.capcodes))
-                    if not check_filter(self.searchcapcode, capcodes):
+                    if not check_filter_with_list(self.searchcapcode, msg.capcodes):
                         self.logger.debug(
-                            f"Message '{msg.body}'{capcodes} ignored (didn't match capcode) - {self.searchcapcode}"
+                            f"Message '{msg.body}'{msg.capcodes} ignored for sensor {self.sensorname} (didn't match capcode) - {self.searchcapcode}"
                         )                        
                         msg.is_posted = True
                         continue
                     self.logger.debug(
-                        f"Message '{msg.body}'{capcodes} posted (sensor succesfull match capcode) - {self.searchcapcode}"
+                        f"Message '{msg.body}'{msg.capcodes} posted for sensor {self.sensorname} (sensor succesfull match capcode) - {self.searchcapcode}"
+                    )
+                    post = True
+
+                # Check for matched disciplines
+                if "searchdiscipline" in self.config.options(section):
+                    if not check_filter(self.searchdiscipline, msg.disciplines):
+                        self.logger.debug(
+                            f"Message '{msg.body}'{msg.disciplines} ignored for sensor {self.sensorname} (didn't match discipline) - {self.searchdiscipline}"
+                        )                        
+                        msg.is_posted = True
+                        continue
+                    self.logger.debug(
+                        f"Message '{msg.body}'{msg.disciplines} posted for sensor {self.sensorname} (sensor succesfull match discipline) - {self.searchdiscipline}"
                     )
                     post = True
 
                 # No other matches valid, if distance is not valid, skip
                 if post is False:
                     self.logger.debug(
-                        f"Message '{msg.body}' ignored (no post criteria)"
+                        f"Message '{msg.body}' ignored for sensor {self.sensorname} (no post criteria)"
                     )
                     msg.is_posted = True
                     continue
@@ -867,11 +891,10 @@ class Main:
                         if capcode in self.capcodes:
                             receiver = "{} ({})".format(
                                 self.capcodes[capcode]["description"],
-                                capcode,
+                                capcode
                             )
-                            discipline = "{} ({})".format(
-                                self.capcodes[capcode]["discipline"],
-                                capcode,
+                            discipline = "{}".format(
+                                self.capcodes[capcode]["discipline"]
                             )
                             region = self.capcodes[capcode]["region"]
                             location = self.capcodes[capcode]["location"]
@@ -956,7 +979,7 @@ class Main:
                         msg = MessageItem()
                         msg.groupid = groupid
                         msg.receivers = receiver
-                        msg.capcodes = [capcodes]
+                        msg.capcodes = capcodes.split(" ")
                         msg.body = message
                         msg.message_raw = line.strip()
                         msg.disciplines = discipline
