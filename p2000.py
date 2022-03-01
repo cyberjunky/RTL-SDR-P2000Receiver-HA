@@ -11,6 +11,7 @@ import subprocess
 import sys
 import threading
 import time
+import csv
 from datetime import datetime
 from logging.handlers import TimedRotatingFileHandler as _TimedRotatingFileHandler
 
@@ -20,7 +21,7 @@ import requests
 
 from opencage.geocoder import InvalidInputError, OpenCageGeocode, RateLimitExceededError
 
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 CFGFILE = "config.ini"
 
 
@@ -440,6 +441,15 @@ class Main:
         if self.logtofile:
             if (not os.path.exists('logfiles')):
                 os.mkdir('logfiles')
+        
+        # Check if GPS datafile is available
+        if (not os.path.isfile('location_gps_database.csv')):
+            gps_data_fieldnames = ['address','latitude','lontitude','url']
+            with open('location_gps_database.csv', 'w') as outfile:
+                writer = csv.DictWriter(outfile, fieldnames=gps_data_fieldnames, delimiter=',', quoting=csv.QUOTE_MINIMAL, lineterminator = '\n')
+                writer.writeheader()
+            outfile.close()
+        
 
         self.logger.info(f"RTL-SDR P2000 Receiver for Home Assistant Version {VERSION}")
         self.logger.info("Started at %s" % time.strftime("%A %H:%M:%S %d-%m-%Y"))
@@ -485,6 +495,9 @@ class Main:
 
         # Load match capcodes filter data
         self.matchcapcodes = load_capcodes_filter_dict(self, "match_capcodes.txt")
+
+        # Load GPS database data
+        self.gpsdatabase = load_capcodes_dict(self, "location_gps_database.csv")        
 
         # Start thread to get data from RTL-SDR stick
         data_thread = threading.Thread(name="DataThread", target=self.data_thread_call)
@@ -919,6 +932,30 @@ class Main:
                             self.opencage_disabled = False
 
                         # If address is filled and OpenCage is enabled check for GPS coordinates
+                        # First check local GPS database file
+                        if (
+                            address
+                            and self.use_opencage
+                            and not gpscheck is True
+                        ):
+                            try:
+                                self.logger.debug(f"Checking databasefile - {address}")
+                                if address in self.gpsdatabase:
+                                    self.logger.debug(f"Address is found in databasefile - {address}")
+                                    mapurl = self.gpsdatabase[address]["url"]
+                                    latitude = self.gpsdatabase[address]["latitude"]
+                                    longitude = self.gpsdatabase[address]["lontitude"]
+                                    self.logger.debug(
+                                        f"GPS Database results: {latitude}, {longitude}, {mapurl}"
+                                    )
+                                    gpscheck = True
+                                else:
+                                    self.logger.debug(f"Address {address} not found in databasefile")
+                            except:
+                                self.logger.info(f"Error checking {address} in databasefile")                            
+
+                        # If not found in GPS database file, check opencage
+                        # If address is filled and OpenCage is enabled check for GPS coordinates
                         if (
                             address
                             and self.use_opencage
@@ -936,6 +973,22 @@ class Main:
                                     self.logger.debug(
                                         f"OpenCage results: {latitude}, {longitude}, {mapurl}"
                                     )
+                                    # Write opencage GPS data to local GPS database file
+                                    try: 
+                                        gps_data_fieldnames = ['address','latitude','lontitude','url']
+                                        gps_data = {'address':address,'latitude':latitude,'lontitude':longitude,'url':mapurl}
+                                        self.logger.debug(f"Writing to databasefile - {address}")
+                                        with open('location_gps_database.csv', 'a') as outfile:
+                                            writer = csv.DictWriter(outfile, fieldnames=gps_data_fieldnames, delimiter=',', quoting=csv.QUOTE_MINIMAL, lineterminator = '\n')
+                                            writer.writerow(gps_data)
+                                        
+                                        # Write also to GPS data in memory
+                                        #following line does not work, need alternative to write to list in memory
+                                        # self.gpsdatabase.append(gps_data)
+                                        self.logger.debug(f"Writing variable - {address}")
+                                    except:
+                                        self.logger.debug(f"saving to local gpsfile or variable error - {address}")
+                                        
                                 else:
                                     latitude = ""
                                     longitude = ""
