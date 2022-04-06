@@ -689,6 +689,8 @@ class Main:
                             f"MQTT status: Posting to {self.mqtt_server}:{self.mqtt_port} topic:{self.mqtt_topic}"
                         )
                         self.logger.debug(f"MQTT json: {data}")
+                    except Exception as e:
+                        self.logger.debug(f"MQTT Crashed: {e}")
                     finally:
                         # Mark as posted to prevent race conditions
                         msg.is_posted = True
