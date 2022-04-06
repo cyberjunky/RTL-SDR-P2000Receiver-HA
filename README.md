@@ -373,6 +373,10 @@ searchcapcode = *000120901*,*000726001*,*000923993*
 friendlyname = P2000 Region Amsterdam-Amstelland and Utrecht
 searchregion = Amsterdam-Amstelland,Flevoland
 
+[sensor_p2000_discipline_]
+friendlyname = P2000 Brandweer
+searchdiscipline = Brandweer
+
 ```
 *main - debug*
 
@@ -457,6 +461,8 @@ Regions as criteria for a sensor, values are case-sensitive and can be comma sep
 *searchcapcode*
 Capcodes for the sensor, comma separated and with use of wildcards
 
+*searchdiscipline*
+Disciplines for the sensor, comma separated and with use of wildcards
 
 ## Filtering
 
