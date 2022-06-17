@@ -714,12 +714,13 @@ class Main:
                 if self.use_mqtt:
                     try:
                         self.logger.debug("Posting to MQTT")
+                        self.mqtt_topic_sensor = self.mqtt_topic + "/" + self.sensorname
 
                         data = json.dumps(data)
                         client = mqtt.Client()
                         client.username_pw_set(self.mqtt_username, self.mqtt_password)
                         client.connect(self.mqtt_server, self.mqtt_port, 60)
-                        client.publish(self.mqtt_topic, data)
+                        client.publish(mqtt_topic_sensor, data)
                         client.disconnect()
 
                         self.logger.debug(
