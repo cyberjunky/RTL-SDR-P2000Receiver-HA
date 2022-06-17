@@ -714,7 +714,7 @@ class Main:
                 if self.use_mqtt:
                     try:
                         self.logger.debug("Posting to MQTT")
-                        self.mqtt_topic_sensor = self.mqtt_topic + "/" + self.sensorname
+                        self.mqtt_topic_sensor = self.mqtt_topic + "/sensor/" + self.sensorname
 
                         data = json.dumps(data)
                         client = mqtt.Client()
