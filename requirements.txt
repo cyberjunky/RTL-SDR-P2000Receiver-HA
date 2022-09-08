@@ -1,0 +1,3 @@
+geopy
+paho.mqtt
+opencage
