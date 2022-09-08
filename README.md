@@ -546,6 +546,18 @@ script:
               longitude: "{{ states.sensor.p2000.attributes.longitude|float }}"
 ```
 
+
+## Troubleshooting
+
+If you have issues with the dongle try this:
+```
+sudo nano /etc/modprobe.d/raspi-blacklist.conf
+
+blacklist dvb_usb_rtl28xxu
+blacklist rtl2832
+blacklist rtl2830
+```
+
 ## Credits
 
 ### RPi-P2000Receiver
