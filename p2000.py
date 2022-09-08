@@ -720,7 +720,7 @@ class Main:
                         client = mqtt.Client()
                         client.username_pw_set(self.mqtt_username, self.mqtt_password)
                         client.connect(self.mqtt_server, self.mqtt_port, 60)
-                        client.publish(mqtt_topic_sensor, data)
+                        client.publish(self.mqtt_topic_sensor, data)
                         client.disconnect()
 
                         self.logger.debug(
