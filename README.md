@@ -549,7 +549,7 @@ script:
 
 ## Troubleshooting
 
-If you have issues with the dongle try this:
+If you have issues with the dongle not being recognized try this:
 ```
 sudo nano /etc/modprobe.d/raspi-blacklist.conf
 
@@ -557,6 +557,17 @@ blacklist dvb_usb_rtl28xxu
 blacklist rtl2832
 blacklist rtl2830
 ```
+
+If you don't get any output from the script, no messages try this:
+
+Run this command to see if you get output lines:
+```
+rtl_fm -f 169.65M -M fm -s 22050 | multimon-ng -a FLEX -t raw -
+```
+If not try ti place the antenna near the window/outside.
+
+If you get output from this command, maybe the filters are too strict/wrong.
+Create an empty match_text.txt file
 
 ## Credits
 
