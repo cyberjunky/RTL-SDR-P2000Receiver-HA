@@ -1050,8 +1050,11 @@ class Main:
                                             writer.writerow(gps_data)
 
                                         # Write also to GPS data in memory
-                                        # following line does not work, need alternative to write to list in memory
-                                        # self.gpsdatabase.append(gps_data)
+                                        self.gpsdatabase[address] = {
+                                            "latitude":latitude,
+                                            "lontitude":longitude,
+                                            "url":mapurl,
+                                        }
                                         self.logger.debug(
                                             f"Writing variable - {address}"
                                         )
