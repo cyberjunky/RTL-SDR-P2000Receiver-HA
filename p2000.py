@@ -934,47 +934,54 @@ class Main:
                             region = self.capcodes[capcode]["region"]
                             location = self.capcodes[capcode]["location"]
                             remark = self.capcodes[capcode]["remark"]
+                            self.logger.debug(
+                                            "capcode opgehaald: "
+                                            + receiver
+                                        )
                         else:
                             receiver = capcode
                             discipline = ""
                             region = ""
                             remark = ""
 
-                    # If this message was already received, only add extra info
-                    if len(self.messages) > 0 and self.messages[0].body == message:
-                        if self.messages[0].receivers == "":
-                            self.messages[0].receivers = receiver
-                        elif receiver:
-                            self.messages[0].receivers += ", " + receiver
+                        # If this message was already received, only add extra info
+                        if len(self.messages) > 0 and self.messages[0].body == message:
+                            if self.messages[0].receivers == "":
+                                self.messages[0].receivers = receiver
+                            self.logger.debug(
+                                        "capcode is nu: "
+                                        + self.messages[0].receivers
+                                        )                                
+                            elif receiver:
+                                self.messages[0].receivers += ", " + receiver
+                            if self.messages[0].disciplines == "":
+                                self.messages[0].disciplines = discipline
+                            elif discipline:
+                                self.messages[0].disciplines += ", " + discipline
+                            if self.messages[0].remarks == "":
+                                self.messages[0].remarks = remark
+                            elif remark:
+                                self.messages[0].remarks += ", " + remark
 
-                        if self.messages[0].disciplines == "":
-                            self.messages[0].disciplines = discipline
-                        elif discipline:
-                            self.messages[0].disciplines += ", " + discipline
-                        if self.messages[0].remarks == "":
-                            self.messages[0].remarks = remark
-                        elif remark:
-                            self.messages[0].remarks += ", " + remark
+                            if self.messages[0].region == "":
+                                self.messages[0].region = region
 
-                        if self.messages[0].region == "":
-                            self.messages[0].region = region
-
-                        self.messages[0].capcodes.append(capcode)
-                        self.messages[0].location = location
-                        self.messages[0].postalcode = postalcode
-                        self.messages[0].city = city
-                        self.messages[0].street = street
-                        self.messages[0].address = address
-                    else:
-                        # After midnight (UTC), reset the opencage disable
-                        hour = datetime.utcnow()
-                        if (
-                            hour.hour >= 0
-                            and hour.minute >= 1
-                            and hour.hour < 1
-                            and hour.minute < 15
-                        ):
-                            self.opencage_disabled = False
+                            self.messages[0].capcodes.append(capcode)
+                            self.messages[0].location = location
+                            self.messages[0].postalcode = postalcode
+                            self.messages[0].city = city
+                            self.messages[0].street = street
+                            self.messages[0].address = address
+                        else:
+                            # After midnight (UTC), reset the opencage disable
+                            hour = datetime.utcnow()
+                            if (
+                                hour.hour >= 0
+                                and hour.minute >= 1
+                                and hour.hour < 1
+                                and hour.minute < 15
+                            ):
+                                self.opencage_disabled = False
 
                         # If address is filled and OpenCage is enabled check for GPS coordinates
                         # First check local GPS database file
