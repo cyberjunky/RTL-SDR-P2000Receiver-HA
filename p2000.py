@@ -983,130 +983,130 @@ class Main:
                             ):
                                 self.opencage_disabled = False
 
-                        # If address is filled and OpenCage is enabled check for GPS coordinates
-                        # First check local GPS database file
-                        if address and self.use_opencage and not gpscheck is True:
-                            try:
-                                self.logger.debug(f"Checking databasefile - {address}")
-                                if address in self.gpsdatabase:
-                                    self.logger.debug(
-                                        f"Address is found in databasefile - {address}"
-                                    )
-                                    mapurl = self.gpsdatabase[address]["url"]
-                                    latitude = self.gpsdatabase[address]["latitude"]
-                                    longitude = self.gpsdatabase[address]["lontitude"]
-                                    self.logger.debug(
-                                        f"GPS Database results: {latitude}, {longitude}, {mapurl}"
-                                    )
-                                    gpscheck = True
-                                else:
-                                    self.logger.debug(
-                                        f"Address {address} not found in databasefile"
-                                    )
-                            except:
-                                self.logger.info(
-                                    f"Error checking {address} in databasefile"
+                    # If address is filled and OpenCage is enabled check for GPS coordinates
+                    # First check local GPS database file
+                    if address and self.use_opencage and not gpscheck is True:
+                        try:
+                            self.logger.debug(f"Checking databasefile - {address}")
+                            if address in self.gpsdatabase:
+                                self.logger.debug(
+                                    f"Address is found in databasefile - {address}"
                                 )
-
-                        # If not found in GPS database file, check opencage
-                        # If address is filled and OpenCage is enabled check for GPS coordinates
-                        if (
-                            address
-                            and self.use_opencage
-                            and (self.opencage_disabled is False)
-                            and not gpscheck is True
-                        ):
-                            geocoder = OpenCageGeocode(self.opencagetoken)
-                            try:
-                                gps = geocoder.geocode(address, countrycode="nl")
+                                mapurl = self.gpsdatabase[address]["url"]
+                                latitude = self.gpsdatabase[address]["latitude"]
+                                longitude = self.gpsdatabase[address]["lontitude"]
+                                self.logger.debug(
+                                    f"GPS Database results: {latitude}, {longitude}, {mapurl}"
+                                )
                                 gpscheck = True
-                                if gps:
-                                    latitude = gps[0]["geometry"]["lat"]
-                                    longitude = gps[0]["geometry"]["lng"]
-                                    mapurl = gps[0]["annotations"]["OSM"]["url"]
+                            else:
+                                self.logger.debug(
+                                    f"Address {address} not found in databasefile"
+                                )
+                        except:
+                            self.logger.info(
+                                f"Error checking {address} in databasefile"
+                            )
+
+                    # If not found in GPS database file, check opencage
+                    # If address is filled and OpenCage is enabled check for GPS coordinates
+                    if (
+                        address
+                        and self.use_opencage
+                        and (self.opencage_disabled is False)
+                        and not gpscheck is True
+                    ):
+                        geocoder = OpenCageGeocode(self.opencagetoken)
+                        try:
+                            gps = geocoder.geocode(address, countrycode="nl")
+                            gpscheck = True
+                            if gps:
+                                latitude = gps[0]["geometry"]["lat"]
+                                longitude = gps[0]["geometry"]["lng"]
+                                mapurl = gps[0]["annotations"]["OSM"]["url"]
+                                self.logger.debug(
+                                    f"OpenCage results: {latitude}, {longitude}, {mapurl}"
+                                )
+                                # Write opencage GPS data to local GPS database file
+                                try:
+                                    gps_data_fieldnames = [
+                                        "address",
+                                        "latitude",
+                                        "lontitude",
+                                        "url",
+                                    ]
+                                    gps_data = {
+                                        "address": address,
+                                        "latitude": latitude,
+                                        "lontitude": longitude,
+                                        "url": mapurl,
+                                    }
                                     self.logger.debug(
-                                        f"OpenCage results: {latitude}, {longitude}, {mapurl}"
+                                        f"Writing to databasefile - {address}"
                                     )
-                                    # Write opencage GPS data to local GPS database file
-                                    try:
-                                        gps_data_fieldnames = [
-                                            "address",
-                                            "latitude",
-                                            "lontitude",
-                                            "url",
-                                        ]
-                                        gps_data = {
-                                            "address": address,
-                                            "latitude": latitude,
-                                            "lontitude": longitude,
-                                            "url": mapurl,
-                                        }
-                                        self.logger.debug(
-                                            f"Writing to databasefile - {address}"
+                                    with open(
+                                        "location_gps_database.csv", "a"
+                                    ) as outfile:
+                                        writer = csv.DictWriter(
+                                            outfile,
+                                            fieldnames=gps_data_fieldnames,
+                                            delimiter=",",
+                                            quoting=csv.QUOTE_MINIMAL,
+                                            lineterminator="\n",
                                         )
-                                        with open(
-                                            "location_gps_database.csv", "a"
-                                        ) as outfile:
-                                            writer = csv.DictWriter(
-                                                outfile,
-                                                fieldnames=gps_data_fieldnames,
-                                                delimiter=",",
-                                                quoting=csv.QUOTE_MINIMAL,
-                                                lineterminator="\n",
-                                            )
-                                            writer.writerow(gps_data)
+                                        writer.writerow(gps_data)
 
-                                        # Write also to GPS data in memory
-                                        # following line does not work, need alternative to write to list in memory
-                                        # self.gpsdatabase.append(gps_data)
-                                        self.logger.debug(
-                                            f"Writing variable - {address}"
-                                        )
-                                    except:
-                                        self.logger.debug(
-                                            f"saving to local gpsfile or variable error - {address}"
-                                        )
+                                    # Write also to GPS data in memory
+                                    # following line does not work, need alternative to write to list in memory
+                                    # self.gpsdatabase.append(gps_data)
+                                    self.logger.debug(
+                                        f"Writing variable - {address}"
+                                    )
+                                except:
+                                    self.logger.debug(
+                                        f"saving to local gpsfile or variable error - {address}"
+                                    )
 
-                                else:
-                                    latitude = ""
-                                    longitude = ""
-                                    mapurl = ""
-                            # Rate-error check from opencage
-                            except RateLimitExceededError as rle:
-                                self.logger.error(rle)
-                                # Over rate, opencage check disabled
-                                if rle:
-                                    self.opencage_disabled = True
-                            except InvalidInputError as ex:
-                                self.logger.error(ex)
-                        else:
-                            gpscheck = False
+                            else:
+                                latitude = ""
+                                longitude = ""
+                                mapurl = ""
+                        # Rate-error check from opencage
+                        except RateLimitExceededError as rle:
+                            self.logger.error(rle)
+                            # Over rate, opencage check disabled
+                            if rle:
+                                self.opencage_disabled = True
+                        except InvalidInputError as ex:
+                            self.logger.error(ex)
+                    else:
+                        gpscheck = False
 
-                        opencage = f"enabled: {self.use_opencage} ratelimit: {self.opencage_disabled} gps-checked: {gpscheck}"
+                    opencage = f"enabled: {self.use_opencage} ratelimit: {self.opencage_disabled} gps-checked: {gpscheck}"
 
-                        msg = MessageItem()
-                        msg.groupid = groupid
-                        msg.receivers = receiver
-                        msg.capcodes = capcodes.split(" ")
-                        msg.body = message
-                        msg.message_raw = line.strip()
-                        msg.disciplines = discipline
-                        msg.priority = priority
-                        msg.region = region
-                        msg.location = location
-                        msg.postalcode = postalcode
-                        msg.longitude = longitude
-                        msg.latitude = latitude
-                        msg.city = city
-                        msg.street = street
-                        msg.address = address
-                        msg.remarks = remark
-                        msg.opencage = opencage
-                        msg.mapurl = mapurl
-                        msg.timestamp = to_local_datetime(timestamp)
-                        msg.is_posted = False
-                        msg.distance = distance
-                        self.messages.insert(0, msg)
+                    msg = MessageItem()
+                    msg.groupid = groupid
+                    msg.receivers = receiver
+                    msg.capcodes = capcodes.split(" ")
+                    msg.body = message
+                    msg.message_raw = line.strip()
+                    msg.disciplines = discipline
+                    msg.priority = priority
+                    msg.region = region
+                    msg.location = location
+                    msg.postalcode = postalcode
+                    msg.longitude = longitude
+                    msg.latitude = latitude
+                    msg.city = city
+                    msg.street = street
+                    msg.address = address
+                    msg.remarks = remark
+                    msg.opencage = opencage
+                    msg.mapurl = mapurl
+                    msg.timestamp = to_local_datetime(timestamp)
+                    msg.is_posted = False
+                    msg.distance = distance
+                    self.messages.insert(0, msg)
 
                 # Limit the message list size
                 if len(self.messages) > 100:
