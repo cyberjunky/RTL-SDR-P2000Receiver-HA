@@ -1,0 +1,17 @@
+version: '3'
+services:
+  p2000:
+    container_name: p2000
+    image: p2000
+    restart: always
+    stop_signal: SIGINT
+    devices:
+      - /dev/bus/usb
+    volumes:
+      - /etc/p2000:/p2000:rw
+    logging:
+      options:
+        max-size: 50m
+    build:
+      context: P2000
+      dockerfile: Dockerfile
